@@ -1,0 +1,19 @@
+{
+    "name": "brightlocal/api",
+    "description": "BrightLocal API wrapper and examples",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Ed Eliot",
+            "email": "ed@brightlocal.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "" : "src/"
+        }
+    }
+}
