@@ -31,10 +31,12 @@ if (isset($options)) {
   error_log('db slug not found');
 }
 
-add_action( 'bl_api_client_cron_hook', 'bl_api_call' );
+//add_action( 'bl_api_client_cron_hook', 'bl_api_call' );
+/*
 if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
     wp_schedule_event( time(), 'hourly', 'bl_api_client_cron_hook' );
 }
+*/
 //https://search.google.com/local/reviews?placeid=ChIJsc2v07GxlVQRRK-jGkZfiw0
 //https://local.google.com/place?id=975978498955128644&use=srp&hl=en
 //ChIJsc2v07GxlVQRRK-jGkZfiw0
