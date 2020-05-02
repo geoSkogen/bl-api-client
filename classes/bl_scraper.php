@@ -59,9 +59,13 @@ class BL_Scraper {
               //sleep(10); // limit how often you poll
         } while (!in_array($results['status'], array('Stopped', 'Finished')));
 
-         //THIS IS THE PATH TO THE REVIEWS ARRAY!
+
          //refer to the data-sample.txt file
+         //THIS IS THE PATH TO THE REVIEWS ARRAY!
          error_log(print_r($results['results']['LdFetchReviews'][0]['results'][0]['reviews']));
+          //THIS IS THE PATH TO THE REVIEWS Count & Agg Rating!
+         error_log(print_r($results['results']['LdFetchReviews'][0]['results'][0]['reviews-count']));
+         error_log(print_r($results['results']['LdFetchReviews'][0]['results'][0]['star-rating']));
          //log results--add timestamp to db
          $commit['log'][] = time();
          update_option('bl_api_client',$commit);
