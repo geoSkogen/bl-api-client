@@ -1,0 +1,58 @@
+
+Array ( [success] => 1
+        [results] => Array (
+		[LdFetchProfileUrl] => Array (
+                     [0] => Array (
+			[results] => Array (
+				[0] => Array ( [url] => https://local.google.com/place?id=975978498955128644&use=srp&gl=us&hl=en )
+		      ) [payload] => Array (
+			        [business-names] => Array (
+				    [0] => Earthworks Excavating Services
+			      ) [country] => USA
+				[city] => Battle Ground
+				[postcode] => 98604
+				[telephone] => (360) 772-0088
+				[directory] => google
+				[street-address] => 1420 SE 13TH ST
+				[api-key] => f972131781582b6dfead1afa4f8082fe79a4765f
+				[dependent-job] => Array (
+					[name] => ApiLdFetchReviews
+					[payload] => Array (
+						[profile-url] =>
+						[country] => USA
+						[date-from] =>
+						[reviews-limit] => 100
+						[start-page] => 1
+						[sort-type] =>
+						[api-key] => f972131781582b6dfead1afa4f8082fe79a4765f
+					)
+				)
+			) [status] => Completed
+			  [job-id] => 3229144302
+		)
+     ) [LdFetchReviews] => Array ( 
+		[0] => Array (
+			[results] => Array (
+				[0] => Array (
+					[reviews] => Array (
+						[0] => Array (
+							[rating] => 5
+							[author] => Kathy Asato
+							[timestamp] => 2020-04-02
+							[text] =>
+							[positive] => Array ( )
+							[critical] => Array ( )
+							[author_avatar] => https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg
+							[id] => 50399aec6a38ab58426ae2e77057a05c36167f52
+		  		) [1] => Array (
+							[rating] => 5
+							[author] => Advanced Plumbing
+							[timestamp] => 2020-03-02
+							[text] => We had a great experience with Earthworks Excavating Services. The communication was wonderful. 				[positive] => Array ( )
+							[critical] => Array ( )
+							[author_avatar] => https://lh6.googleusercontent.com/-m-jjYqGDLyE/AAAAAAAAAAI/AAAAAAAAAAA/ynbQXsyEu50/s40-c-rp-mo-br100/photo.jpg
+							[id] => 68d81651c71f99b6cb857c2c8c2b31464e23d83a
+					     ) [2] => Array ( [rating] => 5 [author] => Bryan Fix [timestamp] => 2019-11-02 [text] => Matt & his crew are the best at Earthworks Excavating we recently had city sewer come in to our Cul-De-Sac and it allowed me to hook up.......they decommissioned my Septic Tank, filled it with rock (by Wheelbarrow), dug the trench to the street, then filled it when done. They arrived at 7am and were gone by 1:30pm same day I couldn't believe it all hooked up there clean up was amazing, it looks better then when they came. Hats off to Matt and his crew, if you are needing excavating work these are the guys to call. Before and after pictures......THANK YOU MATT [positive] => Array ( ) [critical] => Array ( ) [author_avatar] => https://lh5.googleusercontent.com/-sGyaSuk-H-k/AAAAAAAAAAI/AAAAAAAAAAA/QY_M8M4_G_k/s40-c-rp-mo-br100/photo.jpg [id] => 8e66813c6ffa71b08b58918f2e3a0f505906c611 ) [3] => Array ( [rating] => 5 [author] => James Marsh [timestamp] => 2018-05-02 [text] => Earthworks did an awesome job delivery 5 loads of gravel for my driveway. Super professional, showed up on time and spread it exactly where I wanted it and I wasn't even here directing them. Price was lower than the other places I called. A+ for customer service!! THANK YOU! [positive] => Array ( ) [critical] => Array ( ) [author_avatar] => https://lh6.googleusercontent.com/-MV4bs8WUkhs/AAAAAAAAAAI/AAAAAAAAAAA/Uw_A9bM_2fQ/s40-c-rp-mo-ba2-br100/photo.jpg [id] => b6bfa567fc26c4acc97648848b16a8367ea182d8 ) [4] => Array ( [rating] => 4 [author] => Bill Whipple [timestamp] => 2017-05-02 [text] => This fellow was very helpful and nicely candid when I called about a small job on short notice. Like every contractor, July is extremely busy for him but at least he was willing to squeeze the job in when his schedule allowed. He was the only one out of 5 locals that I "cold" called. For what this is worth. [positive] => Array ( ) [critical] => Array ( ) [author_avatar] => https://lh6.googleusercontent.com/-RbsnCA6oYjo/AAAAAAAAAAI/AAAAAAAAAAA/2JxofFgRnRM/s40-c-rp-mo-br100/photo.jpg [id] => e2cc7dc5d799e36c70580e3db3364cb8f284df91 ) [5] => Array ( [rating] => 5 [author] => Matt D [timestamp] => 2016-05-02 [text] => We used this excavation company to replace our septic system, there price was fair, they arrived on the date they said they would with clean trucks and eqpt, their guys were very courteous, quick and did a great job cleaning up the site once they were done, the foreman explained everything that had been done to us before he left and we couldn't have been more pleased with the job they did. [positive] => Array ( ) [critical] => Array ( ) [author_avatar] => https://lh3.googleusercontent.com/-djo4Z7WO5Mc/AAAAAAAAAAI/AAAAAAAAAAA/Gm3Ul4ctpOw/s40-c-rp-mo-ba2-br100/photo.jpg [id] => a4b636efb45e0094469e3589fcaf310bc11e11fd )
+   ) [recommendations] => Array ( )
+     [reviews-count] => 6
+     [star-rating] => 4.8 ) ) [payload] => Array ( [profile-url] => https://local.google.com/place?id=975978498955128644&use=srp&gl=us&hl=en [country] => USA [date-from] => [reviews-limit] => 100 [start-page] => 1 [sort-type] => [api-key] => f972131781582b6dfead1afa4f8082fe79a4765f [parent-id] => 3229144302 ) [status] => Completed [job-id] => 3229144302 ) ) ) [statuses] => Array ( [Completed] => 2 ) [status] => Finished )
