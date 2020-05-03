@@ -2,12 +2,11 @@
 /*
 Plugin Name:  bl-api-client
 Description:  bl-api-client
-Version:      2020.04.30
+Version:      2020.05.01
 Author:       City Ranked Media
 Author URI:
 Text Domain:  bl_api_client
 */
-
 
 use BrightLocal\Api;
 use BrightLocal\Batches\V4 as BatchApi;
@@ -16,9 +15,14 @@ register_activation_hook( __FILE__, 'bl_api_client_activate' );
 register_deactivation_hook( __FILE__, 'bl_api_client_deactivate' );
 
 function bl_api_client_activate() {
-  $commit = array('log'=>array('placeholder'));
-  update_option('bl_api_client',$commit);
-
+  $options = get_option('bl_api_client_activity');
+  $commit = array(
+    'log'=>['placeholder'],
+    'reviews'=> (isset($options['reviews'])) ? $options['reviews'] : '',
+    'aggregate_rating'=> (isset($options['aggregate_rating'])) ?
+       $options['aggregate_rating'] : array('rating'=>'','count'=>'')
+  );
+  update_option('bl_api_client_activity',$commit);
 }
 
 function bl_api_client_deactivate() {
@@ -26,16 +30,33 @@ function bl_api_client_deactivate() {
   wp_unschedule_event( $timestamp, 'bl_api_client_cron_hook' );
 }
 
-$options = get_option('bl_api_client');
+$options = get_option('bl_api_client_activity');
 
 if (isset($options)) {
   error_log('found db slug');
   error_log('iterating db entries');
-  foreach ($options['log'] as $entry) {
-    error_log($entry);
+  if (count($options['log'])) {
+    foreach ($options['log'] as $entry) {
+      error_log($entry);
+    }
   }
 } else {
   error_log('db slug not found');
+}
+//Admin
+if ( !class_exists( 'BL_API_Client_Options' ) ) {
+   include_once 'admin/bl_api_client_options.php';
+   add_action(
+    'admin_menu',
+    array('BL_API_Client_Options','bl_api_client_register_menu_page')
+  );
+}
+if ( !class_exists( 'BL_API_Client_Settings' ) ) {
+   include_once 'admin/bl_api_client_settings.php';
+   add_action(
+     'admin_init',
+     array('BL_API_Client_Settings','settings_api_init')
+   );
 }
 
 if ( !class_exists( 'BL_Scraper' ) ) {
@@ -67,8 +88,16 @@ function bl_api_call() {
     'telephone'       => '(360) 772-0088'//,
     //'gmb'             => "https://local.google.com/place?id=975978498955128644"
   );
-  $commit = get_option('bl_api_client');
+  $commit = get_option('bl_api_client_activity');
   $commit['log'][] = time();
-  update_option('bl_api_client',$commit);
-  //BL_Scraper::call_local_dir($options,'fetch-reviews');
+  //$result = BL_Scraper::call_local_dir($options,'fetch-reviews');
+  /*
+  if ($result->reviews && $result->aggregate_rating) {
+    $commit['reviews'] = $result->reviews;
+    $commit['aggregate_rating'] = $result->aggregate_rating;
+  } else {
+    error_log('review scrape error occurred');
+  }
+  */
+  update_option('bl_api_client_activity',$commit);
 }
