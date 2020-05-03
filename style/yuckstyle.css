@@ -268,3 +268,8 @@ form h2 {
 input[type="radio"] {
   margin: 0 1.5em;
 }
+
+.locale_index {
+    opacity: 0.6;
+    font-size:12px;
+}
