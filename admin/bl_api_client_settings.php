@@ -3,9 +3,8 @@
 class BL_API_Client_Settings {
 
   public static $bl_api_client_label_toggle = array(
-    "name",
+    "business_name",
     "address",
-    "address_2",
     "city",
     "state",
     "zipcode",
@@ -132,7 +131,7 @@ class BL_API_Client_Settings {
   }
 
   static function bl_api_client_settings_info_field() {
-    $options = get_option('bl_api_client');
+    $options = get_option('bl_api_client_settings');
     $divider = (self::$bl_api_client_label_toggle_index < count(self::$bl_api_client_label_toggle)-1) ?
       "" : "<br/><br/><hr/>";
     $field_name = self::$bl_api_client_label_toggle[self::$bl_api_client_label_toggle_index];
