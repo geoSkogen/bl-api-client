@@ -1,0 +1,35 @@
+options table
+
+  bl_api_client
+
+    api_key
+
+    api_secret
+
+  bl_api_client_settings - increment integer by field count
+
+    field_count
+
+    name_{int}
+
+    address_{int}
+
+    address_2_{int}
+
+    city_{int}
+
+    state_{int}
+
+    zipcode_{int}
+
+    gmb_{int}
+
+    facebook_{int}
+
+  bl_api_client_activity
+
+    log - indexed array of timestamps
+
+    reviews - array keys: rating, author, timestamp, text, author_avatar, id
+
+    aggregate_rating - array keys: rating, count
