@@ -27,26 +27,6 @@ nav {
   padding: 0.5em;
 }
 
-.soup {
-  margin: 0.5em;
-  padding: 0.5em;
-  font-weight: 800;
-  font-size: 56px;
-}
-
-#areYouLost {
-  padding: 0 3.5em;
-}
-
-#balloon {
-  height: 16px;;
-}
-
-p.testP {
-  margin: 0 1em;
-  padding: 0.5em;
-}
-
 input.zeroTest,
 input.zeroTestModal {
   margin: 1em;
@@ -135,109 +115,12 @@ input[type="submit"] {
   font-weight: 800;
 }
 
-input[type="file"] {
-  opacity: 0;
-  width: 0;
-  height: 0;
-  padding: 0 0 !important;
-  margin: 0 0 !important;
-  cursor: pointer;
-}
-
-#structure_button {
-  text-align:center;
-  min-width: 124px;
-  padding: 1em 1em 1em 1em;
-}
-
-#structure_button_unset {
-  text-align:center;
-  max-width: 124px;
-  padding: 1em 1em 1em 1em;
-  margin: 0.75em 1em 1em 1em;
-}
-
 input[type="number"] {
   width: 56px;
 }
 
 input.zeroTestModal {
   opacity: 0;
-}
-
-.appWrapper {
-  display: flex;
-  flex-flow: column wrap;
-  justify-content: flex-start;
-}
-
-.appShell {
-  display: none;
-}
-
-.app_link {
-  margin: 0 0.5em 1em 0;
-}
-
-.sitemap_item {
-  padding: 1em;
-  border: 1px solid black;
-  border-radius: 3px;
-  display: none;
-}
-
-.tier_1 {
-  display: block;
-}
-
-.fas {
-  cursor: pointer;
-}
-
-.monster_row:hover {
-  background-color: lightsteelblue;
-  color: white
-}
-
-.drop_me {
-  font-size: 30px !important;
-  font-weight: 600;
-  cursor: pointer;
-  color: #f1f1f1;
-}
-
-.drop_me:hover {
-  font-weight: 800;
-  cursor: pointer;
-  color: red;
-}
-
-
-.monster_row {
-  padding: 0 0 !important;
-  margin: 0 0 !important;
-  line-height: 1 !important;
-  max-height: 1em !important;
-}
-
-.monster_slug {
-  padding: 0 0 0 1em !important;
-  margin: 0 0 !important;
-  line-height: 1 !important;
-  max-height: 1em !important;
-  z-index: 10;
-}
-
-.monster_key {
-  position: relative !important;
-}
-
-.monster_field {
-  position: absolute;
-  left: -1000%;
-  top: -5%;
-  width: 380px;
-  z-index: 1000;
 }
 
 .form-wrap h3 {
@@ -270,6 +153,10 @@ input[type="radio"] {
 }
 
 .locale_index {
-    opacity: 0.6;
-    font-size:12px;
+  opacity: 0.6;
+  font-size:12px;
+}
+
+.alert_me {
+  font-size: 36px;
 }

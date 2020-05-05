@@ -189,6 +189,10 @@ class BL_API_Client_Settings {
       //error_log("drop=false");
     }
     if ($db_slug==='_settings') {
+      $client_info = BL_CR_Suite_Client::validate_business_data();
+      if ($client_info) {
+        echo '<span class="alert_me"><strong>Your Info is in CR Suite</strong></span>';
+      }
       self::trim_fields();
     }
     wp_enqueue_script('bl_api_client-unset-all', plugin_dir_url(__FILE__) . '../lib/bl_api_client-unset-all.js');

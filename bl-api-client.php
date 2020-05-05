@@ -30,7 +30,8 @@ function bl_api_client_deactivate() {
   $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
   wp_unschedule_event( $timestamp, 'bl_api_client_cron_hook' );
 }
-//test pattern
+//test pattern for scheduled api call jobs
+/*
 $options = get_option('bl_api_client_activity');
 if (isset($options)) {
   error_log('found db slug');
@@ -44,6 +45,7 @@ if (isset($options)) {
 } else {
   error_log('db slug not found');
 }
+*/
 //Admin
 if ( !class_exists( 'BL_API_Client_Options' ) ) {
    include_once 'admin/bl_api_client_options.php';
@@ -60,11 +62,27 @@ if ( !class_exists( 'BL_API_Client_Settings' ) ) {
    );
 }
 
+if ( !class_exists( 'BL_CR_Suite_Client' ) ) {
+  include_once 'classes/bl_cr_suite_client.php';
+}
+
+
 if ( !class_exists( 'BL_Scraper' ) ) {
   require_once(__DIR__ . '/vendor/autoload.php');
   include_once 'classes/bl_scraper.php';
 }
 
+if ( !class_exists( 'BL_CR_Suite_Client' ) ) {
+  include_once 'classes/bl_cr_suite_client.php';
+}
+
+//Build out flow controls here!!!
+//Cron job should schedule itself but not run at time of scheduling, and . . .
+//only if the lookup info is validate;
+//add reiteration of API call for businesses with mutiple entries or
+//multiple locales in CR Suite; add alternation for both Facebook and GMB.
+
+//
 //add_action( 'bl_api_client_cron_hook', 'bl_api_call' );
 /*
 if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
@@ -72,30 +90,51 @@ if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
 }
 */
 
+//different lookup-by-URL formats; so far none is accepted:
 //https://search.google.com/local/reviews?placeid=ChIJsc2v07GxlVQRRK-jGkZfiw0
 //https://local.google.com/place?id=975978498955128644&use=srp&hl=en
 //ChIJsc2v07GxlVQRRK-jGkZfiw0
 //975978498955128644
+//FAKE DATA TABLE: use this to test in absence of CR Suite business options
+/*
+$options = array(
+  'business_name'  => 'Earthworks Excavating Services',
+  'business_locality'            => 'Battle Ground',
+  'business_zipcode'        => '98604',
+  'business_address'  => '1420 SE 13TH ST',
+  'business_phone'       => '(360) 772-0088'//,
+  //'gmb'             => "https://local.google.com/place?id=975978498955128644"
+);
+update_option('crs_business_options',$options);
+*/
 
-//bl_api_call();
+bl_api_call();
 
 function bl_api_call() {
-  $one_option = get_option('bl_api_client_settings');
+  $this_option = get_option('bl_api_client_settings');
   $commit = get_option('bl_api_client_activity');
   $auth = get_option('bl_api_client');
-  $req_body = array();
   $valid_keys = array(
     'business_name'=>'business-names','city'=>'city','zipcode'=>'postcode',
     'address'=>'street-address','phone'=>'telephone');
-  $i = 1;
-  $indexer = '_' . strval($i);
-  foreach (array_keys($valid_keys) as $valid_key) {
-    if (isset($one_option[$valid_key . $indexer])
-      && '' !=$one_option[$valid_key . $indexer]) {
-        $req_body[$valid_keys[$valid_key]] = $one_option[$valid_key . $indexer];
-      }
+  //check if CR Suite business options has the required lookup info
+  $req_body = BL_CR_Suite_Client::validate_business_data();
+  //check if BL Client business options are set
+  if (!$req_body) {
+    $i = 1;
+    $indexer = '_' . strval($i);
+    foreach (array_keys($valid_keys) as $valid_key) {
+      $this_key = $valid_key . $indexer;
+      if (isset($this_option[$this_key]) && '' !=$this_option[$this_key]) {
+          $req_body[$valid_keys[$valid_key]] = $this_option[$this_key];
+        }
+    }
+    error_log('cr-suite business options not found; used bl-client lookup');
+  } else {
+    error_log('found cr-suite business options');
   }
-  error_log('cron scheduler');
+  error_log('cron scheduler is running api call');
+  /*
   error_log('test pattern for valid keys');
   foreach(array_keys($valid_keys) as $this_key) {
     error_log($this_key);
@@ -104,17 +143,18 @@ function bl_api_call() {
   foreach(array_keys($req_body) as $this_key) {
     error_log($this_key);
   }
+  */
   if ( count(array_keys($req_body))===count(array_keys($valid_keys)) ) {
     $req_body['country'] = 'USA';
-    error_log('found all valid keys');
+    error_log('found all required business options keys');
     if (isset($auth['api_key']) && isset($auth['api_secret'])) {
       error_log('found api keys');
-      $result = BL_Scraper::call_local_dir($auth,$req_body,'fetch-reviews','google');
+      //$result = BL_Scraper::call_local_dir($auth,$req_body,'fetch-reviews','google');
     } else {
       error_log('api keys not found');
     }
   } else {
-    error_log('valid keys not found');
+    error_log('required business options keys not found');
   }
   /*
   $options = array(
@@ -127,8 +167,6 @@ function bl_api_call() {
     //'gmb'             => "https://local.google.com/place?id=975978498955128644"
   );
   */
-
-
   /*
   if ($result->reviews && $result->aggregate_rating) {
     $commit['reviews'] = $result->reviews;
