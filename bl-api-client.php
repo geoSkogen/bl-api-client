@@ -1,12 +1,13 @@
 <?php
 /*
 Plugin Name:  bl-api-client
-Description:  bl-api-client
-Version:      2020.05.01
+Description:  BrightLocal Client
+Version:      2020.05.04
 Author:       City Ranked Media
 Author URI:
 Text Domain:  bl_api_client
 */
+defined( 'ABSPATH' ) or die( 'We make the path by walking.');
 
 use BrightLocal\Api;
 use BrightLocal\Batches\V4 as BatchApi;
@@ -115,7 +116,7 @@ function bl_api_call() {
   } else {
     error_log('valid keys not found');
   }
-
+  /*
   $options = array(
     'business-names'  => 'Earthworks Excavating Services',
     'city'            => 'Battle Ground',
@@ -125,6 +126,7 @@ function bl_api_call() {
     'telephone'       => '(360) 772-0088'//,
     //'gmb'             => "https://local.google.com/place?id=975978498955128644"
   );
+  */
 
 
   /*
