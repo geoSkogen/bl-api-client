@@ -114,6 +114,7 @@ function bl_api_call() {
   $this_option = get_option('bl_api_client_settings');
   $commit = get_option('bl_api_client_activity');
   $auth = get_option('bl_api_client');
+  $crs_biz = get_option('crs_business_options');
   $valid_keys = array(
     'business_name'=>'business-names','city'=>'city','zipcode'=>'postcode',
     'address'=>'street-address','phone'=>'telephone');
@@ -144,6 +145,13 @@ function bl_api_call() {
     error_log($this_key);
   }
   */
+  /*
+  error_log('test pattern for valid crs biz');
+  foreach(array_keys($crs_biz) as $this_key => $this_value) {
+    error_log($this_key);
+    error_log($this_value);
+  }
+*/
   if ( count(array_keys($req_body))===count(array_keys($valid_keys)) ) {
     $req_body['country'] = 'USA';
     error_log('found all required business options keys');
