@@ -118,6 +118,9 @@ function bl_api_call() {
   $valid_keys = array(
     'business_name'=>'business-names','city'=>'city','zipcode'=>'postcode',
     'address'=>'street-address','phone'=>'telephone');
+  $data_keys = array(
+      'business-names'=>'business_name','city'=>'city','postcode'=>'zipcode',
+      'street-address'=>'address','telephone'=>'phone');
   //check if CR Suite business options has the required lookup info
   $req_body = BL_CR_Suite_Client::validate_business_data();
   //check if BL Client business options are set
@@ -132,6 +135,12 @@ function bl_api_call() {
     }
     error_log('cr-suite business options not found; used bl-client lookup');
   } else {
+    $i = 1;
+    foreach($req_body as $key=>$val) {
+      $new_key = $data_keys[$key] . '_' . $i;
+      $this_option[$new_key] = $val;
+    }
+    update_option('bl_api_client_settings',$this_option);
     error_log('found cr-suite business options');
   }
   error_log('cron scheduler is running api call');

@@ -123,7 +123,6 @@ class BL_API_Client_Settings {
 
   static function bl_api_client_dynamic_settings_field($db_slug,$this_field,$fallback_str) {
     $options = ( get_option($db_slug) ) ? get_option($db_slug) : $db_slug;
-    //$placeholder = Snail_Tail::try_option_key($options,$this_field,$fallback_str);
     $placeholder = (isset($options[$this_field])) ? $options[$this_field] : $fallback_str;
     $value_tag = ($placeholder === $fallback_str) ? "placeholder" : "value";
     return "<input type='text' class='bl_api_client zeroTest' id='{$this_field}'
