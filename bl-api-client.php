@@ -134,6 +134,21 @@ function bl_api_call() {
     error_log('found cr-suite business options');
   }
   error_log('cron scheduler is running api call');
+  error_log('reviews data dump');
+  foreach($commit['reviews'] as $assoc) {
+    error_log('review data');
+    foreach($assoc as $prop) {
+      if (!is_array($prop)) {
+        error_log($prop);
+      }
+
+    }
+  }
+  error_log('agg rating data');
+  foreach($commit['aggregate_rating'] as $key => $val) {
+    error_log($key);
+    error_log($val);
+  }
   /*
   error_log('test pattern for valid keys');
   foreach(array_keys($valid_keys) as $this_key) {
