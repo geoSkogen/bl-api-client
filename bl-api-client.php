@@ -16,14 +16,26 @@ register_activation_hook( __FILE__, 'bl_api_client_activate' );
 register_deactivation_hook( __FILE__, 'bl_api_client_deactivate' );
 
 function bl_api_client_activate() {
-  $options = get_option('bl_api_client_activity');
+  $activity = get_option('bl_api_client_activity');
+  $settings = get_option('bl_api_client_settings');
   $commit = array(
     'log'=>['placeholder'],
-    'reviews'=> (isset($options['reviews'])) ? $options['reviews'] : '',
-    'aggregate_rating'=> (isset($options['aggregate_rating'])) ?
-       $options['aggregate_rating'] : array('rating'=>'','count'=>'')
+    'reviews'=> (isset($activity['reviews'])) ? $activity['reviews'] : '',
+    'aggregate_rating'=> (isset($activity['aggregate_rating'])) ?
+       $activity['aggregate_rating'] : array('rating'=>'','count'=>'')
   );
   update_option('bl_api_client_activity',$commit);
+  error_log('crs biz options validatior running');
+  $body_params = BL_CR_Suite_Client::validate_business_data();
+  if ($body_params) {
+    if (count(array_keys($body_params))===6) {
+      error_log('got cr suite body params');
+    }
+  }
+  error_log('bl api client biz options validator running');
+  $crs_handshake = BL_Biz_Info_Monster::crs_handshake([$body_params],$settings);
+
+  update_option('bl_api_client_settings',$crs_handshake);
 }
 
 function bl_api_client_deactivate() {
@@ -76,6 +88,10 @@ if ( !class_exists( 'BL_CR_Suite_Client' ) ) {
   include_once 'classes/bl_cr_suite_client.php';
 }
 
+if ( !class_exists( 'BL_Biz_Info_Monster' ) ) {
+  include_once 'classes/bl_biz_info_monster.php';
+}
+
 //Build out flow controls here!!!
 //Cron job should schedule itself but not run at time of scheduling, and . . .
 //only if the lookup info is validate;
@@ -96,17 +112,6 @@ if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
 //ChIJsc2v07GxlVQRRK-jGkZfiw0
 //975978498955128644
 //FAKE DATA TABLE: use this to test in absence of CR Suite business options
-/*
-$options = array(
-  'business_name'  => 'Earthworks Excavating Services',
-  'business_locality'            => 'Battle Ground',
-  'business_zipcode'        => '98604',
-  'business_address'  => '1420 SE 13TH ST',
-  'business_phone'       => '(360) 772-0088'//,
-  //'gmb'             => "https://local.google.com/place?id=975978498955128644"
-);
-update_option('crs_business_options',$options);
-*/
 
 bl_api_call();
 
@@ -115,36 +120,21 @@ function bl_api_call() {
   $commit = get_option('bl_api_client_activity');
   $auth = get_option('bl_api_client');
   $crs_biz = get_option('crs_business_options');
-  $valid_keys = array(
-    'business_name'=>'business-names','city'=>'city','zipcode'=>'postcode',
-    'address'=>'street-address','phone'=>'telephone');
-  $data_keys = array(
-      'business-names'=>'business_name','city'=>'city','postcode'=>'zipcode',
-      'street-address'=>'address','telephone'=>'phone');
+
   //check if CR Suite business options has the required lookup info
+  $biz_info = new BL_Biz_Info_Monster($this_option);
   $req_body = BL_CR_Suite_Client::validate_business_data();
   //check if BL Client business options are set
   if (!$req_body) {
-    $i = 1;
-    $indexer = '_' . strval($i);
-    foreach (array_keys($valid_keys) as $valid_key) {
-      $this_key = $valid_key . $indexer;
-      if (isset($this_option[$this_key]) && '' !=$this_option[$this_key]) {
-          $req_body[$valid_keys[$valid_key]] = $this_option[$this_key];
-        }
-    }
+    $req_body = $biz_info->places[0];
     error_log('cr-suite business options not found; used bl-client lookup');
   } else {
-    $i = 1;
-    foreach($req_body as $key=>$val) {
-      $new_key = $data_keys[$key] . '_' . $i;
-      $this_option[$new_key] = $val;
-    }
-    update_option('bl_api_client_settings',$this_option);
     error_log('found cr-suite business options');
   }
   error_log('cron scheduler is running api call');
-  error_log('reviews data dump');
+  //TEST PATTERNS - uncomment for debugging
+  /*
+  error_log('test pattern - all reviews data dump');
   foreach($commit['reviews'] as $assoc) {
     error_log('review data');
     foreach($assoc as $prop) {
@@ -154,14 +144,17 @@ function bl_api_call() {
 
     }
   }
-  error_log('agg rating data');
+  */
+  /*
+  error_log('test pattern for agg rating data');
   foreach($commit['aggregate_rating'] as $key => $val) {
     error_log($key);
     error_log($val);
   }
+  */
   /*
   error_log('test pattern for valid keys');
-  foreach(array_keys($valid_keys) as $this_key) {
+  foreach(array_keys($biz_info->valid_keys) as $this_key) {
     error_log($this_key);
   }
   error_log('test pattern for req body');
@@ -176,11 +169,12 @@ function bl_api_call() {
     error_log($this_value);
   }
 */
-  if ( count(array_keys($req_body))===count(array_keys($valid_keys)) ) {
+  if ( count(array_keys($req_body))===count(array_keys($biz_info->valid_keys)) ) {
     $req_body['country'] = 'USA';
     error_log('found all required business options keys');
     if (isset($auth['api_key']) && isset($auth['api_secret'])) {
       error_log('found api keys');
+      //THIS IS THE API CALL - UNCOMMENT TO RUN
       //$result = BL_Scraper::call_local_dir($auth,$req_body,'fetch-reviews','google');
     } else {
       error_log('api keys not found');
@@ -188,17 +182,7 @@ function bl_api_call() {
   } else {
     error_log('required business options keys not found');
   }
-  /*
-  $options = array(
-    'business-names'  => 'Earthworks Excavating Services',
-    'city'            => 'Battle Ground',
-    'postcode'        => '98604',
-    'street-address'  => '1420 SE 13TH ST',
-    'country'         => 'USA',
-    'telephone'       => '(360) 772-0088'//,
-    //'gmb'             => "https://local.google.com/place?id=975978498955128644"
-  );
-  */
+
   /*
   if ($result->reviews && $result->aggregate_rating) {
     $commit['reviews'] = $result->reviews;

@@ -8,6 +8,7 @@ class BL_API_Client_Settings {
     "city",
     "state",
     "zipcode",
+    "country",
     "phone",
     "gmb",
     "facebook"

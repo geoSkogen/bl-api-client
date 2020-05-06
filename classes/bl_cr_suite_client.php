@@ -6,7 +6,8 @@ class BL_CR_Suite_Client {
     'address'=>'street-address',
     'locality'=>'city',
     'phone'=>'telephone',
-    'zip'=>'postcode'
+    'zip'=>'postcode',
+    'country'=>'country'
   );
   public static $db_slug = 'crs_business_options';
   public static $business_options = array();
@@ -30,11 +31,6 @@ class BL_CR_Suite_Client {
     self::init_business_options();
     foreach ($keys as $prop) {
       $result_str = self::get_business_option($prop, true);
-      /*
-      error_log('test pattern for crs biz lookup');
-      error_log($prop);
-      error_log($result_str);
-      */
       if ($result_str) {
         $result_arr[self::$business_props[$prop]] = $result_str;
       }
@@ -43,9 +39,11 @@ class BL_CR_Suite_Client {
       count(array_keys(self::$business_props))) {
       return $result_arr;
     } else {
-      return array('not_found'=>true);
+      return false;
     }
   }
+
+
 }
 
 
