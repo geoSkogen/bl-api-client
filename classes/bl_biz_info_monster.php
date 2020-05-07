@@ -10,6 +10,7 @@ class BL_Biz_Info_Monster {
   public static $data_keys = array(
       'business-names'=>'business_name','city'=>'city','postcode'=>'zipcode',
       'street-address'=>'address','country'=>'country','telephone'=>'phone');
+
   function __construct($table) {
     $this->count = $table['field_count'];
     $this->places = $this->get_places($this->count,$table);

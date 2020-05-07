@@ -16,6 +16,9 @@ class BL_API_Client_Settings {
 
   public static $current_field_index = 0;
   public static $bl_api_client_label_toggle_index = 0;
+  public static $crs_business_options = array();
+  public static $crs_keys = array();
+  public static $crs_prepends = array();
 
   public static function get_field_count() {
     $result = '';
@@ -50,6 +53,10 @@ class BL_API_Client_Settings {
   }
 
   public static function settings_api_init() {
+
+    self::$crs_business_options = BL_CR_Suite_Client::init_business_options();
+    self::$crs_keys = BL_CR_Suite_Client::$client_props;
+    self::$crs_prepends = BL_CR_Suite_Client::$prefixes;
 
     add_settings_section(
       'bl_api_client_auth',                         //uniqueID
@@ -137,9 +144,23 @@ class BL_API_Client_Settings {
     $field_name = self::$bl_api_client_label_toggle[self::$bl_api_client_label_toggle_index];
     $this_field = $field_name . "_" . strval(self::$current_field_index);
     $this_label = ucwords($field_name) . " " . strval(self::$current_field_index);
-    $placeholder =
-      (isset($options[$this_field]) && "" != $options[$this_field]) ?
-      $options[$this_field] : "(not set)";
+    /*
+    error_log('crs slug test:');
+    error_log($this_crs_slug);
+    error_log('crs database value:');
+    error_log(self::$crs_business_options[$this_crs_slug]);
+    */
+    $placeholder = '(not set)';
+    if (self::$crs_business_options && isset(self::$crs_keys[$field_name])
+      && isset(self::$crs_prepends[self::$current_field_index-1])) {
+      $this_crs_slug = self::$crs_prepends[self::$current_field_index-1] . '_' . self::$crs_keys[$field_name];
+      $placeholder = (isset(self::$crs_business_options[$this_crs_slug]) &&
+        ''!=self::$crs_business_options[$this_crs_slug]) ?
+        self::$crs_business_options[$this_crs_slug] : $placeholder;
+    } else {
+      $placeholder = isset($options[$this_field]) ?
+        $options[$this_field] : $placeholder;
+    }
     $value_tag = ($placeholder === "(not set)") ? "placeholder" : "value";
     //reset globals - toggle label and increment pairing series as needed
     self::$bl_api_client_label_toggle_index +=
@@ -189,7 +210,7 @@ class BL_API_Client_Settings {
       //error_log("drop=false");
     }
     if ($db_slug==='_settings') {
-      $client_info = BL_CR_Suite_Client::validate_business_data();
+      $client_info = BL_CR_Suite_Client::validate_business_data('business');
       if ($client_info) {
         echo '<span class="alert_me"><strong>Your Info is in CR Suite</strong></span>';
       }

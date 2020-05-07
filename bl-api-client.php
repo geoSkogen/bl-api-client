@@ -24,17 +24,20 @@ function bl_api_client_activate() {
     'aggregate_rating'=> (isset($activity['aggregate_rating'])) ?
        $activity['aggregate_rating'] : array('rating'=>'','count'=>'')
   );
-  update_option('bl_api_client_activity',$commit);
-  error_log('crs biz options validatior running');
-  $body_params = BL_CR_Suite_Client::validate_business_data();
+
+  //error_log('crs biz options validatior running');
+  $body_params = BL_CR_Suite_Client::validate_business_data('business');
+  /*
   if ($body_params) {
     if (count(array_keys($body_params))===6) {
       error_log('got cr suite body params');
     }
   }
   error_log('bl api client biz options validator running');
+  */
   $crs_handshake = BL_Biz_Info_Monster::crs_handshake([$body_params],$settings);
 
+  update_option('bl_api_client_activity',$commit);
   update_option('bl_api_client_settings',$crs_handshake);
 }
 
@@ -58,6 +61,24 @@ if (isset($options)) {
   error_log('db slug not found');
 }
 */
+//Controller
+if ( !class_exists( 'BL_Scraper' ) ) {
+  require_once(__DIR__ . '/vendor/autoload.php');
+  include_once 'classes/bl_scraper.php';
+}
+
+if ( !class_exists( 'BL_CR_Suite_Client' ) ) {
+  include_once 'classes/bl_cr_suite_client.php';
+}
+
+if ( !class_exists( 'BL_Biz_Info_Monster' ) ) {
+  include_once 'classes/bl_biz_info_monster.php';
+}
+
+if ( !class_exists( 'BL_Review_Monster' ) ) {
+  include_once 'classes/bl_review_monster.php';
+}
+
 //Admin
 if ( !class_exists( 'BL_API_Client_Options' ) ) {
    include_once 'admin/bl_api_client_options.php';
@@ -76,20 +97,6 @@ if ( !class_exists( 'BL_API_Client_Settings' ) ) {
 
 if ( !class_exists( 'BL_CR_Suite_Client' ) ) {
   include_once 'classes/bl_cr_suite_client.php';
-}
-
-
-if ( !class_exists( 'BL_Scraper' ) ) {
-  require_once(__DIR__ . '/vendor/autoload.php');
-  include_once 'classes/bl_scraper.php';
-}
-
-if ( !class_exists( 'BL_CR_Suite_Client' ) ) {
-  include_once 'classes/bl_cr_suite_client.php';
-}
-
-if ( !class_exists( 'BL_Biz_Info_Monster' ) ) {
-  include_once 'classes/bl_biz_info_monster.php';
 }
 
 //Build out flow controls here!!!
@@ -123,7 +130,7 @@ function bl_api_call() {
 
   //check if CR Suite business options has the required lookup info
   $biz_info = new BL_Biz_Info_Monster($this_option);
-  $req_body = BL_CR_Suite_Client::validate_business_data();
+  $req_body = BL_CR_Suite_Client::validate_business_data('business');
   //check if BL Client business options are set
   if (!$req_body) {
     $req_body = $biz_info->places[0];
