@@ -17,6 +17,7 @@ class BL_CR_Suite_Client {
   public static $prefixes = ['business','second','third','fourth'];
   public static $db_slug = 'crs_business_options';
   public static $business_options = array();
+  public static $places = array();
 
   public static function init_business_options() {
     $options = get_option('crs_business_options');
@@ -25,17 +26,29 @@ class BL_CR_Suite_Client {
   }
 
   public static function get_business_option($option_str, $prefix) {
-    $slug = $prefix . '_'. $option_str;
+    $slug = ($option_str==='name') ? 'business_name' : $prefix . '_'. $option_str;
+    error_log('looking up slug:');
+    error_log($slug);
     $result = isset( self::$business_options[ $slug ] ) ?
       sanitize_text_field( self::$business_options[ $slug ] ) : '';
     return $result;
   }
 
-  public static function business_options_rollup_report() {
+  public static function business_options_rollup() {
     self::init_business_options();
+    $result = array();
+    $row = array();
     $count = (isset(self::$business_options['business_locations'])) ?
-      numval($count) : 1;
-
+      intval(self::$business_options['business_locations']) : 1;
+    error_log('# of biz locales');
+    error_log(strval($count));
+    for ($i = 0; $i < $count; $i++) {
+      error_log(self::$prefixes[$i]);
+      $row = self::validate_business_data(self::$prefixes[$i]);
+      $result[] = $row;
+    }
+    self::$places = $result;
+    return $result;
   }
 
   public static function validate_business_data($prefix) {
@@ -56,11 +69,5 @@ class BL_CR_Suite_Client {
       return false;
     }
   }
-
-
-
-
 }
-
-
 ?>

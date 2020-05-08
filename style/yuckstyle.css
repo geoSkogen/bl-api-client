@@ -28,12 +28,17 @@ nav {
 }
 
 input.zeroTest,
+input.zeroText,
 input.zeroTestModal {
   margin: 1em;
   padding: 0.25em 0.75em;
   border-radius: 2px;
   border: 1.5px solid cornflowerblue;
   font-size: 16px;
+}
+
+input.zeroText {
+  margin: 0;
 }
 
 .slight {
@@ -103,7 +108,7 @@ a:link, a:active, a:hover, a:visited {
   text-decoration: none;
 }
 
-.snail_admin,
+.bl_admin,
 input[type="submit"] {
   color: white;
   background-color: steelblue;
@@ -117,6 +122,9 @@ input[type="submit"] {
 
 input[type="number"] {
   width: 56px;
+  border-radius: 2px;
+  border: 1.5px solid cornflowerblue;
+  font-size: 16px;
 }
 
 input.zeroTestModal {

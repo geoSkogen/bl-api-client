@@ -26,19 +26,28 @@ function bl_api_client_activate() {
   );
 
   //error_log('crs biz options validatior running');
-  $body_params = BL_CR_Suite_Client::validate_business_data('business');
-  /*
+  //$body_params = BL_CR_Suite_Client::validate_business_data('business');
+  $body_params = BL_CR_Suite_Client::business_options_rollup();
+
   if ($body_params) {
-    if (count(array_keys($body_params))===6) {
+    if (count($body_params)) {
       error_log('got cr suite body params');
+      foreach($body_params as $row) {
+        foreach($row as $key=>$val) {
+          error_log($key);
+          error_log($val);
+        }
+      }
     }
   }
   error_log('bl api client biz options validator running');
-  */
+
+  /*
   $crs_handshake = BL_Biz_Info_Monster::crs_handshake([$body_params],$settings);
 
   update_option('bl_api_client_activity',$commit);
   update_option('bl_api_client_settings',$crs_handshake);
+  */
 }
 
 function bl_api_client_deactivate() {
