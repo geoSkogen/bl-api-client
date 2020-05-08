@@ -19,6 +19,7 @@ class BL_API_Client_Settings {
   public static $crs_business_options = array();
   public static $crs_keys = array();
   public static $crs_prepends = array();
+  public static $options = array();
 
   public static function get_field_count() {
     $result = '';
@@ -57,6 +58,7 @@ class BL_API_Client_Settings {
     self::$crs_business_options = BL_CR_Suite_Client::init_business_options();
     self::$crs_keys = BL_CR_Suite_Client::$client_props;
     self::$crs_prepends = BL_CR_Suite_Client::$prefixes;
+    self::$options = get_option('bl_api_client_settings');
 
     add_settings_section(
       'bl_api_client_auth',                         //uniqueID
@@ -138,7 +140,7 @@ class BL_API_Client_Settings {
   }
 
   static function bl_api_client_settings_info_field() {
-    $options = get_option('bl_api_client_settings');
+    //$options = get_option('bl_api_client_settings');
     $divider = (self::$bl_api_client_label_toggle_index < count(self::$bl_api_client_label_toggle)-1) ?
       "" : "<br/><br/><hr/>";
     $field_name = self::$bl_api_client_label_toggle[self::$bl_api_client_label_toggle_index];
@@ -152,14 +154,14 @@ class BL_API_Client_Settings {
     */
     $placeholder = '(not set)';
     if (self::$crs_business_options && isset(self::$crs_keys[$field_name])
-      && isset(self::$crs_prepends[self::$current_field_index-1])) {
+        && isset(self::$crs_prepends[self::$current_field_index-1])) {
       $this_crs_slug = self::$crs_prepends[self::$current_field_index-1] . '_' . self::$crs_keys[$field_name];
       $placeholder = (isset(self::$crs_business_options[$this_crs_slug]) &&
         ''!=self::$crs_business_options[$this_crs_slug]) ?
         self::$crs_business_options[$this_crs_slug] : $placeholder;
     } else {
-      $placeholder = isset($options[$this_field]) ?
-        $options[$this_field] : $placeholder;
+      $placeholder = isset(self::$options[$this_field]) ?
+        self::$options[$this_field] : $placeholder;
     }
     $value_tag = ($placeholder === "(not set)") ? "placeholder" : "value";
     //reset globals - toggle label and increment pairing series as needed
@@ -175,15 +177,14 @@ class BL_API_Client_Settings {
 
   static function bl_api_client_field_count() {
     $result = '<div>';
-    $options = get_option('bl_api_client_settings');
     $this_field = 'field_count';
     $ghost_field = 'prev_field_count';
     $invis_atts = "class='invis-input' id='prev_field_count'";
     $style_rule = "style='display:none'";
-    $val = (isset($options[$this_field]) && "" != $options[$this_field]) ?
-      $options[$this_field] : strval(1);
-    $ghost_val = (isset($options[$ghost_field]) && "" != $options[$ghost_field]) ?
-      $options[$ghost_field] : strval(1);
+    $val = (isset(self::$options[$this_field]) && "" != self::$options[$this_field]) ?
+      self::$options[$this_field] : strval(1);
+    $ghost_val = (isset(self::$options[$ghost_field]) && "" != self::$options[$ghost_field]) ?
+      self::$options[$ghost_field] : strval(1);
     $result .= "<input name=bl_api_client_settings[{$this_field}] type='number' value='{$val}'/>";
     $result .= "<input name='submit' type='submit' id='update' class='button-primary' value='Update' />";
     $result .= "<input {$style_rule} {$invis_atts} name=bl_api_client_settings[{$ghost_field}] type='number' value='{$val}'/>";

@@ -5,6 +5,4 @@ class BL_Review_Monster  {
   function __construct($table,$assoc) {
     $this->reviews = $table;
   }
-
-
 }

@@ -26,11 +26,15 @@ class BL_CR_Suite_Client {
   }
 
   public static function get_business_option($option_str, $prefix) {
-    $slug = ($option_str==='name') ? 'business_name' : $prefix . '_'. $option_str;
+    $prepend = ($option_str==='name' || $option_str==='country') ?
+      'business' : $prefix;
+    $slug = $prepend . '_'. $option_str;
     error_log('looking up slug:');
     error_log($slug);
     $result = isset( self::$business_options[ $slug ] ) ?
       sanitize_text_field( self::$business_options[ $slug ] ) : '';
+    error_log('result:');
+    error_log($result);
     return $result;
   }
 
@@ -43,6 +47,7 @@ class BL_CR_Suite_Client {
     error_log('# of biz locales');
     error_log(strval($count));
     for ($i = 0; $i < $count; $i++) {
+      error_log('fetching biz data iteration# ' . strval($i) . ' for:');
       error_log(self::$prefixes[$i]);
       $row = self::validate_business_data(self::$prefixes[$i]);
       $result[] = $row;

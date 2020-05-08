@@ -17,7 +17,7 @@ class BL_Biz_Info_Monster {
   }
 
   public function get_places($count,$assoc) {
-    var_dump($assoc);
+    //var_dump($assoc);
     $places = [];
     for ($i = 1; $i < $count+1; $i++) {
       $req_body = array();
@@ -34,16 +34,17 @@ class BL_Biz_Info_Monster {
   }
 
   public static function crs_handshake($req_body_arr,$settings_table) {
-    $score = 0;
     for ($i = 0; $i < count($req_body_arr);$i++) {
+      $score = 0;
       foreach($req_body_arr[$i] as $key=>$val) {
         $new_key = self::$data_keys[$key] . '_' . strval($i+1);
         $settings_table[$new_key] = $val;
         $score++;
       }
+      error_log('crs handshake row ' . strval($i) . ' - number of values imported:');
+      error_log(strval($score));
     }
-    error_log('crs handshake score - number of values imported:');
-    error_log(strval($score));
+    error_log(var_dump($settings_table));
     return $settings_table;
   }
 
