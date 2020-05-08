@@ -23,9 +23,9 @@ class BL_API_Client_Settings {
 
   public static function get_field_count() {
     $result = '';
-    $option = get_option('bl_api_client_settings');
-    if (isset($option['field_count'])) {
-      $result = $option['field_count'];
+    self::$options = get_option('bl_api_client_settings');
+    if (isset(self::$options['field_count'])) {
+      $result = self::$options['field_count'];
     } else {
       $result = 1;
     }
@@ -33,20 +33,20 @@ class BL_API_Client_Settings {
   }
 
   public static function trim_fields() {
-    $option = get_option('bl_api_client_settings');
-    $stop = (isset($option['field_count'])) ?
-      intval($option['field_count']) + 1 : 2;
+    //$option = get_option('bl_api_client_settings');
+    $stop = (isset(self::$options['field_count'])) ?
+      intval(self::$options['field_count']) + 1 : 2;
     $result = array();
     $meta_data = ['drop','field_count','prev_field_count'];
     foreach ($meta_data as $meta_datum) {
-      $result[$meta_datum] = $option[$meta_datum];
+      $result[$meta_datum] = self::$options[$meta_datum];
     }
     for ($i = 1; $i < $stop; $i++) {
       foreach (self::$bl_api_client_label_toggle as $bl_api_client_label) {
         $result[$bl_api_client_label . '_' . strval($i)] =
-          (isset($option[$bl_api_client_label . '_' . strval($i)]) &&
-            "" != $option[$bl_api_client_label . '_' . strval($i)]) ?
-              $option[$bl_api_client_label . '_' . strval($i)] : '';
+          (isset(self::$options[$bl_api_client_label . '_' . strval($i)]) &&
+            "" != self::$options[$bl_api_client_label . '_' . strval($i)]) ?
+              self::$options[$bl_api_client_label . '_' . strval($i)] : '';
       }
     }
     update_option('bl_api_client_settings', $result);
@@ -140,7 +140,6 @@ class BL_API_Client_Settings {
   }
 
   static function bl_api_client_settings_info_field() {
-    //$options = get_option('bl_api_client_settings');
     $divider = (self::$bl_api_client_label_toggle_index < count(self::$bl_api_client_label_toggle)-1) ?
       "" : "<br/><br/><hr/>";
     $field_name = self::$bl_api_client_label_toggle[self::$bl_api_client_label_toggle_index];
