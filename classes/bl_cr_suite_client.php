@@ -1,6 +1,8 @@
 <?php
 class BL_CR_Suite_Client {
-
+  //exports BL API request body params from CR Suite directly
+  //also exposes static data and methods for plugin settings admin page
+  //allows CR biz info to dynamically populate BL Client biz info
   public static $business_props = array(
     'name'=>'business-names',
     'address'=>'street-address',
@@ -24,7 +26,7 @@ class BL_CR_Suite_Client {
     self::$business_options = (isset($options)) ? $options : null;
     return (isset($options)) ? $options : null;
   }
-
+  //gets just the table keys needed per API request body param
   public static function get_business_option($option_str, $prefix) {
     $prepend = ($option_str==='name' || $option_str==='country') ?
       'business' : $prefix;
@@ -37,7 +39,8 @@ class BL_CR_Suite_Client {
     error_log($result);
     return $result;
   }
-
+  //returns indexed array per biz locale - elements are API request params objects
+  //same data structure as BL_Biz_Info_Monster->places;
   public static function business_options_rollup() {
     self::init_business_options();
     $result = array();
@@ -55,7 +58,7 @@ class BL_CR_Suite_Client {
     self::$places = $result;
     return $result;
   }
-
+  //returns just the biz info props needed by the API request
   public static function validate_business_data($prefix) {
     $result_arr = [];
     $result_str = '';

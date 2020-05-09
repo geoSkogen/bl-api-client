@@ -19,23 +19,56 @@ class BL_API_Client_Settings {
   public static $crs_business_options = array();
   public static $crs_keys = array();
   public static $crs_prepends = array();
+  public static $crs_locale_count = 0;
+  public static $crs_override = false;
   public static $options = array();
 
+  public static function crs_handshake() {
+    if (!count(array_keys(self::$crs_business_options))) {
+      self::$crs_business_options = BL_CR_Suite_Client::init_business_options();
+      self::$crs_keys = BL_CR_Suite_Client::$client_props;
+      self::$crs_prepends = BL_CR_Suite_Client::$prefixes;
+      self::$crs_locale_count = (isset(self::$crs_business_options['business_locations']) &&
+        intval(self::$crs_business_options['business_locations'])) ?
+          intval(self::$crs_business_options['business_locations']) : 0 ;
+    }
+    if (!count(array_keys(self::$options))) {
+      self::$options = get_option('bl_api_client_settings');
+      /*
+      self::$crs_override = ( isset(self::$options['crs_override']) &&
+        intval(isset(self::$options['crs_override'])) ) ? true : false;
+      */
+    }
+    return self::$crs_business_options;
+  }
+
   public static function get_field_count() {
-    $result = '';
-    self::$options = get_option('bl_api_client_settings');
-    if (isset(self::$options['field_count'])) {
-      $result = self::$options['field_count'];
-    } else {
-      $result = 1;
+    $result = 1;
+    self::crs_handshake();
+    //self::$options = get_option('bl_api_client_settings');
+    if (isset(self::$crs_locale_count)) {
+      $result = (self::$crs_locale_count) ?
+        self::$crs_locale_count : $result;
+    } else if (isset(self::$options['field_count'])) {
+      $result = invtval(self::$options['field_count']);
     }
     return $result;
   }
-
+  //instantiates the correct number of form fields
   public static function trim_fields() {
     //$option = get_option('bl_api_client_settings');
-    $stop = (isset(self::$options['field_count'])) ?
-      intval(self::$options['field_count']) + 1 : 2;
+    $stop = self::get_field_count() + 1;
+    /*
+    $stop = 2;
+    self::crs_handshake();
+    if (isset(self::$crs_business_options['business_locations'])) {
+      $stop = (intval(self::$crs_business_options['business_locations'])) ?
+        intval(self::$crs_business_options['business_locations']) + 1 : $stop;
+    } else {
+      $stop = (isset(self::$options['field_count'])) ?
+        intval(self::$options['field_count']) + 1 : $stop;
+    }
+    */
     $result = array();
     $meta_data = ['drop','field_count','prev_field_count'];
     foreach ($meta_data as $meta_datum) {
@@ -54,11 +87,10 @@ class BL_API_Client_Settings {
   }
 
   public static function settings_api_init() {
-
-    self::$crs_business_options = BL_CR_Suite_Client::init_business_options();
-    self::$crs_keys = BL_CR_Suite_Client::$client_props;
-    self::$crs_prepends = BL_CR_Suite_Client::$prefixes;
-    self::$options = get_option('bl_api_client_settings');
+    //cr suite data import using passive-record technique
+    self::crs_handshake();
+    $data_status = (self::$crs_business_options && !self::$crs_override) ?
+        'Found Your Business Info in CR Suite' : 'Enter Your Business Info';
 
     add_settings_section(
       'bl_api_client_auth',                         //uniqueID
@@ -69,7 +101,7 @@ class BL_API_Client_Settings {
 
     add_settings_section(
       'bl_api_client_settings',                         //uniqueID
-      'BrightLocal Review Profiles - Enter Your Business Info',   //Title
+      'BrightLocal Review Profiles - ' . $data_status,   //Title
       array('BL_API_Client_Settings','bl_api_client_settings_section'),//CallBack Function
       'bl_api_client_settings'                                //page-slug
     );
@@ -89,7 +121,15 @@ class BL_API_Client_Settings {
       'bl_api_client',
       'bl_api_client_auth'
     );
-
+    /*
+    add_settings_field(
+      'crs_override',
+      'override crs business options',
+      array('BL_API_Client_Settings','bl_api_client_crs_override'),
+      'bl_api_client_settings',
+      'bl_api_client_settings'
+    );
+    */
     add_settings_field(
       'field_count',
       'Number of Brick & Mortars',
@@ -97,7 +137,7 @@ class BL_API_Client_Settings {
       'bl_api_client_settings',
       'bl_api_client_settings'
     );
-
+    //dynamic grouped settings fields - reiterates all items on the list $bl_api_client_label_toggle
     for ($i = 1; $i < self::get_field_count() + 1; $i++) {
       self::$current_field_index = $i;
       for ($ii = 0; $ii < count(self::$bl_api_client_label_toggle); $ii++) {
@@ -123,15 +163,15 @@ class BL_API_Client_Settings {
   }
   //Templates
   ////template 3 - settings section field - dynamically rendered <input/>
-  static function bl_api_client_api_key_field() {
+  public static function bl_api_client_api_key_field() {
     echo self::bl_api_client_dynamic_settings_field('bl_api_client','api_key','(not set)');
   }
 
-  static function bl_api_client_api_secret_field() {
+  public static function bl_api_client_api_secret_field() {
     echo self::bl_api_client_dynamic_settings_field('bl_api_client','api_secret','(not set)');
   }
 
-  static function bl_api_client_dynamic_settings_field($db_slug,$this_field,$fallback_str) {
+  public static function bl_api_client_dynamic_settings_field($db_slug,$this_field,$fallback_str) {
     $options = ( get_option($db_slug) ) ? get_option($db_slug) : $db_slug;
     $placeholder = (isset($options[$this_field])) ? $options[$this_field] : $fallback_str;
     $value_tag = ($placeholder === $fallback_str) ? "placeholder" : "value";
@@ -139,18 +179,12 @@ class BL_API_Client_Settings {
       name={$db_slug}[$this_field] {$value_tag}='{$placeholder}'/>";
   }
 
-  static function bl_api_client_settings_info_field() {
+  public static function bl_api_client_settings_info_field() {
     $divider = (self::$bl_api_client_label_toggle_index < count(self::$bl_api_client_label_toggle)-1) ?
       "" : "<br/><br/><hr/>";
     $field_name = self::$bl_api_client_label_toggle[self::$bl_api_client_label_toggle_index];
     $this_field = $field_name . "_" . strval(self::$current_field_index);
     $this_label = ucwords($field_name) . " " . strval(self::$current_field_index);
-    /*
-    error_log('crs slug test:');
-    error_log($this_crs_slug);
-    error_log('crs database value:');
-    error_log(self::$crs_business_options[$this_crs_slug]);
-    */
     $placeholder = '(not set)';
     if (self::$crs_business_options && isset(self::$crs_keys[$field_name])
         && isset(self::$crs_prepends[self::$current_field_index-1])) {
@@ -173,34 +207,48 @@ class BL_API_Client_Settings {
     echo "<input type='text' class='zeroText'
       name=bl_api_client_settings[{$this_field}] {$value_tag}='{$placeholder}'/>" . $divider;
   }
-
-  static function bl_api_client_field_count() {
+  //numeric input
+  public static function bl_api_client_field_count() {
     $result = '<div>';
     $this_field = 'field_count';
     $ghost_field = 'prev_field_count';
     $invis_atts = "class='invis-input' id='prev_field_count'";
     $style_rule = "style='display:none'";
-    $val = (isset(self::$options[$this_field]) && "" != self::$options[$this_field]) ?
-      self::$options[$this_field] : strval(1);
-    $ghost_val = (isset(self::$options[$ghost_field]) && "" != self::$options[$ghost_field]) ?
-      self::$options[$ghost_field] : strval(1);
+
+    if (self::$crs_locale_count) {
+      $val = strval(self::$crs_locale_count);
+      $ghost_val = strval(self::$crs_locale_count);
+    } else {
+      $val = (isset(self::$options[$this_field]) && "" != self::$options[$this_field]) ?
+        self::$options[$this_field] : strval(1);
+      $ghost_val = (isset(self::$options[$ghost_field]) && "" != self::$options[$ghost_field]) ?
+        self::$options[$ghost_field] : strval(1);
+    }
+
     $result .= "<input name=bl_api_client_settings[{$this_field}] type='number' value='{$val}'/>";
     $result .= "<input name='submit' type='submit' id='update' class='button-primary' value='Update' />";
     $result .= "<input {$style_rule} {$invis_atts} name=bl_api_client_settings[{$ghost_field}] type='number' value='{$val}'/>";
     $result .= "</div><hr/>";
     echo $result;
   }
-  ////template 2 - after settings section title
 
-  static function bl_api_client_auth_section() {
+  public static function bl_api_client_crs_override() {
+    $is_checked = (self::$crs_override) ? 'checked' : '';
+    $result = "<input type='checkbox' name='bl_api_client_settings[crs_override]' value='1' ";
+    $result .= " $is_checked />";
+    $result .= "<label for='crs_override'>override CRS business options</label>";
+    echo $result;
+  }
+  ////template 2 - after settings section title
+  public static function bl_api_client_auth_section() {
     self::bl_api_client_dynamic_settings_section('');
   }
 
-  static function bl_api_client_settings_section() {
+  public static function bl_api_client_settings_section() {
     self::bl_api_client_dynamic_settings_section('_settings');
   }
 
-  static function bl_api_client_dynamic_settings_section($db_slug) {
+  public static function bl_api_client_dynamic_settings_section($db_slug) {
     $options = get_option('bl_api_client' . $db_slug);
     $dropped = (isset($options['drop'])) ? $options['drop'] : '(not set)';
     if ($dropped === "TRUE") {
@@ -210,10 +258,6 @@ class BL_API_Client_Settings {
       //error_log("drop=false");
     }
     if ($db_slug==='_settings') {
-      $client_info = BL_CR_Suite_Client::validate_business_data('business');
-      if ($client_info) {
-        echo '<span class="alert_me"><strong>Your Info is in CR Suite</strong></span>';
-      }
       self::trim_fields();
     }
     wp_enqueue_script('bl_api_client-unset-all', plugin_dir_url(__FILE__) . '../lib/bl_api_client-unset-all.js');
