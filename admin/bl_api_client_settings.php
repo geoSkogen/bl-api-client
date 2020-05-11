@@ -34,10 +34,11 @@ class BL_API_Client_Settings {
     }
     if (!count(array_keys(self::$options))) {
       self::$options = get_option('bl_api_client_settings');
-      /*
-      self::$crs_override = ( isset(self::$options['crs_override']) &&
-        intval(isset(self::$options['crs_override'])) ) ? true : false;
-      */
+      self::$crs_override = ( isset(self::$options['crs_override']) )  ?
+        intval(self::$options['crs_override']) : 0;
+        error_log('retuned crs override ');
+        error_log(strval(self::$options['crs_override']));
+
     }
     return self::$crs_business_options;
   }
@@ -121,15 +122,15 @@ class BL_API_Client_Settings {
       'bl_api_client',
       'bl_api_client_auth'
     );
-    /*
+
     add_settings_field(
       'crs_override',
-      'override crs business options',
+      'Override CRS business options?',
       array('BL_API_Client_Settings','bl_api_client_crs_override'),
       'bl_api_client_settings',
       'bl_api_client_settings'
     );
-    */
+
     add_settings_field(
       'field_count',
       'Number of Brick & Mortars',
@@ -233,10 +234,20 @@ class BL_API_Client_Settings {
   }
 
   public static function bl_api_client_crs_override() {
-    $is_checked = (self::$crs_override) ? 'checked' : '';
-    $result = "<input type='checkbox' name='bl_api_client_settings[crs_override]' value='1' ";
-    $result .= " $is_checked />";
+    $result = '';
+    error_log('field query crs override');
+    error_log(strval(self::$crs_override));
+    $is_selected = ['',''];
+    $is_selected[intval(self::$crs_override)] = 'checked';
+    $result .= "<div class='flexOuterStart'/>";
+    $result .= "<input type='radio' name='bl_api_client_settings[crs_override]' value='0' ";
+    $result .= " {$is_selected[0]} />";
+    $result .= "<label for='crs_override'>use CRS business options</label>";
+    $result .= "</div>";
+    $result .= "<input type='radio' name='bl_api_client_settings[crs_override]' value='1' ";
+    $result .= " {$is_selected[1]} />";
     $result .= "<label for='crs_override'>override CRS business options</label>";
+
     echo $result;
   }
   ////template 2 - after settings section title
