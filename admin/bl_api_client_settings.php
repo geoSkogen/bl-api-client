@@ -6,7 +6,7 @@ class BL_API_Client_Settings {
     "business_name",
     "address",
     "city",
-    "state",
+  //  "state",
     "zipcode",
     "country",
     "phone",
@@ -20,7 +20,7 @@ class BL_API_Client_Settings {
   public static $crs_keys = array();
   public static $crs_prepends = array();
   public static $crs_locale_count = 0;
-  public static $crs_override = false;
+  public static $crs_override = 0;
   public static $options = array();
 
   public static function crs_handshake() {
@@ -47,29 +47,17 @@ class BL_API_Client_Settings {
     $result = 1;
     self::crs_handshake();
     //self::$options = get_option('bl_api_client_settings');
-    if (isset(self::$crs_locale_count)) {
+    if (isset(self::$crs_locale_count) && !self::$crs_override) {
       $result = (self::$crs_locale_count) ?
         self::$crs_locale_count : $result;
     } else if (isset(self::$options['field_count'])) {
-      $result = invtval(self::$options['field_count']);
+      $result = intval(self::$options['field_count']);
     }
     return $result;
   }
   //instantiates the correct number of form fields
   public static function trim_fields() {
-    //$option = get_option('bl_api_client_settings');
     $stop = self::get_field_count() + 1;
-    /*
-    $stop = 2;
-    self::crs_handshake();
-    if (isset(self::$crs_business_options['business_locations'])) {
-      $stop = (intval(self::$crs_business_options['business_locations'])) ?
-        intval(self::$crs_business_options['business_locations']) + 1 : $stop;
-    } else {
-      $stop = (isset(self::$options['field_count'])) ?
-        intval(self::$options['field_count']) + 1 : $stop;
-    }
-    */
     $result = array();
     $meta_data = ['drop','field_count','prev_field_count'];
     foreach ($meta_data as $meta_datum) {
@@ -187,13 +175,17 @@ class BL_API_Client_Settings {
     $this_field = $field_name . "_" . strval(self::$current_field_index);
     $this_label = ucwords($field_name) . " " . strval(self::$current_field_index);
     $placeholder = '(not set)';
-    if (self::$crs_business_options && isset(self::$crs_keys[$field_name])
+    //determine if CRS business options table will repopulate form fields
+    if (!self::$crs_override && self::$crs_business_options && isset(self::$crs_keys[$field_name])
         && isset(self::$crs_prepends[self::$current_field_index-1])) {
-      $this_crs_slug = self::$crs_prepends[self::$current_field_index-1] . '_' . self::$crs_keys[$field_name];
+      $this_prepend = (self::$crs_keys[$field_name]==='name'||self::$crs_keys[$field_name]==='country') ?
+        'business' : self::$crs_prepends[self::$current_field_index-1];
+      $this_crs_slug = $this_prepend . '_' . self::$crs_keys[$field_name];
       $placeholder = (isset(self::$crs_business_options[$this_crs_slug]) &&
         ''!=self::$crs_business_options[$this_crs_slug]) ?
         self::$crs_business_options[$this_crs_slug] : $placeholder;
     } else {
+    //fallback on local database
       $placeholder = isset(self::$options[$this_field]) ?
         self::$options[$this_field] : $placeholder;
     }
@@ -216,7 +208,7 @@ class BL_API_Client_Settings {
     $invis_atts = "class='invis-input' id='prev_field_count'";
     $style_rule = "style='display:none'";
 
-    if (self::$crs_locale_count) {
+    if (self::$crs_locale_count && !self::$crs_override) {
       $val = strval(self::$crs_locale_count);
       $ghost_val = strval(self::$crs_locale_count);
     } else {
