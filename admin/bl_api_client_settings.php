@@ -44,16 +44,18 @@ class BL_API_Client_Settings {
   }
 
   public static function get_field_count() {
-    $result = 1;
     self::crs_handshake();
+    $crs_result = 1;
+    $bl_client_result = (isset(self::$options['field_count'])) ?
+      intval(self::$options['field_count']) : 1;
     //self::$options = get_option('bl_api_client_settings');
     if (isset(self::$crs_locale_count) && !self::$crs_override) {
-      $result = (self::$crs_locale_count) ?
-        self::$crs_locale_count : $result;
-    } else if (isset(self::$options['field_count'])) {
-      $result = intval(self::$options['field_count']);
+      $crs_result = (self::$crs_locale_count) ?
+        self::$crs_locale_count : $crs_result;
+      return ($bl_client_result > 4) ? $bl_client_result : $crs_result;
+    } else {
+      return $bl_client_result;
     }
-    return $result;
   }
   //instantiates the correct number of form fields
   public static function trim_fields() {
@@ -207,15 +209,19 @@ class BL_API_Client_Settings {
     $ghost_field = 'prev_field_count';
     $invis_atts = "class='invis-input' id='prev_field_count'";
     $style_rule = "style='display:none'";
+    $bl_client_val = (isset(self::$options[$this_field]) && "" != self::$options[$this_field]) ?
+      self::$options[$this_field] : strval(1);
+    $bl_client_ghost_val = (isset(self::$options[$ghost_field]) && "" != self::$options[$ghost_field]) ?
+      self::$options[$ghost_field] : strval(1);
 
     if (self::$crs_locale_count && !self::$crs_override) {
-      $val = strval(self::$crs_locale_count);
-      $ghost_val = strval(self::$crs_locale_count);
+      $val = (intval($bl_client_val) > 4) ?
+        $bl_client_val : strval(self::$crs_locale_count);
+      $ghost_val = (intval($bl_client_ghost_val) > 4) ?
+        $bl_client_ghost_val : strval(self::$crs_locale_count);
     } else {
-      $val = (isset(self::$options[$this_field]) && "" != self::$options[$this_field]) ?
-        self::$options[$this_field] : strval(1);
-      $ghost_val = (isset(self::$options[$ghost_field]) && "" != self::$options[$ghost_field]) ?
-        self::$options[$ghost_field] : strval(1);
+      $val = $bl_client_val;
+      $ghost_val = $bl_client_ghost_val;
     }
 
     $result .= "<input name=bl_api_client_settings[{$this_field}] type='number' value='{$val}'/>";
