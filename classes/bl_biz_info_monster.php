@@ -46,7 +46,7 @@ class BL_Biz_Info_Monster {
       error_log('crs handshake row ' . strval($i) . ' - number of values imported:');
       error_log(strval($score));
     }
-    error_log(var_dump($settings_table));
+    //error_log(var_dump($settings_table));
     return $settings_table;
   }
 

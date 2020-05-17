@@ -37,7 +37,7 @@ class BL_API_Client_Settings {
       self::$crs_override = ( isset(self::$options['crs_override']) )  ?
         intval(self::$options['crs_override']) : 0;
         error_log('retuned crs override ');
-        error_log(strval(self::$options['crs_override']));
+        //error_log(strval(self::$options['crs_override']));
 
     }
     return self::$crs_business_options;
@@ -97,6 +97,14 @@ class BL_API_Client_Settings {
       'bl_api_client_settings'                                //page-slug
     );
 
+
+    add_settings_section(
+      'bl_api_client_activity',                         //uniqueID
+      'BrightLocal API Activity',   //Title
+      array('BL_API_Client_Settings','bl_api_client_activity_section'),//CallBack Function
+      'bl_api_client'                                //page-slug
+    );
+
     add_settings_field(
       'api_key',
       'API Key',
@@ -127,6 +135,14 @@ class BL_API_Client_Settings {
       array('BL_API_Client_Settings','bl_api_client_field_count'),
       'bl_api_client_settings',
       'bl_api_client_settings'
+    );
+
+    add_settings_field(
+      'call_now',
+      'CALL NOW?',
+      array('BL_API_Client_Settings','bl_api_client_call_now'),
+      'bl_api_client_activity',
+      'bl_api_client_activity'
     );
     //dynamic grouped settings fields - reiterates all items on the list $bl_api_client_label_toggle
     for ($i = 1; $i < self::get_field_count() + 1; $i++) {
@@ -163,6 +179,7 @@ class BL_API_Client_Settings {
   }
 
   public static function bl_api_client_dynamic_settings_field($db_slug,$this_field,$fallback_str) {
+    //factor the database hits out into static record instance within the api_init() call?
     $options = ( get_option($db_slug) ) ? get_option($db_slug) : $db_slug;
     $placeholder = (isset($options[$this_field])) ? $options[$this_field] : $fallback_str;
     $value_tag = ($placeholder === $fallback_str) ? "placeholder" : "value";
@@ -248,6 +265,16 @@ class BL_API_Client_Settings {
 
     echo $result;
   }
+
+  public static function bl_api_client_call_now() {
+    $field_name = 'call_now';
+    $db_slug = 'activity';
+    $style_rule = 'style="display:none;"';
+
+    $result = "<input $style_rule value='1' name='{$db_slug}[{$field_name}]'></input>";
+
+    echo $result;
+  }
   ////template 2 - after settings section title
   public static function bl_api_client_auth_section() {
     self::bl_api_client_dynamic_settings_section('');
@@ -255,6 +282,10 @@ class BL_API_Client_Settings {
 
   public static function bl_api_client_settings_section() {
     self::bl_api_client_dynamic_settings_section('_settings');
+  }
+
+  public static function bl_api_client_activity_section() {
+    self::bl_api_client_dynamic_settings_section('_activity');
   }
 
   public static function bl_api_client_dynamic_settings_section($db_slug) {

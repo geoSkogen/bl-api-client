@@ -31,12 +31,12 @@ class BL_CR_Suite_Client {
     $prepend = ($option_str==='name' || $option_str==='country') ?
       'business' : $prefix;
     $slug = $prepend . '_'. $option_str;
-    error_log('looking up slug:');
-    error_log($slug);
+    //error_log('looking up slug:');
+    //error_log($slug);
     $result = isset( self::$business_options[ $slug ] ) ?
       sanitize_text_field( self::$business_options[ $slug ] ) : '';
-    error_log('result:');
-    error_log($result);
+    //error_log('result:');
+    //error_log($result);
     return $result;
   }
   //returns indexed array per biz locale - elements are API request params objects
@@ -47,11 +47,11 @@ class BL_CR_Suite_Client {
     $row = array();
     $count = (isset(self::$business_options['business_locations'])) ?
       intval(self::$business_options['business_locations']) : 1;
-    error_log('# of biz locales');
-    error_log(strval($count));
+    //error_log('# of biz locales');
+    //error_log(strval($count));
     for ($i = 0; $i < $count; $i++) {
-      error_log('fetching biz data iteration# ' . strval($i) . ' for:');
-      error_log(self::$prefixes[$i]);
+      //error_log('fetching biz data iteration# ' . strval($i) . ' for:');
+      //error_log(self::$prefixes[$i]);
       $row = self::validate_business_data(self::$prefixes[$i]);
       $result[] = $row;
     }

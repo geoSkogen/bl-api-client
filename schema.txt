@@ -18,8 +18,6 @@ options table
 
     city_{int}
 
-    state_{int}
-
     zipcode_{int}
 
     gmb_{int}

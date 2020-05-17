@@ -95,5 +95,4 @@ class BL_Scraper {
     update_option('bl_api_client_activity',$commit);
     return $return_val;
   }
-
 }
