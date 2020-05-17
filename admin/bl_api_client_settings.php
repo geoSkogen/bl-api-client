@@ -97,12 +97,11 @@ class BL_API_Client_Settings {
       'bl_api_client_settings'                                //page-slug
     );
 
-
     add_settings_section(
       'bl_api_client_activity',                         //uniqueID
       'BrightLocal API Activity',   //Title
       array('BL_API_Client_Settings','bl_api_client_activity_section'),//CallBack Function
-      'bl_api_client'                                //page-slug
+      'bl_api_client_activity'                                //page-slug
     );
 
     add_settings_field(
@@ -301,15 +300,22 @@ class BL_API_Client_Settings {
       self::trim_fields();
     }
     wp_enqueue_script('bl_api_client-unset-all', plugin_dir_url(__FILE__) . '../lib/bl_api_client-unset-all.js');
-    ?>
-    <hr/>
-    <div style="display:flex;flex-flow:row wrap;justify-content:space-between;">
-      <input name='submit' type='submit' id='submit' class='button-primary' value='<?php _e("Save Changes") ?>' />
-      <button id='drop_button' class='button-primary' style='border:1.5px solid red;'>
-        <?php _e("Delete All") ?>
-      </button>
-    </div>
-    <?php
+    if ($db_slug!='_activity') {
+      ?>
+      <hr/>
+      <div style="display:flex;flex-flow:row wrap;justify-content:space-between;">
+        <input name='submit' type='submit' id='submit' class='button-primary' value='<?php _e("Save Changes") ?>' />
+        <button id='drop_button' class='button-primary' style='border:1.5px solid red;'>
+          <?php _e("Delete All") ?>
+        </button>
+      </div>
+      <?php
+    } else {
+      $review_monster = new BL_Review_Monster($options);
+      $review_table = $review_monster->do_reviews_table();
+      echo $review_table;
+    }
   }
+
 }
 ?>

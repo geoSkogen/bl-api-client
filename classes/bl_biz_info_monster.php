@@ -38,10 +38,14 @@ class BL_Biz_Info_Monster {
   public static function crs_handshake($req_body_arr,$settings_table) {
     for ($i = 0; $i < count($req_body_arr);$i++) {
       $score = 0;
-      foreach($req_body_arr[$i] as $key=>$val) {
-        $new_key = self::$data_keys[$key] . '_' . strval($i+1);
-        $settings_table[$new_key] = $val;
-        $score++;
+      if ($req_body_arr[$i]) {
+        foreach($req_body_arr[$i] as $key=>$val) {
+          $new_key = self::$data_keys[$key] . '_' . strval($i+1);
+          $settings_table[$new_key] = $val;
+          $score++;
+        }
+      } else {
+        error_log('crs client handshake returned null value; check your data entry');
       }
       error_log('crs handshake row ' . strval($i) . ' - number of values imported:');
       error_log(strval($score));

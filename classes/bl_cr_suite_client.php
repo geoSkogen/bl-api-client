@@ -74,7 +74,7 @@ class BL_CR_Suite_Client {
       count(array_keys(self::$business_props))) {
       return $result_arr;
     } else {
-      return false;
+      return null;
     }
   }
 }

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name:  BrightLocal Client
-Description:  - extends CR Suite with live reviews
+Description:  Extends CR-Suite with Live Reviews
 Version:      2020.05.18
 Author:       City Ranked Media
 Author URI:
@@ -63,6 +63,8 @@ function bl_api_client_activate() {
        $activity['aggregate_rating'] : array('rating'=>'','count'=>'')
   );
   //error_log('crs biz options validatior running');
+  // return indexed associative arrays of request params per CR Suite locale
+  // if a locale dosn't fully validate, it adds a null to the array
   $body_params = BL_CR_Suite_Client::business_options_rollup();
   /*TEST PATTERN CODE ONLY for locating CR Suite Options Table
   if ($body_params) {
@@ -84,7 +86,6 @@ function bl_api_client_activate() {
     }
   }
   */
-
   // transfer CR Suite Business Options data into BL API Client Settings table
   $crs_handshake = BL_Biz_Info_Monster::crs_handshake($body_params,$settings);
   //instatiate activity table with new log and recycled review data if found;
@@ -202,6 +203,7 @@ function bl_api_call() {
     if (isset($auth['api_key']) && isset($auth['api_secret'])) {
       error_log('found api keys');
       //NOTE:THIS IS THE API CALL - UNCOMMENT TO RUN
+      //
       //$result = BL_Scraper::call_local_dir($auth,$req_body,'fetch-reviews','google');
     } else {
       error_log('api keys not found');

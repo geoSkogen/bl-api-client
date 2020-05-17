@@ -8,9 +8,13 @@ options table
 
   bl_api_client_settings - increment integer by field count
 
-    field_count
+    crs_override (bool - 1 | 0)
+
+    field_count (int)
 
     name_{int}
+
+    phone_{int}
 
     address_{int}
 

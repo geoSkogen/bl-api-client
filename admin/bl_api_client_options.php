@@ -47,6 +47,7 @@ class BL_API_Client_Options {
   static function bl_api_client_options_page($db_slug) {
     wp_register_style('yuckstyle', plugin_dir_url(__FILE__) . '../style/' . 'yuckstyle' . '.css');
     wp_enqueue_style('yuckstyle');
+    $submit_text = ($db_slug==='_activity') ? 'Call Now' : 'Save Changes';
     ?>
     <div class='form-wrap'>
       <h3>BrightLocal Client</h3>
@@ -59,7 +60,7 @@ class BL_API_Client_Options {
                 <input class='invis-input' id='drop_field' name=bl_api_client<?php echo $db_slug; ?>[drop] type='text'/>
            </div>
            <p class='submit'>
-                <input name='submit' type='submit' id='submit' class='button-primary' value='<?php _e("Save Changes") ?>' />
+                <input name='submit' type='submit' id='submit' class='button-primary' value='<?php _e($submit_text); ?>' />
            </p>
       </form>
     </div>
