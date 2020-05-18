@@ -26,6 +26,7 @@ class BL_Review_Monster  {
     foreach($this->reviews as $review_obj) {
       $result .= "<tr>";
       foreach(self::$review_props as $review_prop) {
+        $minwidth = '';
         if ($review_obj[$review_prop]) {
           $this_class = "class='bl_api_client_review_{$review_prop}''";
           switch($review_prop) {
@@ -37,11 +38,12 @@ class BL_Review_Monster  {
               $inner_html = "<span {$this_class}>{$review_obj[$review_prop]}</span>";
               break;
             case 'rating' :
-              $star_img_url = 'https://mikeanddadshauling.com/wp-content/uploads/2018/06/gold-star.png';
+              $star_img_url = 'http://localhost/joseph-scoggins/wp-content/plugins/bl-api-client/assets/gold-star.png';
               $coeff = strval(floatval($review_obj[$review_prop]) * 20);
-              $style_rule = "style='width: {$coeff}%;background: transparent url( {$star_img_url}  ) repeat-x 0 0;background-position: 1px 1px;'";
+              $style_rule = "style='height:25px;width: {$coeff}%;background: url( {$star_img_url}  ) repeat-x 0 0;background-position: 0 -25px;'";
               //$inner_html = "<span {$this_class}>{$review_obj[$review_prop]}</span>";
               $inner_html = "<div $style_rule></div>";
+              $minwidth = "style='width:120px;'";
               break;
             case 'text' :
               $inner_html = "<p {$this_class}>{$review_obj[$review_prop]}</p>";
@@ -52,7 +54,7 @@ class BL_Review_Monster  {
         } else {
           $inner_html = "<span {$this_class}>(not set)</span>";
         }
-        $result .= "<td>{$inner_html}</td>";
+        $result .= "<td {$minwidth} >{$inner_html}</td>";
       }
       $result .= "</tr>";
     }

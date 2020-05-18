@@ -299,8 +299,8 @@ class BL_API_Client_Settings {
     if ($db_slug==='_settings') {
       self::trim_fields();
     }
-    wp_enqueue_script('bl_api_client-unset-all', plugin_dir_url(__FILE__) . '../lib/bl_api_client-unset-all.js');
     if ($db_slug!='_activity') {
+      wp_enqueue_script('bl_api_client-unset-all', plugin_dir_url(__FILE__) . '../lib/bl_api_client-unset-all.js');
       ?>
       <hr/>
       <div style="display:flex;flex-flow:row wrap;justify-content:space-between;">
