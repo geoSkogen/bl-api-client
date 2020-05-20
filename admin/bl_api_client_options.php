@@ -45,7 +45,7 @@ class BL_API_Client_Options {
   }
 
   static function bl_api_client_options_page($db_slug) {
-    wp_register_style('yuckstyle', plugin_dir_url(__FILE__) . '../style/' . 'yuckstyle' . '.css');
+    wp_register_style('yuckstyle', plugin_dir_url(__FILE__) . '../style/' . 'bl_api_client_styles' . '.css');
     wp_enqueue_style('yuckstyle');
     $submit_text = ($db_slug==='_activity') ? 'Call Now' : 'Save Changes';
     ?>

@@ -1,11 +1,13 @@
 <?php
-
 class BL_Review_Monster  {
   public $reviews;
+  public $rating;
+  public $count;
   public static $props = ['log','reviews','aggregate_rating'];
   public static $dirs = ['google','facebook','yelp'];
   public static $review_props = ['author_avatar','author','timestamp','rating','text','id'];
   public static $star_img_path = '/wp-content/plugins/bl-api-client/assets/gold-star.png';
+
   function __construct($options_arr) {
     foreach(self::$props as $key) {
       if ($options_arr[$key]) {
@@ -42,7 +44,6 @@ class BL_Review_Monster  {
               $coeff = strval(floatval($review_obj[$review_prop]) * 20);
               $style_rule = "style='height:25px;width: {$coeff}%;background: url( " .
                 site_url() . self::$star_img_path . " ) repeat-x 0 0;background-position: 0 -25px;'";
-              //$inner_html = "<span {$this_class}>{$review_obj[$review_prop]}</span>";
               $inner_html = "<div $style_rule></div>";
               $minwidth = "style='width:120px;'";
               break;
@@ -62,7 +63,5 @@ class BL_Review_Monster  {
     $result .= "</table>";
     return $result;
   }
-
-
 
 }

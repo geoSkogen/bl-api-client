@@ -30,6 +30,10 @@ if ( !class_exists( 'BL_Review_Monster' ) ) {
   include_once 'classes/bl_review_monster.php';
 }
 
+if ( !class_exists( 'BL_Review_Templater' ) ) {
+  include_once 'classes/bl_review_templater.php';
+}
+
 //Admin
 if ( !class_exists( 'BL_API_Client_Options' ) ) {
    include_once 'admin/bl_api_client_options.php';
@@ -52,6 +56,10 @@ if ( !class_exists( 'BL_CR_Suite_Client' ) ) {
 
 register_activation_hook( __FILE__, 'bl_api_client_activate' );
 register_deactivation_hook( __FILE__, 'bl_api_client_deactivate' );
+
+add_shortcode('bl_client_local_reviews',
+  array('BL_Review_Templater','local_reviews_shortcode_handler')
+);
 
 function bl_api_client_activate() {
   $activity = get_option('bl_api_client_activity');
