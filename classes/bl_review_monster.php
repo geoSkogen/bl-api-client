@@ -3,6 +3,8 @@ class BL_Review_Monster  {
   public $reviews = array('google'=>array(),'facebook'=>array());
   public $rating = array('google'=>array(),'facebook'=>array());
   public $count = array('google'=>array(),'facebook'=>array());
+  public $reviews_all = array();
+  public $rating_all = array();
   public static $props = ['log','reviews','aggregate_rating'];
   public static $dirs = ['google','facebook'];
   public static $review_props = ['author_avatar','author','timestamp','rating','text','id'];
@@ -29,10 +31,20 @@ class BL_Review_Monster  {
     }
   }
 
+  public function sort_by_date() {
+    $new_schema = [];
+    $new_row = array();
+    $date_objs = [];
+    foreach($this->dirs as $dir) {
+      foreach($this->reviews[$dir] as $review_obj) {
+
+      }
+    }
+  }
+
   public function do_reviews_table() {
-    $dirs = ['google','facebook'];
     $result = "<table id='bl_api_client_reviews_table'>";
-    foreach($dirs as $dir) {
+    foreach(self::$dirs as $dir) {
       foreach($this->reviews[$dir] as $review_obj) {
         $result .= "<tr>";
         foreach(self::$review_props as $review_prop) {

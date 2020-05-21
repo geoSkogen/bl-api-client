@@ -3,7 +3,7 @@
 class BL_Review_Templater {
 
   public static $props = ['log','reviews','aggregate_rating'];
-  public static $dirs = ['google','facebook','yelp'];
+  public static $dirs = ['google','facebook'];
   public static $review_props = ['author_avatar','author','timestamp','rating','text','id'];
   public static $star_img_path = '/wp-content/plugins/bl-api-client/assets/gold-star.png';
 
@@ -30,7 +30,7 @@ class BL_Review_Templater {
     //isntantiate the review shrine return string value
     $result = "<div id='my_review_shrine' class='bl_client_reviews_widget'>";
     //iterate the monster's review record
-    foreach ($dirs as $dir) {
+    foreach (self::$dirs as $dir) {
       foreach ($monster->reviews[$dir] as $review_obj) {
         $result .= "<div class='bl_client_review {$dir}'>";
         //iterate each review object property
