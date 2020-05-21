@@ -13,7 +13,7 @@ class BL_Scraper {
 
   }
 
-  public static function call_local_dir($auth,$options,$api_endpoint,$directory) {
+  public static function call_local_dir($auth,$options,$commit,$api_endpoint,$directory) {
 
     $return_val = new stdClass();
     /*

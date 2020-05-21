@@ -149,9 +149,9 @@ if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
 
 //manual deployment for dev purposes; this should never run on its own;
 //BL API Call should only run on scheduled events at traffic down times
-//bl_api_call();
+//bl_api_call('google');
 
-function bl_api_call() {
+function bl_api_call($dir) {
   $this_option = get_option('bl_api_client_settings');
   $commit = get_option('bl_api_client_activity');
   $auth = get_option('bl_api_client');
@@ -216,7 +216,7 @@ function bl_api_call() {
       error_log('found api keys');
       //NOTE:THIS IS THE API CALL - UNCOMMENT TO RUN
       //
-      $result = BL_Scraper::call_local_dir($auth,$req_body,'fetch-reviews','facebook');
+      $result = BL_Scraper::call_local_dir($auth,$req_body,$commit,'fetch-reviews',$dir);
     } else {
       error_log('api keys not found');
     }
