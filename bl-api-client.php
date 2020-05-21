@@ -58,7 +58,7 @@ register_activation_hook( __FILE__, 'bl_api_client_activate' );
 register_deactivation_hook( __FILE__, 'bl_api_client_deactivate' );
 
 add_action( 'wp_enqueue_scripts',
-array('BL_Review_Templater','local_reviews_style') 
+array('BL_Review_Templater','local_reviews_style')
 );
 
 add_shortcode('bl_client_local_reviews',
@@ -149,7 +149,7 @@ if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
 
 //manual deployment for dev purposes; this should never run on its own;
 //BL API Call should only run on scheduled events at traffic down times
-bl_api_call();
+//bl_api_call();
 
 function bl_api_call() {
   $this_option = get_option('bl_api_client_settings');
@@ -216,7 +216,7 @@ function bl_api_call() {
       error_log('found api keys');
       //NOTE:THIS IS THE API CALL - UNCOMMENT TO RUN
       //
-      //$result = BL_Scraper::call_local_dir($auth,$req_body,'fetch-reviews','google');
+      $result = BL_Scraper::call_local_dir($auth,$req_body,'fetch-reviews','facebook');
     } else {
       error_log('api keys not found');
     }

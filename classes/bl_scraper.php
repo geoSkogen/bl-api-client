@@ -67,13 +67,13 @@ class BL_Scraper {
           //print_r($results['results']['LdFetchReviews'][0]['results'][0]['reviews']);
          //refer to the data-sample.txt file
          //THIS IS THE PATH TO THE REVIEWS ARRAY!
-          print('reviews<br/>');
-          print_r($results['results']['LdFetchReviews'][0]['results'][0]['reviews']);
+          error_log('reviews<br/>');
+          //error_log(var_dump($results['results']['LdFetchReviews'][0]['results'][0]['reviews']));
           //THIS IS THE PATH TO THE REVIEWS Count & Agg Rating!
-          print('aggregate count<br/>');
-          print_r($results['results']['LdFetchReviews'][0]['results'][0]['reviews-count']);
-          print('aggregate rating<br/>');
-          print_r($results['results']['LdFetchReviews'][0]['results'][0]['star-rating']);
+          error_log('aggregate count<br/>');
+          error_log($results['results']['LdFetchReviews'][0]['results'][0]['reviews-count']);
+          error_log('aggregate rating<br/>');
+          error_log($results['results']['LdFetchReviews'][0]['results'][0]['star-rating']);
          //log results--add timestamp to db
 
         $reviews = $results['results']['LdFetchReviews'][0]['results'][0]['reviews'];
@@ -87,8 +87,8 @@ class BL_Scraper {
     $return_val->aggregate_rating = ($aggregate_rating) ? $aggregate_rating : null;
     $commit['log'][] = time();
     if ($return_val->reviews && $return_val->aggregate_rating) {
-      $commit['reviews'] = $return_val->reviews;
-      $commit['aggregate_rating'] = $return_val->aggregate_rating;
+      $commit[$directory . '_reviews'] = $return_val->reviews;
+      $commit[$directory . '_aggregate_rating'] = $return_val->aggregate_rating;
     } else {
       error_log('review scrape error occurred');
     }

@@ -37,7 +37,7 @@ class BL_API_Client_Settings {
       self::$crs_override = ( isset(self::$options['crs_override']) )  ?
         intval(self::$options['crs_override']) : 0;
         error_log('retuned crs override ');
-        //error_log(strval(self::$options['crs_override']));
+        error_log(strval(self::$options['crs_override']));
 
     }
     return self::$crs_business_options;
@@ -261,7 +261,7 @@ class BL_API_Client_Settings {
     $result .= "<input type='radio' name='bl_api_client_settings[crs_override]' value='1' ";
     $result .= " {$is_selected[1]} />";
     $result .= "<label for='crs_override'>override CRS business options</label>";
-
+    
     echo $result;
   }
 
