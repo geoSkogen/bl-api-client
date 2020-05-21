@@ -57,6 +57,10 @@ if ( !class_exists( 'BL_CR_Suite_Client' ) ) {
 register_activation_hook( __FILE__, 'bl_api_client_activate' );
 register_deactivation_hook( __FILE__, 'bl_api_client_deactivate' );
 
+add_action( 'wp_enqueue_scripts',
+array('BL_Review_Templater','local_reviews_style') 
+);
+
 add_shortcode('bl_client_local_reviews',
   array('BL_Review_Templater','local_reviews_shortcode_handler')
 );
