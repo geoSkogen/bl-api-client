@@ -29,17 +29,65 @@ class BL_Review_Monster  {
         }
       }
     }
+    $this->reviews_all = $this->sort_by_date();
+  }
+
+  public function get_weighted_aggregate() {
+    $result = array('rating'=>0,'count'=>0);
+    return $result;
   }
 
   public function sort_by_date() {
+    $result = [];
     $new_schema = [];
-    $new_row = array();
+    $new_obj = array();
     $date_objs = [];
-    foreach($this->dirs as $dir) {
+    foreach(self::$dirs as $dir) {
       foreach($this->reviews[$dir] as $review_obj) {
-
+        $new_obj = $review_obj;
+        //add a new property to identify the review's home directory
+        $new_obj['dir'] = $dir;
+        $new_schema[] = $new_obj;
       }
     }
+    $assoc_index = array();
+    $index_val = 0;
+    foreach ($new_schema as $elm) {
+      $val = self::normalize_days($elm['timestamp']);
+      $assoc_index[$val] = $index_val;
+      $index_val++;
+    }
+    $result = self::get_new_order($assoc_index,$new_schema);
+    return $result;
+  }
+
+  public static function get_new_order($assoc_index,$master_arr) {
+    $result = [];
+    //Key-based R-Sort = awesome computation power!!
+    krsort($assoc_index);
+    foreach ($assoc_index as $master_index) {
+      $result[] = $master_arr[$master_index];
+    }
+    return $result;
+  }
+
+  public static function get_int_arr($str) {
+    $int_arr = [];
+    $str_arr = explode('-',$str);
+    foreach($str_arr as $str) { $int_arr[] = intval($str); }
+    return $int_arr;
+  }
+
+  public static function normalize_days($str) {
+    $result = 0;
+    $denoms = [365,30,1];
+    $int_arr = self::get_int_arr($str);
+    $index = 0;
+    foreach($int_arr as $int) {
+      $result += ($denoms[$index]*$int);
+      $index++;
+    }
+    return $result;
   }
 
   public function do_reviews_table() {
