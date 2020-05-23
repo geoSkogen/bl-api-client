@@ -6,7 +6,7 @@ options table
 
     api_secret
 
-  bl_api_client_settings - increment integer by field count
+  bl_api_client_settings - increment {int} by field count
 
     crs_override (bool - 1 | 0)
 
@@ -28,10 +28,26 @@ options table
 
     facebook_{int}
 
-  bl_api_client_activity
+  bl_api_client_activity - where {dir} is facebook and google
 
     log - indexed array of timestamps
 
-    reviews - array keys: rating, author, timestamp, text, author_avatar, id
+    {dir}_reviews - array keys: rating, author, timestamp, text, author_avatar, id
 
-    aggregate_rating - array keys: rating, count
+    {dir}_aggregate_rating - array keys: rating, count
+
+issues:
+Handshake stack trace for crs override makes no sense
+BL_API_Client_Settings::crs_handshake() is called in three places:
+--line 46 in get_field_count()
+  get_field_count() is called twice
+  --line 61 in trim_fields(), to render the biz settings form
+    trim_fields() is called once
+    1)
+    --line 299, in the settings section, within the form render
+  --line 146 in settings_api_init(), determining the size of the field loop
+    2)
+    settings_api_init() is called by wordpress admin_init()
+--line 81 in settings_api_init(), to instantiate CRS data in the plugin settings
+    3)
+    settings_api_init() is called by wordpress admin_init()

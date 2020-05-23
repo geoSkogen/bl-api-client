@@ -20,10 +20,11 @@ class BL_API_Client_Settings {
   public static $crs_keys = array();
   public static $crs_prepends = array();
   public static $crs_locale_count = 0;
-  public static $crs_override = 0;
+  public static $crs_override = null;
   public static $options = array();
 
   public static function crs_handshake() {
+    //error_log("\r\n\r\nCRS HANDSHAKE\r\n");
     if (!count(array_keys(self::$crs_business_options))) {
       self::$crs_business_options = BL_CR_Suite_Client::init_business_options();
       self::$crs_keys = BL_CR_Suite_Client::$client_props;
@@ -31,14 +32,23 @@ class BL_API_Client_Settings {
       self::$crs_locale_count = (isset(self::$crs_business_options['business_locations']) &&
         intval(self::$crs_business_options['business_locations'])) ?
           intval(self::$crs_business_options['business_locations']) : 0 ;
+      /*
+      error_log('reset cr client options passive record - retuned locale count');
+      error_log(strval(self::$crs_locale_count));
+      */
+    } else {
+      //error_log('found cr client passive record w/ options intact');
     }
-    if (!count(array_keys(self::$options))) {
+    if (!count(array_keys(self::$options))||!isset(self::$crs_override)) {
       self::$options = get_option('bl_api_client_settings');
-      self::$crs_override = ( isset(self::$options['crs_override']) )  ?
-        intval(self::$options['crs_override']) : 0;
-        error_log('retuned crs override ');
-        error_log(strval(self::$options['crs_override']));
-
+      self::$crs_override = ( isset(get_option('bl_api_client_settings')['crs_override']) )  ?
+        intval(get_option('bl_api_client_settings')['crs_override']) : 0;
+        /*
+        error_log('reset bl client options passive record - retuned crs override ');
+        error_log(strval(get_option('bl_api_client_settings')['crs_override']));
+        */
+    } else {
+      //error_log('found bl client passive record w/ options intact');
     }
     return self::$crs_business_options;
   }
@@ -61,10 +71,13 @@ class BL_API_Client_Settings {
   public static function trim_fields() {
     $stop = self::get_field_count() + 1;
     $result = array();
-    $meta_data = ['drop','field_count','prev_field_count'];
+    //NOTE: whitelist each table metadata key here or it will get dropped!
+    //metas instantly are added back to the result array . . .
+    $meta_data = ['drop','field_count','prev_field_count','crs_override'];
     foreach ($meta_data as $meta_datum) {
       $result[$meta_datum] = self::$options[$meta_datum];
     }
+    //any repopulating value fields will have indices less than new 'field count'
     for ($i = 1; $i < $stop; $i++) {
       foreach (self::$bl_api_client_label_toggle as $bl_api_client_label) {
         $result[$bl_api_client_label . '_' . strval($i)] =
@@ -73,12 +86,15 @@ class BL_API_Client_Settings {
               self::$options[$bl_api_client_label . '_' . strval($i)] : '';
       }
     }
+    //re-commit the new data array before rendering the form fields, so they render with the upated data
+    //in case the passive record falls back on the database
     update_option('bl_api_client_settings', $result);
     return;
   }
 
   public static function settings_api_init() {
-    //cr suite data import using passive-record technique
+    //cr suite data import using passive-record technique:
+    //if values are found in this object's static properties, no database hit is required
     self::crs_handshake();
     $data_status = (self::$crs_business_options && !self::$crs_override) ?
         'Found Your Business Info in CR Suite' : 'Enter Your Business Info';
@@ -92,7 +108,7 @@ class BL_API_Client_Settings {
 
     add_settings_section(
       'bl_api_client_settings',                         //uniqueID
-      'BrightLocal Review Profiles - ' . $data_status,   //Title
+      'BrightLocal Review Profiles',   //Title
       array('BL_API_Client_Settings','bl_api_client_settings_section'),//CallBack Function
       'bl_api_client_settings'                                //page-slug
     );
@@ -249,19 +265,21 @@ class BL_API_Client_Settings {
 
   public static function bl_api_client_crs_override() {
     $result = '';
+    /*
     error_log('field query crs override');
     error_log(strval(self::$crs_override));
+    */
     $is_selected = ['',''];
     $is_selected[intval(self::$crs_override)] = 'checked';
     $result .= "<div class='flexOuterStart'/>";
     $result .= "<input type='radio' name='bl_api_client_settings[crs_override]' value='0' ";
     $result .= " {$is_selected[0]} />";
     $result .= "<label for='crs_override'>use CRS business options</label>";
-    $result .= "</div>";
     $result .= "<input type='radio' name='bl_api_client_settings[crs_override]' value='1' ";
     $result .= " {$is_selected[1]} />";
     $result .= "<label for='crs_override'>override CRS business options</label>";
-    
+    $result .= "</div>";
+
     echo $result;
   }
 
