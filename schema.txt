@@ -1,10 +1,23 @@
-options table
+==========================================
+Copyright 2020
+City Ranked Media
+All Rights Reserved
+==========================================
+==========================================
+BL API CLIENT WordPress plugin data schema
+==========================================
+
+using the options table -
+
+  AUTHORIZATION
 
   bl_api_client
 
     api_key
 
     api_secret
+
+  BUSINESS INFO
 
   bl_api_client_settings - increment {int} by field count
 
@@ -28,6 +41,8 @@ options table
 
     facebook_{int}
 
+  REVIEWS & API ACTIVITY
+
   bl_api_client_activity - where {dir} is facebook and google
 
     log - indexed array of timestamps
@@ -36,8 +51,11 @@ options table
 
     {dir}_aggregate_rating - array keys: rating, count
 
-issues:
-Handshake stack trace for crs override makes no sense
+
+========================================
+SETTINGS API - CRS HANDSHAKE STACK TRACE
+========================================
+
 BL_API_Client_Settings::crs_handshake() is called in three places:
 --line 46 in get_field_count()
   get_field_count() is called twice
