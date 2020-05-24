@@ -6,10 +6,10 @@ class BL_API_Client_Settings {
     "business_name",
     "address",
     "city",
-  //  "state",
     "zipcode",
     "country",
     "phone",
+    'gmb_line',
     "gmb",
     "facebook"
   );
@@ -22,6 +22,7 @@ class BL_API_Client_Settings {
   public static $crs_locale_count = 0;
   public static $crs_override = null;
   public static $options = array();
+  public static $tracks_gmb = false;
 
   public static function crs_handshake() {
     //error_log("\r\n\r\nCRS HANDSHAKE\r\n");
@@ -41,8 +42,9 @@ class BL_API_Client_Settings {
     }
     if (!count(array_keys(self::$options))||!isset(self::$crs_override)) {
       self::$options = get_option('bl_api_client_settings');
-      self::$crs_override = ( isset(get_option('bl_api_client_settings')['crs_override']) )  ?
-        intval(get_option('bl_api_client_settings')['crs_override']) : 0;
+      self::$crs_override = ( isset(self::$options['crs_override']) )  ?
+        intval(self::$options['crs_override']) : 0;
+
         /*
         error_log('reset bl client options passive record - retuned crs override ');
         error_log(strval(get_option('bl_api_client_settings')['crs_override']));
@@ -165,7 +167,8 @@ class BL_API_Client_Settings {
       for ($ii = 0; $ii < count(self::$bl_api_client_label_toggle); $ii++) {
         $field_name = self::$bl_api_client_label_toggle[$ii];
         $this_field = $field_name . "_" . strval(self::$current_field_index);
-        $this_label = str_replace('_',' ',ucwords($field_name)) .
+        $label_name = str_replace('_',' ',ucwords($field_name));
+        $this_label = str_replace('Gmb','GMB ',$label_name) .
           "<span class='locale_index'>&nbsp;&nbsp;&nbsp;locale&nbsp;#" .
           strval(self::$current_field_index) . "</span>";
         add_settings_field(

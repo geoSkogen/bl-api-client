@@ -68,12 +68,8 @@ add_shortcode('bl_client_local_reviews',
 function bl_api_client_activate() {
   $activity = get_option('bl_api_client_activity');
   $settings = get_option('bl_api_client_settings');
-  $commit = array(
-    'log'=>['placeholder'],
-    'reviews'=> (isset($activity['reviews'])) ? $activity['reviews'] : '',
-    'aggregate_rating'=> (isset($activity['aggregate_rating'])) ?
-       $activity['aggregate_rating'] : array('rating'=>'','count'=>'')
-  );
+  $commit = $activity;
+  //$commit['log'] = [array('placeholder','plugin activated')];
   //error_log('crs biz options validatior running');
   // return indexed associative arrays of request params per CR Suite locale
   // if a locale dosn't fully validate, it adds a null to the array
@@ -147,6 +143,7 @@ if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
 //ChIJsc2v07GxlVQRRK-jGkZfiw0
 //975978498955128644
 
+//API CALL
 //manual deployment for dev purposes; this should never run on its own;
 //BL API Call should only run on scheduled events at traffic down times
 //bl_api_call('google');

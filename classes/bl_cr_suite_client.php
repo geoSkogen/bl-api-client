@@ -53,7 +53,9 @@ class BL_CR_Suite_Client {
       //error_log('fetching biz data iteration# ' . strval($i) . ' for:');
       //error_log(self::$prefixes[$i]);
       $row = self::validate_business_data(self::$prefixes[$i]);
-      $result[] = $row;
+      if ($row) {
+        $result[] = $row;
+      }
     }
     self::$places = $result;
     return $result;

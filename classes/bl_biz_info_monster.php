@@ -36,11 +36,13 @@ class BL_Biz_Info_Monster {
   }
   //imports data from cr-suite-sourced bl-api-requqest-params into plugin settings table
   public static function crs_handshake($req_body_arr,$settings_table) {
+    //takes its own table as argument . . .
     for ($i = 0; $i < count($req_body_arr);$i++) {
       $score = 0;
       if ($req_body_arr[$i]) {
         foreach($req_body_arr[$i] as $key=>$val) {
           $new_key = self::$data_keys[$key] . '_' . strval($i+1);
+          //overwrites old key=>val pairs with cr-suite info
           $settings_table[$new_key] = $val;
           $score++;
         }

@@ -60,6 +60,7 @@ BL_API_Client_Settings::crs_handshake() is called in three places:
 --line 46 in get_field_count()
   get_field_count() is called twice
   --line 61 in trim_fields(), to render the biz settings form
+    there's FORM DATA BUG trap, here - make sure to whitelist any extra fields
     trim_fields() is called once
     1)
     --line 299, in the settings section, within the form render
