@@ -166,5 +166,6 @@ input[type="radio"] {
 }
 
 .alert_me {
-  font-size: 36px;
+  font-size: 12px;
+  color: orange !important;
 }

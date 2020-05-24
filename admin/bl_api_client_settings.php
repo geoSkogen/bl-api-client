@@ -10,8 +10,8 @@ class BL_API_Client_Settings {
     "country",
     "phone",
     'gmb_line',
-    "gmb",
-    "facebook"
+    "gmb_link",
+    "facebook_link"
   );
 
   public static $current_field_index = 0;
@@ -22,7 +22,7 @@ class BL_API_Client_Settings {
   public static $crs_locale_count = 0;
   public static $crs_override = null;
   public static $options = array();
-  public static $tracks_gmb = false;
+  public static $caveat_text = 'Using a tracking line for your GMB phone number? Enter it separately here.';
 
   public static function crs_handshake() {
     //error_log("\r\n\r\nCRS HANDSHAKE\r\n");
@@ -44,7 +44,6 @@ class BL_API_Client_Settings {
       self::$options = get_option('bl_api_client_settings');
       self::$crs_override = ( isset(self::$options['crs_override']) )  ?
         intval(self::$options['crs_override']) : 0;
-
         /*
         error_log('reset bl client options passive record - retuned crs override ');
         error_log(strval(get_option('bl_api_client_settings')['crs_override']));
@@ -99,7 +98,7 @@ class BL_API_Client_Settings {
     //if values are found in this object's static properties, no database hit is required
     self::crs_handshake();
     $data_status = (self::$crs_business_options && !self::$crs_override) ?
-        'Found Your Business Info in CR Suite' : 'Enter Your Business Info';
+      'Found Your Business Info in CR Suite' : 'Enter Your Business Info';
 
     add_settings_section(
       'bl_api_client_auth',                         //uniqueID
@@ -110,7 +109,7 @@ class BL_API_Client_Settings {
 
     add_settings_section(
       'bl_api_client_settings',                         //uniqueID
-      'BrightLocal Review Profiles',   //Title
+      'BrightLocal Review Profiles - ' . $data_status,   //Title
       array('BL_API_Client_Settings','bl_api_client_settings_section'),//CallBack Function
       'bl_api_client_settings'                                //page-slug
     );
@@ -161,16 +160,24 @@ class BL_API_Client_Settings {
       'bl_api_client_activity',
       'bl_api_client_activity'
     );
-    //dynamic grouped settings fields - reiterates all items on the list $bl_api_client_label_toggle
+    //dynamic grouped settings fields - reiterates all items on the list: $bl_api_client_label_toggle
     for ($i = 1; $i < self::get_field_count() + 1; $i++) {
       self::$current_field_index = $i;
       for ($ii = 0; $ii < count(self::$bl_api_client_label_toggle); $ii++) {
         $field_name = self::$bl_api_client_label_toggle[$ii];
         $this_field = $field_name . "_" . strval(self::$current_field_index);
-        $label_name = str_replace('_',' ',ucwords($field_name));
+        $label_name = ucwords(str_replace('_',' ',$field_name));
         $this_label = str_replace('Gmb','GMB ',$label_name) .
           "<span class='locale_index'>&nbsp;&nbsp;&nbsp;locale&nbsp;#" .
           strval(self::$current_field_index) . "</span>";
+
+        if ($field_name === 'gmb_line') {
+          $tracker_status = (!self::$options[$this_field]) ?
+            "<span class='alert_me'>&nbsp;» " . self::$caveat_text . " </span>" :
+            '';
+          $this_label .= $tracker_status;
+        }
+
         add_settings_field(
           $this_field,                   //uniqueID - "param_1", etc.
           $this_label,                  //uniqueTitle -
