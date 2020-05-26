@@ -42,6 +42,7 @@ class BL_CR_Suite_Client {
   //returns indexed array per biz locale - elements are API request params objects
   //same data structure as BL_Biz_Info_Monster->places;
   public static function business_options_rollup() {
+    //error_log('crs biz options validatior running');
     self::init_business_options();
     $result = array();
     $row = array();
