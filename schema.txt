@@ -29,6 +29,8 @@ using the options table -
 
     phone_{int}
 
+    gmb_line_{int}
+
     address_{int}
 
     address_2_{int}
@@ -37,9 +39,9 @@ using the options table -
 
     zipcode_{int}
 
-    gmb_{int}
+    gmb_link_{int}
 
-    facebook_{int}
+    facebook_link_{int}
 
   REVIEWS & API ACTIVITY
 

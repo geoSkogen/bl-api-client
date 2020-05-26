@@ -56,4 +56,38 @@ class BL_Biz_Info_Monster {
     return $settings_table;
   }
 
+  public static function valid_api_params($options,$index,$body,$directory) {
+    $valid_options = null;
+    $score = 0;
+    $tracker = '';
+    $db_dir = ($directory==='google') ? 'gmb' : $directory;
+    $tracker = (isset($options[$db_dir . '_line_' . strval($index+1)])) ?
+    $options[$db_dir . '_line_' . strval($index+1)] : $tracker;
+    /* triage directory specifics & validate - return error messages to info page */
+    error_log('got dir tracker?  ' . $db_dir . '_line_' . strval($index+1) );
+    foreach( array_keys(self::$data_keys) as $valid_key) {
+      if ($body[$valid_key]) {
+        switch($valid_key) {
+          case 'postcode'  :
+          //
+            $valid_options[$valid_key] = $body[$valid_key];
+            break;
+          case 'country' :
+          //
+            $valid_options[$valid_key] = $body[$valid_key];
+            break;
+          case 'telephone' :
+          //
+            $valid_options[$valid_key] = ($tracker) ? : $body[$valid_key];
+            error_log('got dir tracker: ' . strval($tracker) );
+            break;
+          default :
+            $valid_options[$valid_key] = $body[$valid_key];
+        }
+      }
+    }
+    return (count(array_keys($valid_options))===count(array_keys(self::$data_keys))) ?
+      $valid_options : null ;
+  }
+
 }
