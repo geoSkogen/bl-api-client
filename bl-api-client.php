@@ -2,7 +2,7 @@
 /*
 Plugin Name:  BrightLocal Client
 Description:  Extends CR-Suite with Live Reviews
-Version:      2020.05.18
+Version:      2020.05.25
 Author:       City Ranked Media
 Author URI:
 Text Domain:  bl_api_client
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) or die( 'We make the path by walking.');
 use BrightLocal\Api;
 use BrightLocal\Batches\V4 as BatchApi;
 
-//Controller
+//Controllers
 if ( !class_exists( 'BL_Scraper' ) ) {
   require_once(__DIR__ . '/vendor/autoload.php');
   include_once 'classes/bl_scraper.php';
@@ -34,6 +34,10 @@ if ( !class_exists( 'BL_Review_Templater' ) ) {
   include_once 'classes/bl_review_templater.php';
 }
 
+if ( !class_exists( 'BL_Client_Tasker' ) ) {
+  include_once 'classes/bl_client_tasker.php';
+}
+
 //Admin
 if ( !class_exists( 'BL_API_Client_Options' ) ) {
    include_once 'admin/bl_api_client_options.php';
@@ -48,10 +52,6 @@ if ( !class_exists( 'BL_API_Client_Settings' ) ) {
      'admin_init',
      array('BL_API_Client_Settings','settings_api_init')
    );
-}
-
-if ( !class_exists( 'BL_CR_Suite_Client' ) ) {
-  include_once 'classes/bl_cr_suite_client.php';
 }
 
 register_activation_hook( __FILE__, 'bl_api_client_activate' );
@@ -70,31 +70,9 @@ function bl_api_client_activate() {
   $settings = get_option('bl_api_client_settings');
   $commit = $activity;
   $commit['log'] = [array('placeholder','plugin activated')];
-  //error_log('crs biz options validatior running');
-
   // return indexed associative arrays of request params per CR Suite locale
   // if a locale dosn't fully validate, it adds a null to the array
   $body_params = BL_CR_Suite_Client::business_options_rollup();
-  /*TEST PATTERN CODE ONLY for locating CR Suite Options Table
-  if ($body_params) {
-    //error_log('bl api client biz options validator running');
-    if (count($body_params)) {
-      //error_log('got cr suite body params');
-      foreach($body_params as $key => $row) {
-        if (is_array($row)) {
-          //error_log('row ' . strval($key));
-          foreach($row as $key=>$val) {
-            //error_log($key);
-            //error_log($val);
-          }
-        } else {
-          //error_log($row);
-        }
-
-      }
-    }
-  }
-  */
   // transfer CR Suite Business Options data into BL API Client Settings table
   // - per valid biz entry, if null values are present in the array, nothing happens
   $crs_handshake = BL_Biz_Info_Monster::crs_handshake($body_params,$settings);
@@ -123,7 +101,7 @@ if (isset($options)) {
   error_log('db slug not found');
 }
 */
-//NOTE:
+//CRON JOB
 //Build out flow controls here!!!
 //Cron job should schedule itself but not run at time of scheduling, and . . .
 //only if the lookup info validates;
@@ -131,14 +109,18 @@ if (isset($options)) {
 //multiple locales in CR Suite; add alternation for both Facebook and GMB.
 //for best use of server resources, schedule seperate locales on sepatate jobs
 //
-//add_action( 'bl_api_client_cron_hook', 'bl_api_call' );
+/*
+add_action( 'bl_api_client_cron_hook',
+  array('BL_Client_Tasker','api_call_triage' )
+);
+*/
 /*
 if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
     wp_schedule_event( time(), 'hourly', 'bl_api_client_cron_hook' );
 }
 */
 
-//NOTE: work on discovering the correct URL format for GMB pings
+//API CALL FORMAT! work on discovering the correct URL format for GMB pings
 //different lookup-by-URL formats; so far none is accepted:
 //https://search.google.com/local/reviews?placeid=ChIJsc2v07GxlVQRRK-jGkZfiw0
 //https://local.google.com/place?id=975978498955128644&use=srp&hl=en
@@ -148,66 +130,4 @@ if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
 //API CALL
 //manual deployment for dev purposes; this should never run on its own;
 //BL API Call should only run on scheduled events at traffic down times
-bl_api_client_review_scrape(0);
-
-function bl_api_client_review_scrape($index) {
-
-  $this_option = get_option('bl_api_client_settings');
-  $auth = get_option('bl_api_client');
-  //check if CR Suite business options has the required lookup info
-  $biz_info = new BL_Biz_Info_Monster($this_option);
-  // single locale validation - one 'row'
-  // this function should accept an arument to determine which row to use.
-  $req_body = BL_CR_Suite_Client::validate_business_data('business');
-  // if no CR Suite table exists, or CRS override is in place . . .
-  // check if BL Client business options are set
-  if (!$req_body) {
-    $req_body = $biz_info->places[0];
-    error_log('cr-suite business options not found; used bl-client lookup');
-  } else {
-    error_log('found cr-suite business options');
-  }
-  define('BL_API_KEY', $auth['api_key']);
-  define('BL_API_SECRET', $auth['api_secret']);
-  bl_api_get_reviews('google',$req_body,$auth,$this_option);
-  bl_api_get_reviews('facebook',$req_body,$auth,$this_option);
-
-}
-
-function bl_api_get_reviews($dir,$req_body,$auth,$this_option) {
-  $commit = get_option('bl_api_client_activity');
-  error_log('cron scheduler is running api call');
-  error_log("\r\n\n\nREQUEST BDOY PARAMS VALIDATION TEST\r\n");
-  $valid_req_body = BL_Biz_Info_Monster::valid_api_params($this_option,0,$req_body,$dir);
-  if ($valid_req_body) {
-    error_log('found all required business options keys');
-    foreach($valid_req_body as $key=>$val) {
-      error_log($key);
-      error_log($val);
-    }
-    error_log("\r\n");
-    if (isset($auth['api_key']) && isset($auth['api_secret'])) {
-      error_log('found api keys');
-      //NOTE:THIS IS THE API CALL - UNCOMMENT TO RUN
-      //
-      $result = BL_Scraper::sim_call_local_dir($auth,$req_body,$commit,'fetch-reviews',$dir);
-    } else {
-      error_log('api keys not found');
-    }
-  } else {
-    error_log('required business options keys not found');
-  }
-
-  //NOTE:DATABASE SUBROUTINE - needs dev work:
-  // experiment with committing review data to 'activity' table as a callback to the API call;
-  // currently doing database commit within the API call static function scope;
-  /*
-  if ($result->reviews && $result->aggregate_rating) {
-    $commit['reviews'] = $result->reviews;
-    $commit['aggregate_rating'] = $result->aggregate_rating;
-  } else {
-    error_log('review scrape error occurred');
-  }
-  */
-  //update_option('bl_api_client_activity',$commit);
-}
+//BL_Client_Tasker::review_scrape(0);

@@ -298,7 +298,7 @@ class BL_API_Client_Settings {
     $db_slug = 'activity';
     $style_rule = 'style="display:none;"';
 
-    $result = "<input $style_rule value='1' name='{$db_slug}[{$field_name}]'></input>";
+    $result = "<input $style_rule value='1' name='bl_api_client_{$db_slug}[{$field_name}]'/>";
 
     echo $result;
   }
@@ -315,19 +315,26 @@ class BL_API_Client_Settings {
     self::bl_api_client_dynamic_settings_section('_activity');
   }
 
+  public static function sticky_field($dir,$prop,$db_slug,$json_str) {
+    $style_rule = 'style="display:none;"';
+    $result = '<input ' . $style_rule . ' value=' . $json_str .
+      ' name=' . $db_slug . '[' . $dir . '_' . $prop . ']/>';
+    return $result;
+  }
+
   public static function bl_api_client_dynamic_settings_section($db_slug) {
     $options = get_option('bl_api_client' . $db_slug);
-    $dropped = (isset($options['drop'])) ? $options['drop'] : '(not set)';
-    if ($dropped === "TRUE") {
-      error_log('got drop');
-      delete_option('bl_api_client' . $db_slug);
-    } else {
-      //error_log("drop=false");
-    }
-    if ($db_slug==='_settings') {
-      self::trim_fields();
-    }
     if ($db_slug!='_activity') {
+      $dropped = (isset($options['drop'])) ? $options['drop'] : '(not set)';
+      if ($dropped === "TRUE") {
+        error_log('got drop');
+        delete_option('bl_api_client' . $db_slug);
+      } else {
+        //error_log("drop=false");
+      }
+      if ($db_slug==='_settings') {
+        self::trim_fields();
+      }
       wp_enqueue_script('bl_api_client-unset-all', plugin_dir_url(__FILE__) . '../lib/bl_api_client-unset-all.js');
       ?>
       <hr/>
@@ -339,9 +346,36 @@ class BL_API_Client_Settings {
       </div>
       <?php
     } else {
+      if (isset($options['call_now']) && $options['call_now']===1) {
+        $options['call_now'] = '0';
+        //update_option('bl_api_client_activity',$options);
+        //BL_Client_Tasker::review_scrape(0);
+      }
+      var_dump($options);
+      $review_table = "<input name='submit' type='submit' id='submit' class='button-primary' value='Call Now' />";
       $review_monster = new BL_Review_Monster($options);
-      $review_table = $review_monster->do_reviews_table();
+      $review_table .= $review_monster->do_reviews_table();
       echo $review_table;
+      /*
+      $new_data = array(
+       array(
+         'rating' => 5,
+         'author' => 'Kathy Asato',
+         'timestamp' => '2020-04-02',
+         'text' => 'We had a great experience with Earthworks Excavating Services. The communication was wonderful.',
+         'author_avatar' => 'https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg',
+         'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
+      ),array(
+         'rating' => 5,
+         'author' => 'Advanced Plumbing',
+         'timestamp' => '2020-03-02',
+         'text' => 'We had a great experience with Earthworks Excavating Services. The communication was wonderful.',
+         'author_avatar' => 'https://lh6.googleusercontent.com/-m-jjYqGDLyE/AAAAAAAAAAI/AAAAAAAAAAA/ynbQXsyEu50/s40-c-rp-mo-br100/photo.jpg',
+         'id' => '68d81651c71f99b6cb857c2c8c2b31464e23d83'          )
+      );
+      */
+      //$options['facebook_reviews'] = $new_data;
+      //update_option('bl_api_client_activity',$options);
     }
   }
 
