@@ -109,8 +109,10 @@ class BL_Scraper {
     define('BL_API_KEY', 'f972131781582b6dfead1afa4f8082fe79a4765f');
     define('BL_API_SECRET', '58190962d27d9');
     */
+    /*
     define('BL_API_KEY', $auth['api_key']);
     define('BL_API_SECRET', $auth['api_secret']);
+    */
 
     $expires = (int) gmdate('U') + 1800; // not more than 1800 seconds
     $sig = base64_encode(hash_hmac('sha1', BL_API_KEY.$expires, BL_API_SECRET, true));
@@ -118,11 +120,12 @@ class BL_Scraper {
     error_log( urlencode($sig) ); // for get requests
     error_log( $sig );
 
+    $db_dir = ($directory==='google') ? 'gmb' : $directory;
     $api = new Api(BL_API_KEY, BL_API_SECRET);
     $batchApi = new BatchApi($api);
-    if (isset($options['gmb'])) {
+    if (isset($options[$db_dir . '_link'])) {
       $append_endpoint = '';
-      $body_params['profile_url'] = $options['gmb'];
+      $body_params['profile-url'] = $options[$db_dir . '_link'];
       $body_params['country'] = $options['country'];
     } else {
       $append_endpoint = '-by-business-data';
@@ -130,6 +133,7 @@ class BL_Scraper {
       $body_params['local-directory'] = $directory;
     }
 
+    $batchId = $batchApi->create();
     $batchId = $batchApi->create();
 
     if ($batchId) {
