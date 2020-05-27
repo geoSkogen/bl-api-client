@@ -69,7 +69,7 @@ function bl_api_client_activate() {
   $activity = get_option('bl_api_client_activity');
   $settings = get_option('bl_api_client_settings');
   $commit = $activity;
-  $commit['log'] = [array('placeholder','plugin activated')];
+  $commit['log'] = [['-1,-1','plugin activated']];
   // return indexed associative arrays of request params per CR Suite locale
   // if a locale dosn't fully validate, it adds a null to the array
   $body_params = BL_CR_Suite_Client::business_options_rollup();
@@ -133,10 +133,4 @@ if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
 //manual deployment for dev purposes; this should never run on its own;
 //BL API Call should only run on scheduled events at traffic down times
 //BL_Client_Tasker::api_call_triage();
-error_log('boot task 0,2 - ');
-$this_option = get_option('bl_api_client_settings');
-$vals = BL_Client_Tasker::boot_task(['0,2','no message'],$this_option);
-foreach($vals as $key=>$val) {
-    error_log($key);
-    error_log($val);
-}
+BL_Client_Tasker::api_call_triage();

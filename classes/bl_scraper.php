@@ -173,7 +173,7 @@ class BL_Scraper {
           error_log('aggregate rating<br/>');
           error_log($results['results']['LdFetchReviews'][0]['results'][0]['star-rating']);
          //log results--add timestamp to db
-
+        //NOTE: iterate through reviews here and add location ID to each one!!! 
         $reviews = $results['results']['LdFetchReviews'][0]['results'][0]['reviews'];
         $aggregate_rating = array(
           'rating' => $results['results']['LdFetchReviews'][0]['results'][0]['star-rating'],
