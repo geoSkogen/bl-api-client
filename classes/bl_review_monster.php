@@ -12,7 +12,6 @@ class BL_Review_Monster  {
 
   function __construct($options_arr) {
     foreach (self::$dirs as $dir) {
-
       foreach (self::$props as $prop) {
         $key = $dir . '_';
         $key .= $prop;

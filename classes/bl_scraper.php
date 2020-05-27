@@ -13,9 +13,13 @@ class BL_Scraper {
 
   }
 
-  public static function sim_call_local_dir($auth,$options,$commit,$api_endpoint,$directory) {
+  public static function sim_call_local_dir($options,$api_endpoint,$directory) {
 
     $return_val = new stdClass();
+    $commit = get_option('bl_api_client_activity');
+    $commit_log = (isset($commit['log'])) ? end($commit['log']) : ['-1,-1',''];
+    $reviews = [];
+    $aggregate_rating = [];
     /*
     define('BL_API_KEY', 'f972131781582b6dfead1afa4f8082fe79a4765f');
     define('BL_API_SECRET', '58190962d27d9');
@@ -89,9 +93,10 @@ class BL_Scraper {
     //
     */
     }
-    $return_val->reviews = ($reviews) ? $reviews : null;
-    $return_val->aggregate_rating = ($aggregate_rating) ? $aggregate_rating : null;
-    $commit['log'][] = time();
+    $return_val->reviews = (count($reviews)) ? $reviews : null;
+    $return_val->aggregate_rating = (count($aggregate_rating)) ? $aggregate_rating : null;
+    //$commit_log[] = time();
+    $commit['log'] = $commit_log;
     if ($return_val->reviews && $return_val->aggregate_rating) {
       $commit[$directory . '_reviews'] = $return_val->reviews;
       $commit[$directory . '_aggregate_rating'] = $return_val->aggregate_rating;

@@ -349,9 +349,8 @@ class BL_API_Client_Settings {
       if (isset($options['call_now']) && $options['call_now']===1) {
         $options['call_now'] = '0';
         //update_option('bl_api_client_activity',$options);
-        //BL_Client_Tasker::review_scrape(0);
       }
-      var_dump($options);
+      //var_dump($options);
       $review_table = "<input name='submit' type='submit' id='submit' class='button-primary' value='Call Now' />";
       $review_monster = new BL_Review_Monster($options);
       $review_table .= $review_monster->do_reviews_table();

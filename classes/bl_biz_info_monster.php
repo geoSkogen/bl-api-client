@@ -30,7 +30,9 @@ class BL_Biz_Info_Monster {
             $req_body[$this->valid_keys[$valid_key]] = $assoc[$this_key];
         }
       }
-      $places[] = $req_body;
+      if (count(array_keys($req_body))===count(array_keys($this->valid_keys))) {
+        $places[] = $req_body;
+      }
     }
     return $places;
   }

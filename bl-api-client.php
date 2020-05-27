@@ -130,4 +130,4 @@ if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
 //API CALL
 //manual deployment for dev purposes; this should never run on its own;
 //BL API Call should only run on scheduled events at traffic down times
-//BL_Client_Tasker::review_scrape(0);
+//BL_Client_Tasker::api_call_triage();
