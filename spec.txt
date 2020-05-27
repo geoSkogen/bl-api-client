@@ -1,2 +1,3 @@
 log schema
-x,y => 0987654321
+['x,y' , '0987654321']
+where x is locale index and y is directory index

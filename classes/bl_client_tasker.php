@@ -16,20 +16,36 @@ class BL_Client_Tasker {
       self::review_scrape($biz_index,$dir,$this_option);
   }
 
+  public static function boot_task($log,$option) {
+    $loc_count = (isset($option['field_count'])) ?
+      intval($option['field_count']) : 1;
+    $biz_index = 0;
+    $dir_index = 0;
+    if ($log[0]!='placeholder') {
+      $biz_index_was = intval(explode(',',$log[0])[0]);
+      $biz_index_was = intval(explode(',',$log[0])[1]);
+      $biz_index = ($biz_index_was > $loc_count-1) ? 0 : $biz_index_was+1;
+      $dir_index = ($dir_index_was > count(BL_Review_Monster::$dirs)-1) ?
+        0 : $dir_index_was+1;
+    }
+    
+
+  }
+
   public static function review_scrape($index,$directory,$this_option) {
-    //check if CR Suite business options has the required lookup info
+    $req_body = null;
     $biz_info = new BL_Biz_Info_Monster($this_option);
-    // single locale validation - one 'row'
-    // this function should accept an arument to determine which row to use.
-    $biz_key = BL_CR_Suite_Client::$prefixes[$index];
-    $req_body = BL_CR_Suite_Client::validate_business_data($biz_key);
+    //check if CR Suite business options has the required lookup info
+    if (!$this_option['crs_override'] && $index < 4) {
+      $biz_key = BL_CR_Suite_Client::$prefixes[$index];
+      $req_body = BL_CR_Suite_Client::validate_business_data($biz_key);
+      error_log('using cr-suite business options for bl-client');
+    }
     // if no CR Suite table exists, or CRS override is in place . . .
     // check if BL Client business options are set
     if (!$req_body) {
-      $req_body = $biz_info->places[0];
-      error_log('cr-suite business options not found; used bl-client lookup');
-    } else {
-      error_log('found cr-suite business options');
+      $req_body = $biz_info->places[$index];
+      error_log('cr-suite business options not used; using bl-client lookup');
     }
     self::bl_api_get_reviews($directory,$req_body,$this_option);
   }

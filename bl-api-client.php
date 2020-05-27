@@ -75,10 +75,12 @@ function bl_api_client_activate() {
   $body_params = BL_CR_Suite_Client::business_options_rollup();
   // transfer CR Suite Business Options data into BL API Client Settings table
   // - per valid biz entry, if null values are present in the array, nothing happens
-  $crs_handshake = BL_Biz_Info_Monster::crs_handshake($body_params,$settings);
+  if ($body_params && !$settings['crs_override']) {
+    $crs_handshake = BL_Biz_Info_Monster::crs_handshake($body_params,$settings);
+    update_option('bl_api_client_settings',$crs_handshake);
+  }
   //instatiate activity table with new log and recycled review data if found;
   update_option('bl_api_client_activity',$commit);
-  update_option('bl_api_client_settings',$crs_handshake);
 }
 
 function bl_api_client_deactivate() {

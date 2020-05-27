@@ -44,7 +44,7 @@ class BL_CR_Suite_Client {
   public static function business_options_rollup() {
     //error_log('crs biz options validatior running');
     self::init_business_options();
-    $result = array();
+    $result = (self::$business_options) ? array() : null;
     $row = array();
     $count = (isset(self::$business_options['business_locations'])) ?
       intval(self::$business_options['business_locations']) : 1;
