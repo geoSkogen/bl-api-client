@@ -133,3 +133,10 @@ if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
 //manual deployment for dev purposes; this should never run on its own;
 //BL API Call should only run on scheduled events at traffic down times
 //BL_Client_Tasker::api_call_triage();
+error_log('boot task 0,2 - ');
+$this_option = get_option('bl_api_client_settings');
+$vals = BL_Client_Tasker::boot_task(['0,2','no message'],$this_option);
+foreach($vals as $key=>$val) {
+    error_log($key);
+    error_log($val);
+}
