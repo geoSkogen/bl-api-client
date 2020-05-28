@@ -17,7 +17,11 @@ class BL_Scraper {
 
     $return_val = new stdClass();
     $commit = get_option('bl_api_client_activity');
-    $commit_log = (isset($commit['log'])) ? end($commit['log']) : ['-1,-1',''];
+    $commit_log = (isset($commit['log'])) ? end($commit['log']) : ['-1,-1','not set)'];
+    $xy_str = (isset($commit_log[0])) ? $commit_log[0] : '-1,-1';
+    $log_index = (isset($commit['log'])) ? count($commit['log'])-1 : 0;
+    $locale_index = explode(',',$xy_str);
+    $msg = '(not set)';
     $reviews = [];
     $aggregate_rating = [];
     /*
@@ -93,18 +97,26 @@ class BL_Scraper {
     //
     */
     }
+    foreach($reviews as $review) {
+      $review['locale_id'] = $locale_index;
+    }
+    $aggregrate_rating['locale_id'] = $locale_index;
     $return_val->reviews = (count($reviews)) ? $reviews : null;
     $return_val->aggregate_rating = (count($aggregate_rating)) ? $aggregate_rating : null;
-    //$commit_log[] = time();
-    $commit['log'] = $commit_log;
+
     if ($return_val->reviews && $return_val->aggregate_rating) {
       $commit[$directory . '_reviews'] = $return_val->reviews;
       $commit[$directory . '_aggregate_rating'] = $return_val->aggregate_rating;
+      $msg = time();
+      error_log('review scrape ' . strval($msg));
     } else {
+      $msg = 'review scrape error occurred';
       error_log('review scrape error occurred');
     }
-    //update_option('bl_api_client_activity',$commit);
-    return $return_val;
+
+    $commit['log'][] = [$xy_str,$msg];
+    update_option('bl_api_client_activity',$commit);
+    //return $return_val;
   }
 
   public static function call_local_dir($auth,$options,$commit,$api_endpoint,$directory) {
@@ -173,7 +185,7 @@ class BL_Scraper {
           error_log('aggregate rating<br/>');
           error_log($results['results']['LdFetchReviews'][0]['results'][0]['star-rating']);
          //log results--add timestamp to db
-        //NOTE: iterate through reviews here and add location ID to each one!!! 
+        //NOTE: iterate through reviews here and add location ID to each one!!!
         $reviews = $results['results']['LdFetchReviews'][0]['results'][0]['reviews'];
         $aggregate_rating = array(
           'rating' => $results['results']['LdFetchReviews'][0]['results'][0]['star-rating'],

@@ -22,6 +22,9 @@ class BL_Client_Tasker {
         'triage call'
       ];
       error_log('found valid task index: ' . $new_commit_log[0]);
+      $commit['log'][] = $new_commit_log;
+      update_option('bl_api_client_activity',$commit);
+      //var_dump($commit);
       self::review_scrape($loc_index,$dir,$this_option);
     } else {
       // null task-indexing value commits one 'stop-code' to the log
@@ -31,11 +34,10 @@ class BL_Client_Tasker {
       ];
       if ($new_commit_log[0]!=$xy_str) {
         error_log('found stop task index: ' . $xy_str);
+        $commit['log'][] = $new_commit_log;
+        update_option('bl_api_client_activity',$commit);
+        //var_dump($commit);
       }
-    }
-    if ($new_commit_log[0]!=$xy_str) {
-      $commit['log'][] = $new_commit_log;
-      update_option('bl_api_client_activity',$commit);
     }
   }
 
