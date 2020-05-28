@@ -1,7 +1,7 @@
 <?php
 class BL_Review_Monster  {
   public $reviews = array('google'=>array(),'facebook'=>array());
-  public $rating = array('google'=>array(),'facebook'=>array());
+  public $ratings = array('google'=>array(),'facebook'=>array());
   public $count = array('google'=>array(),'facebook'=>array());
   public $reviews_all = array();
   public $rating_all = array();
@@ -20,9 +20,8 @@ class BL_Review_Monster  {
             case 'reviews' :
               $this->reviews[$dir] = $options_arr[$key];
               break;
-            case 'aggregate_rating' :
-              $this->rating[$dir] = $options_arr[$key]['rating'];
-              $this->count[$dir] = $options_arr[$key]['count'];
+            case 'aggregate_ratings' :
+              $this->ratings[$dir] = $options_arr[$key];
               break;
           }
         }
@@ -53,7 +52,11 @@ class BL_Review_Monster  {
     $index_val = 0;
     foreach ($new_schema as $elm) {
       $val = self::normalize_days($elm['timestamp']);
-      $assoc_index[$val] = $index_val;
+      // bug fix - increment the value until there's a unique key:
+      while(isset($assoc_index[$val])) {
+        $val+=0.01;
+      }
+      $assoc_index[strval($val)] = $index_val;
       $index_val++;
     }
     $result = self::get_new_order($assoc_index,$new_schema);

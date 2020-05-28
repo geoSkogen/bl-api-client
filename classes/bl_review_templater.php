@@ -12,10 +12,11 @@ class BL_Review_Templater {
     wp_enqueue_style('bl_local_reviews_styles');
     error_log("got local reivews styleshseet request");
   }
-  //Integrates all directories, sorts by date 
+  //Integrates all directories, sorts by date
   public static function local_reviews_shortcode_handler() {
     //hit your local options table for recent activity
     $options_arr = get_option('bl_api_client_activity');
+    //var_dump($options_arr);
     //instantiate the "review monster" active record
     $monster = new BL_Review_Monster($options_arr);
     //isntantiate the review shrine return string value
