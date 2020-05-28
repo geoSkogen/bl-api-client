@@ -73,7 +73,7 @@ function bl_api_client_activate() {
     'google_reviews'=>[],'facebook_reviews'=>[],
     'google_aggregate_rating'=>[],'facebook_aggregate_rating'=>[]
   );
-  $commit['log'] = [['-2,-2','plugin activated']];
+  $commit['log'] = [['-1,-1','plugin activated']];
   // return indexed associative arrays of request params per CR Suite locale
   // if a locale dosn't fully validate, it adds a null to the array
   $body_params = BL_CR_Suite_Client::business_options_rollup();
