@@ -20,7 +20,7 @@ class BL_Scraper {
     $commit_log = (isset($commit['log'])) ? end($commit['log']) : ['-1,-1','not set)'];
     $xy_str = (isset($commit_log[0])) ? $commit_log[0] : '-1,-1';
     $log_index = (isset($commit['log'])) ? count($commit['log'])-1 : 0;
-    $locale_index = explode(',',$xy_str);
+    $locale_index = explode(',',$xy_str)[0];
     $msg = '(not set)';
     $reviews = [];
     $aggregate_rating = [];
@@ -96,15 +96,41 @@ class BL_Scraper {
       }
     //
     */
+    $reviews = array(
+          array (
+             'rating' => 5,
+             'author' => 'Kathy Asato',
+             'timestamp' => '2020-04-02',
+             'text' =>'oil',
+             'positive' => array ( ),
+             'critical' => array ( ),
+             'author_avatar' => 'https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg',
+             'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
+         ), array (
+             'rating' => 5,
+             'author' => 'Advanced Plumbing',
+             'timestamp' => '2020-03-02',
+             'text' => 'We had a great experience with Earthworks Excavating Services. The communication was wonderful.',
+             'positive' => array ( ),
+             'critical' => array ( ),
+             'author_avatar' => 'https://lh6.googleusercontent.com/-m-jjYqGDLyE/AAAAAAAAAAI/AAAAAAAAAAA/ynbQXsyEu50/s40-c-rp-mo-br100/photo.jpg',
+             'id' => '68d81651c71f99b6cb857c2c8c2b31464e23d83a',
+        )
+    );
+    $aggregate_rating = array('count'=>111,'rating'=>3.3);
     }
+    $final_reviews = [];
     foreach($reviews as $review) {
       $review['locale_id'] = $locale_index;
+      $final_reviews[] = $review;
     }
     $aggregrate_rating['locale_id'] = $locale_index;
-    $return_val->reviews = (count($reviews)) ? $reviews : null;
+    $return_val->reviews = (count($final_reviews)) ? $final_reviews : null;
     $return_val->aggregate_rating = (count($aggregate_rating)) ? $aggregate_rating : null;
 
     if ($return_val->reviews && $return_val->aggregate_rating) {
+
+      //NOTE: add routine to get existing reviews by locale id and overwrite them
       $commit[$directory . '_reviews'] = $return_val->reviews;
       $commit[$directory . '_aggregate_rating'] = $return_val->aggregate_rating;
       $msg = time();
@@ -117,6 +143,7 @@ class BL_Scraper {
     $commit['log'][] = [$xy_str,$msg];
     update_option('bl_api_client_activity',$commit);
     //return $return_val;
+    //var_dump($commit);
   }
 
   public static function call_local_dir($auth,$options,$commit,$api_endpoint,$directory) {
