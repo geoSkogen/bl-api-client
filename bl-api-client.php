@@ -73,7 +73,7 @@ function bl_api_client_activate() {
     'google_reviews'=>[],'facebook_reviews'=>[],
     'google_aggregate_rating'=>[],'facebook_aggregate_rating'=>[]
   );
-  $commit['log'] = [['-1,-1','plugin activated']];
+  $commit['log'] = [['-2,-2','plugin activated']];
   // return indexed associative arrays of request params per CR Suite locale
   // if a locale dosn't fully validate, it adds a null to the array
   $body_params = BL_CR_Suite_Client::business_options_rollup();
@@ -115,16 +115,12 @@ if (isset($options)) {
 //multiple locales in CR Suite; add alternation for both Facebook and GMB.
 //for best use of server resources, schedule seperate locales on sepatate jobs
 //
-/*
 add_action( 'bl_api_client_cron_hook',
   array('BL_Client_Tasker','api_call_boot' )
 );
-*/
-/*
 if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
-    wp_schedule_event( time(), 'hourly', 'bl_api_client_cron_hook' );
+    wp_schedule_event( time(), 360, 'bl_api_client_cron_hook' );
 }
-*/
 
 //API CALL FORMAT! work on discovering the correct URL format for GMB pings
 //different lookup-by-URL formats; so far none is accepted:

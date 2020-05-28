@@ -9,10 +9,16 @@ class BL_Client_Tasker {
 
   public static function api_call_boot() {
     $option = get_option('bl_api_client_activity');
-    $row = ['-1,-1','Wabbit!'];
+    $row = ['-1,-1','call series scheduler activated'];
     $option['log'][] = $row;
     update_option('bl_api_client_activity',$option);
-    self::api_call_triage();
+
+    add_action( 'bl_api_client_call_series',
+      array('BL_Client_Tasker','api_call_triage' )
+    );
+    if ( ! wp_next_scheduled( 'bl_api_client_call_series' ) ) {
+        wp_schedule_event( time(), 60, 'bl_api_client_call_series' );
+    }
   }
 
   public static function api_call_triage() {
@@ -38,6 +44,8 @@ class BL_Client_Tasker {
       self::review_scrape($loc_index,$dir,$this_option);
     } else {
       // null task-indexing value commits one 'stop-code' to the log
+      $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
+      wp_unschedule_event( $timestamp, 'bl_api_client_call_series' );
       $new_commit_log = [
         '-2,-2',
         'task stop'
