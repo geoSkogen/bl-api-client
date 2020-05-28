@@ -137,4 +137,13 @@ if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
 //manual deployment for dev purposes; this should never run on its own;
 //BL API Call should only run on scheduled events at traffic down times
 //BL_Client_Tasker::api_call_triage();
+//TEST FRAMEWORK - Uncomment this code to run the api call series
+// Change the something in the test data in scraper first, then repeatedly
+// refresh the page executing the reviews shortcode handler, and watch it update
+/*
+$option = get_option('bl_api_client_activity');
+$row = ['-1,-1','Wabbit!'];
+$option['log'][] = $row;
+update_option('bl_api_client_activity',$option);
+*/
 BL_Client_Tasker::api_call_triage();

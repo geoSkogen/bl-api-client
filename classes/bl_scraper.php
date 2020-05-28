@@ -99,11 +99,21 @@ class BL_Scraper {
     //
     */
     $reviews = array(
+      array (
+         'rating' => 5,
+         'author' => 'Oil Boil',
+         'timestamp' => '2020-01-28',
+         'text' =>'We had a great experience with Earthworks Excavating Services St. Elmo. The communication was wonderful.',
+         'positive' => array ( ),
+         'critical' => array ( ),
+         'author_avatar' => 'https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg',
+         'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
+     ),
           array (
              'rating' => 5,
              'author' => 'Kathy Asato',
              'timestamp' => '2020-04-02',
-             'text' =>'Facebook We had a great experience with Earthworks Excavating Services 988. The communication was wonderful.',
+             'text' =>'We had a great experience with Earthworks Excavating Services St. Elmo. The communication was wonderful.',
              'positive' => array ( ),
              'critical' => array ( ),
              'author_avatar' => 'https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg',
@@ -112,7 +122,7 @@ class BL_Scraper {
              'rating' => 5,
              'author' => 'Advanced Plumbing',
              'timestamp' => '2020-03-02',
-             'text' => 'Facebook We had a great experience with Earthworks Excavating Services 988. The communication was wonderful.',
+             'text' => 'We had a great experience with Earthworks Excavating Services St. Elmo. The communication was wonderful.',
              'positive' => array ( ),
              'critical' => array ( ),
              'author_avatar' => 'https://lh6.googleusercontent.com/-m-jjYqGDLyE/AAAAAAAAAAI/AAAAAAAAAAA/ynbQXsyEu50/s40-c-rp-mo-br100/photo.jpg',
@@ -122,7 +132,7 @@ class BL_Scraper {
            'rating' => 5,
            'author' => 'Kay Ao',
            'timestamp' => '2020-05-02',
-           'text' =>'Facebook We had a great experience with Earthworks Excavating Services 988. The communication was wonderful.',
+           'text' =>'We had a great experience with Earthworks Excavating Services St. Elmo. The communication was wonderful.',
            'positive' => array ( ),
            'critical' => array ( ),
            'author_avatar' => 'https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg',
@@ -131,7 +141,7 @@ class BL_Scraper {
            'rating' => 5,
            'author' => 'Aed Ping',
            'timestamp' => '2020-05-02',
-           'text' => 'Facebook We had a great experience with Earthworks Excavating Services 988. The communication was wonderful.',
+           'text' => 'We had a great experience with Earthworks Excavating Services St. Elmo. The communication was wonderful.',
            'positive' => array ( ),
            'critical' => array ( ),
            'author_avatar' => 'https://lh6.googleusercontent.com/-m-jjYqGDLyE/AAAAAAAAAAI/AAAAAAAAAAA/ynbQXsyEu50/s40-c-rp-mo-br100/photo.jpg',
@@ -178,7 +188,7 @@ class BL_Scraper {
       error_log('review scrape error occurred');
     }
     $commit['log'][] = [$xy_str,$msg];
-    var_dump($commit);
+    //var_dump($commit);
     update_option('bl_api_client_activity',$commit);
     //return $return_val;
   }
