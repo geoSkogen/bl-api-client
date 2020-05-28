@@ -18,8 +18,8 @@ class BL_Scraper {
     $return_val = new stdClass();
     $commit = get_option('bl_api_client_activity');
     // meta values
-    $commit_log = (isset($commit['log'])) ? end($commit['log']) : ['-1,-1','not set)'];
-    $xy_str = (isset($commit_log[0])) ? $commit_log[0] : '-1,-1';
+    $commit_log = (isset($commit['log'])) ? end($commit['log']) : [BL_Client_Tasker::$init_key,'(not set)'];
+    $xy_str = (isset($commit_log[0])) ? $commit_log[0] : BL_Client_Tasker::$init_key;
     $log_index = (isset($commit['log'])) ? count($commit['log'])-1 : 0;
     $locale_index = explode(',',$xy_str)[0];
     $msg = '(not set)';
@@ -103,7 +103,7 @@ class BL_Scraper {
          'rating' => 5,
          'author' => 'Oil Boil',
          'timestamp' => '2020-01-28',
-         'text' =>'We had a great experience with Earthworks Excavating Services St. Elmo. The communication was wonderful.',
+         'text' =>'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
          'positive' => array ( ),
          'critical' => array ( ),
          'author_avatar' => 'https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg',
@@ -113,7 +113,7 @@ class BL_Scraper {
              'rating' => 5,
              'author' => 'Kathy Asato',
              'timestamp' => '2020-04-02',
-             'text' =>'We had a great experience with Earthworks Excavating Services St. Elmo. The communication was wonderful.',
+             'text' =>'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
              'positive' => array ( ),
              'critical' => array ( ),
              'author_avatar' => 'https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg',
@@ -122,7 +122,7 @@ class BL_Scraper {
              'rating' => 5,
              'author' => 'Advanced Plumbing',
              'timestamp' => '2020-03-02',
-             'text' => 'We had a great experience with Earthworks Excavating Services St. Elmo. The communication was wonderful.',
+             'text' => 'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
              'positive' => array ( ),
              'critical' => array ( ),
              'author_avatar' => 'https://lh6.googleusercontent.com/-m-jjYqGDLyE/AAAAAAAAAAI/AAAAAAAAAAA/ynbQXsyEu50/s40-c-rp-mo-br100/photo.jpg',
@@ -132,7 +132,7 @@ class BL_Scraper {
            'rating' => 5,
            'author' => 'Kay Ao',
            'timestamp' => '2020-05-02',
-           'text' =>'We had a great experience with Earthworks Excavating Services St. Elmo. The communication was wonderful.',
+           'text' =>'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
            'positive' => array ( ),
            'critical' => array ( ),
            'author_avatar' => 'https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg',
@@ -141,7 +141,7 @@ class BL_Scraper {
            'rating' => 5,
            'author' => 'Aed Ping',
            'timestamp' => '2020-05-02',
-           'text' => 'We had a great experience with Earthworks Excavating Services St. Elmo. The communication was wonderful.',
+           'text' => 'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
            'positive' => array ( ),
            'critical' => array ( ),
            'author_avatar' => 'https://lh6.googleusercontent.com/-m-jjYqGDLyE/AAAAAAAAAAI/AAAAAAAAAAA/ynbQXsyEu50/s40-c-rp-mo-br100/photo.jpg',

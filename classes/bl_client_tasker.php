@@ -1,15 +1,25 @@
 <?php
 class BL_Client_Tasker {
 
+  public static $init_key = '-1,-1';
+
   function __construct() {
 
+  }
+
+  public static function api_call_boot() {
+    $option = get_option('bl_api_client_activity');
+    $row = ['-1,-1','Wabbit!'];
+    $option['log'][] = $row;
+    update_option('bl_api_client_activity',$option);
+    self::api_call_triage();
   }
 
   public static function api_call_triage() {
     $commit = get_option('bl_api_client_activity');
     $this_option = get_option('bl_api_client_settings');
-    $commit_log = (isset($commit['log'])) ? end($commit['log']) : [['-1,-1','(not set)']];
-    $xy_str = (isset($commit_log[0])) ? $commit_log[0] : '-1,-1';
+    $commit_log = (isset($commit['log'])) ? end($commit['log']) : [[self::$init_key,'(not set)']];
+    $xy_str = (isset($commit_log[0])) ? $commit_log[0] : self::$init_key;
     // 'decode' the last activity log
     $x_y = self::index_task($xy_str);
     // use valid index numbers to schedule directory call y for biz locale x
