@@ -163,12 +163,15 @@ class BL_Scraper {
     $aggregrate_rating['locale_id'] = $locale_index;
     // make record exluding the current locale's previous reviews
     // and merge it with the new reviews for this locale
+
+    // add error handnling, isset()...
     foreach ($commit[$directory . '_reviews'] as $current_review) {
       if ($current_review['locale_id']!=strval($locale_index)) {
         $other_reviews[] = $current_review;
       }
     }
     $all_reviews = array_merge($final_reviews_batch,$other_reviews);
+    // add error handnling, isset()...
     foreach ($commit[$directory . '_aggregate_rating'] as $current_rating_obj) {
       if ($current_rating_obj['locale_id']!=strval($locale_index)) {
         $all_agg_ratings[] = $current_rating_obj;

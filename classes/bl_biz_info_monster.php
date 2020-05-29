@@ -88,6 +88,7 @@ class BL_Biz_Info_Monster {
         }
       }
     }
+    // add error handling around array keys of potential null value
     return (count(array_keys($valid_options))===count(array_keys(self::$data_keys))) ?
       $valid_options : null ;
   }
