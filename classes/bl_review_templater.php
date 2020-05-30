@@ -10,7 +10,7 @@ class BL_Review_Templater {
   public static function local_reviews_style() {
     wp_register_style('bl_local_reviews_styles', plugin_dir_url(__FILE__) . '../style/' . 'bl_local_reviews_styles' . '.css');
     wp_enqueue_style('bl_local_reviews_styles');
-    error_log("got local reivews styleshseet request");
+    error_log("got local reviews styleshseet request");
   }
   //Integrates all directories, sorts by date
   public static function local_reviews_shortcode_handler() {

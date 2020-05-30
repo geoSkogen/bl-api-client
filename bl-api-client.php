@@ -58,7 +58,7 @@ register_activation_hook( __FILE__, 'bl_api_client_activate' );
 register_deactivation_hook( __FILE__, 'bl_api_client_deactivate' );
 
 add_action( 'wp_enqueue_scripts',
-array('BL_Review_Templater','local_reviews_style')
+  array('BL_Review_Templater','local_reviews_style')
 );
 
 add_shortcode('bl_client_local_reviews',
