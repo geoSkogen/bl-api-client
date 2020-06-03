@@ -90,6 +90,10 @@ function bl_api_client_activate() {
 function bl_api_client_deactivate() {
   $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
   wp_unschedule_event( $timestamp, 'bl_api_client_cron_hook' );
+  error_log('timestamp for outer cron hook was : ' . strval($timestamp));
+  $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
+  wp_unschedule_event( $timestamp, 'bl_api_client_call_series' );
+  error_log('timestamp for outer cron hook was : ' . strval($timestamp));
 }
 //TEST PATTERN CODE ONLY - for inspecting run-times of scheduled api call jobs
 /*
@@ -110,13 +114,21 @@ if (isset($options)) {
 add_filter( 'cron_schedules', 'bl_api_client_add_cron_intervals' );
 
 function bl_api_client_add_cron_intervals( $schedules ) {
-  $schedules['fifteen_seconds'] = array(
-      'interval' => 15,
-      'display'  => esc_html__( 'Every Fifteen Seconds' ),
-  );
+    $schedules['fifteen_seconds'] = array(
+       'interval' => 15,
+       'display'  => esc_html__( 'Every Fifteen Seconds' ),
+    );
+    $schedules['thirty_seconds'] = array(
+       'interval' => 30,
+       'display'  => esc_html__( 'Every Fifteen Seconds' ),
+    );
     $schedules['one_minute'] = array(
         'interval' => 60,
         'display'  => esc_html__( 'Every Sixty Seconds' ),
+    );
+    $schedules['three_minutes'] = array(
+        'interval' => 180,
+        'display'  => esc_html__( 'Every Five Minutes' ),
     );
     $schedules['five_minutes'] = array(
         'interval' => 300,
@@ -127,10 +139,10 @@ function bl_api_client_add_cron_intervals( $schedules ) {
 
 
 if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
-    error_log('got cron hook schedule - outer ring ');
-    wp_schedule_event( time(), 'one_minute', 'bl_api_client_cron_hook' );
-    $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
-    error_log('timestamp for outer cron hook is : ' . strval($timestamp));
+  error_log('got cron hook schedule - outer ring ');
+  wp_schedule_event( time(), 'five_minutes', 'bl_api_client_cron_hook' );
+  $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
+  error_log('timestamp for outer cron hook is : ' . strval($timestamp));
 } else {
   $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
   error_log('timestamp for next outer cron hook is : ' . strval($timestamp));
@@ -142,6 +154,10 @@ add_action( 'bl_api_client_cron_hook',
   'api_call_boot'
 );
 
+add_action( 'bl_api_client_call_series',
+  'api_call_triage'
+);
+
 function api_call_boot() {
   $option = get_option('bl_api_client_activity');
   $row = ['-1,-1','call series scheduler activated'];
@@ -149,29 +165,14 @@ function api_call_boot() {
   update_option('bl_api_client_activity',$option);
 
   if ( ! wp_next_scheduled( 'bl_api_client_call_series' ) ) {
-      error_log('got cron hook schedule - inner ring ');
-      wp_schedule_event( time(),'fifteen_seconds', 'bl_api_client_call_series' );
-      $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
-      error_log('timestamp for inner cron hook is : ' . strval($timestamp));
-      /*
-      foreach( _get_cron_array() as $key => $val) {
-        echo $key;
-        if (is_array($val)) {
-          echo(implode(',',array_keys($val)));
-        } else {
-          echo $arr;
-        }
-      }
-      */
+    error_log('got cron hook schedule - inner ring ');
+    wp_schedule_event( time(),'fifteen_seconds', 'bl_api_client_call_series' );
+    $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
+    error_log('timestamp for inner cron hook is : ' . strval($timestamp));
   } else {
     $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
     error_log('timestamp for next inner cron hook is : ' . strval($timestamp));
   }
-
-  add_action( 'bl_api_client_call_series',
-    'api_call_triage'
-  );
-
 }
 
 function api_call_triage() {

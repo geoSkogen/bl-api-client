@@ -97,6 +97,8 @@ class BL_Client_Tasker {
     // a conversation with local biz options
     $req_body = null;
     $biz_info = new BL_Biz_Info_Monster($this_option);
+    $dir_slug = ($directory==='google') ? 'gmb' : $directory;
+    $link_prop = $dir_slug . '_link_' . strval($index+1);
     // for the first four local listings, if override isn't set,
     // check if CR Suite business options has the required lookup info
     if (!$this_option['crs_override'] && $index < 4) {
@@ -108,16 +110,14 @@ class BL_Client_Tasker {
     // check if BL Client business options are set
     if (!$req_body) {
       $req_body = $biz_info->places[$index];
-      $dir_slug = ($directory==='google') ? 'gmb' : $directory;
-      $link_prop = $dir_slug . '_link_' . strval($index+1);
       error_log('cr-suite business options not used; using bl-client lookup');
-      //
-      if (isset($this_option[$link_prop]) && '' != $this_option[$link_prop]) {
-        error_log('found ' . $link_prop . '; starting api call body validation');
-        self::bl_api_get_reviews($directory,$index,$req_body,$this_option);
-      } else {
-        error_log($link_prop . ' not found; skipping api call body validation');
-      }
+    }
+
+    if (isset($this_option[$link_prop]) && '' != $this_option[$link_prop]) {
+      error_log('found ' . $link_prop . '; starting api call body validation');
+      self::bl_api_get_reviews($directory,$index,$req_body,$this_option);
+    } else {
+      error_log($link_prop . ' not found; skipping api call body validation');
     }
   }
 
