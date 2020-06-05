@@ -81,7 +81,11 @@ class BL_Biz_Info_Monster {
           case 'telephone' :
           //
             $valid_options[$valid_key] = ($tracker) ? : $body[$valid_key];
-            error_log('got dir tracker: ' . strval($tracker) );
+            if ($tracker) {
+              error_log('got dir tracker: ' . strval($tracker) );
+            } else {
+              error_log('using land line: ' . strval($body[$valid_key]) );
+            }
             break;
           default :
             $valid_options[$valid_key] = $body[$valid_key];

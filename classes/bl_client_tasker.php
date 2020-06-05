@@ -13,11 +13,12 @@ class BL_Client_Tasker {
     $option['log'][] = $row;
     update_option('bl_api_client_activity',$option);
 
-    add_action( 'bl_api_client_call_series',
-      array('BL_Client_Tasker','api_call_triage' )
-    );
     if ( ! wp_next_scheduled( 'bl_api_client_call_series' ) ) {
-        wp_schedule_event( time(), 60, 'bl_api_client_call_series' );
+        error_log('got cron hook schedule - inner ring ');
+        wp_schedule_event( time(), 'one_minute', 'bl_api_client_call_series' );
+    } else {
+      $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
+      error_log('timestamp for next inner cron hook is : ' . strval($timestamp));
     }
   }
 
@@ -46,6 +47,7 @@ class BL_Client_Tasker {
       // null task-indexing value commits one 'stop-code' to the log
       $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
       wp_unschedule_event( $timestamp, 'bl_api_client_call_series' );
+      error_log('timestamp for next inner cron hook was : ' . strval($timestamp));
       $new_commit_log = [
         '-2,-2',
         'task stop'
@@ -144,7 +146,8 @@ class BL_Client_Tasker {
         error_log('found api keys');
         //NOTE: THIS IS THE API CALL - UNCOMMENT TO RUN
         //
-        $result = BL_Scraper::sim_call_local_dir($req_body,'fetch-reviews',$dir);
+        $result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
+        //$result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
       } else {
         error_log('bl api keys not found');
       }
