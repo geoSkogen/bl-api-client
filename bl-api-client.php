@@ -73,7 +73,7 @@ function bl_api_client_activate() {
     'google_reviews'=>[],'facebook_reviews'=>[],
     'google_aggregate_rating'=>[],'facebook_aggregate_rating'=>[]
   );
-  $commit['log'] = [['-1,-1','plugin activated']];
+  $commit['log'] = [['n,n','plugin activated']];
   // return indexed associative arrays of request params per CR Suite locale
   // if a locale dosn't fully validate, it adds a null to the array
   $body_params = BL_CR_Suite_Client::business_options_rollup();
@@ -85,6 +85,16 @@ function bl_api_client_activate() {
   }
   //instatiate activity table with new log and recycled review data if found;
   update_option('bl_api_client_activity',$commit);
+  add_action( 'bl_api_client_cron_hook_1',
+    'bl_api_call_boot',
+    10,
+    2
+  );
+  if ( ! wp_next_scheduled( 'bl_api_client_cron_hook_1' ) ) {
+      wp_schedule_event( time(), 360, 'bl_api_client_cron_hook_1' );
+  }
+
+
 }
 
 function bl_api_client_deactivate() {
@@ -107,6 +117,22 @@ if (isset($options)) {
   error_log('db slug not found');
 }
 */
+
+function bl_api_call_boot() {
+  $option = get_option('bl_api_client_activity');
+  $row = ['-1,-1','call series scheduler activated'];
+  $option['log'][] = $row;
+  update_option('bl_api_client_activity',$option);
+  error_log('boot call updated activity log with ' . $row[0] . ' ' . $row[1]);
+  /*
+  add_action( 'bl_api_client_call_series',
+    array('BL_Client_Tasker','api_call_triage' )
+  );
+  if ( ! wp_next_scheduled( 'bl_api_client_call_series' ) ) {
+      wp_schedule_event( time(), 60, 'bl_api_client_call_series' );
+  }
+  */
+}
 //CRON JOB
 //Build out flow controls here!!!
 //Cron job should schedule itself but not run at time of scheduling, and . . .
@@ -115,12 +141,6 @@ if (isset($options)) {
 //multiple locales in CR Suite; add alternation for both Facebook and GMB.
 //for best use of server resources, schedule seperate locales on sepatate jobs
 //
-add_action( 'bl_api_client_cron_hook',
-  array('BL_Client_Tasker','api_call_boot' )
-);
-if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
-    wp_schedule_event( time(), 360, 'bl_api_client_cron_hook' );
-}
 
 //API CALL FORMAT! work on discovering the correct URL format for GMB pings
 //different lookup-by-URL formats; so far none is accepted:
@@ -138,4 +158,5 @@ if ( ! wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
 // Change the something in the test data in scraper first, then repeatedly
 // refresh the page executing the reviews shortcode handler, and watch it update
 //BL_Client_Tasker::api_call_boot();
-BL_Client_Tasker::api_call_triage();
+//BL_Client_Tasker::api_call_triage();
+//print_r( _get_cron_array() );
