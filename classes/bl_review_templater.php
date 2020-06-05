@@ -8,9 +8,19 @@ class BL_Review_Templater {
   public static $star_img_path = '/wp-content/plugins/bl-api-client/assets/gold-star.png';
 
   public static function local_reviews_style() {
-    wp_register_style('bl_local_reviews_styles', plugin_dir_url(__FILE__) . '../style/' . 'bl_local_reviews_styles' . '.css');
-    wp_enqueue_style('bl_local_reviews_styles');
-    error_log("got local reviews styleshseet request");
+    $page_slug_whitelist = ['review','testimonial'];
+    $is_reviews_page = false;
+    foreach ($page_slug_whitelist as $slug) {
+      if (strpos($_SERVER['REQUEST_URI'],$slug)) {
+        $is_reviews_page = true ;
+        break;
+      }
+    }
+    if ($is_reviews_page) {
+      wp_register_style('bl_local_reviews_styles', plugin_dir_url(__FILE__) . '../style/' . 'bl_local_reviews_styles' . '.css');
+      wp_enqueue_style('bl_local_reviews_styles');
+      error_log("got local reviews stylesheet request");
+    }
   }
   //Integrates all directories, sorts by date
   public static function local_reviews_shortcode_handler() {

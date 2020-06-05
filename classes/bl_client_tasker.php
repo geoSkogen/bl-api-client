@@ -12,7 +12,7 @@ class BL_Client_Tasker {
     $row = ['-1,-1','call series scheduler activated'];
     $option['log'][] = $row;
     update_option('bl_api_client_activity',$option);
-    error_log('boot call updated activity log with ' . $row[0] . ' ' . $row[1]);
+
     add_action( 'bl_api_client_call_series',
       array('BL_Client_Tasker','api_call_triage' )
     );
@@ -50,21 +50,21 @@ class BL_Client_Tasker {
         '-2,-2',
         'task stop'
       ];
-      if ($new_commit_log[0]!=$xy_str) {
+      //if ($new_commit_log[0]!=$xy_str) {
         error_log('found stop task index: ' . $xy_str);
         $commit['log'][] = $new_commit_log;
         update_option('bl_api_client_activity',$commit);
         //var_dump($commit);
-      }
+      //}
     }
   }
 
   public static function index_task($log) {
     // get index numbers of listing directory and business locale
     // initiate with argument of '-1,-1' in order to return '0,0'
-    if ($log==='-2,-2') { return null; }
+    if ($log==='-2,-2') { errorlog('null call to index task()'); return null; }
     $result = array();
-    error_log("re-indexing tasks");
+    error_log("\r\nre-indexing tasks\r\n");
     error_log('bl_client field count is ' . strval(BL_API_Client_Settings::get_field_count()) );
     $loc_count = BL_API_Client_Settings::get_field_count();
     $counts = [$loc_count-1,count(BL_Review_Monster::$dirs)-1];
@@ -97,6 +97,8 @@ class BL_Client_Tasker {
     // a conversation with local biz options
     $req_body = null;
     $biz_info = new BL_Biz_Info_Monster($this_option);
+    $dir_slug = ($directory==='google') ? 'gmb' : $directory;
+    $link_prop = $dir_slug . '_link_' . strval($index+1);
     // for the first four local listings, if override isn't set,
     // check if CR Suite business options has the required lookup info
     if (!$this_option['crs_override'] && $index < 4) {
@@ -110,15 +112,13 @@ class BL_Client_Tasker {
       $req_body = $biz_info->places[$index];
       error_log('cr-suite business options not used; using bl-client lookup');
     }
-    $dir_slug = ($directory==='google') ? 'gmb' : $directory;
-    $link_prop = $dir_slug . '_link_' . strval($index+1);
+
     if (isset($this_option[$link_prop]) && '' != $this_option[$link_prop]) {
       error_log('found ' . $link_prop . '; starting api call body validation');
       self::bl_api_get_reviews($directory,$index,$req_body,$this_option);
     } else {
       error_log($link_prop . ' not found; skipping api call body validation');
     }
-
   }
 
   public static function bl_api_get_reviews($dir,$index,$req_body,$this_option) {

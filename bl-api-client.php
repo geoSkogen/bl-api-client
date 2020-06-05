@@ -73,7 +73,7 @@ function bl_api_client_activate() {
     'google_reviews'=>[],'facebook_reviews'=>[],
     'google_aggregate_rating'=>[],'facebook_aggregate_rating'=>[]
   );
-  $commit['log'] = [['n,n','plugin activated']];
+  $commit['log'] = [['-1,-1','plugin activated']];
   // return indexed associative arrays of request params per CR Suite locale
   // if a locale dosn't fully validate, it adds a null to the array
   $body_params = BL_CR_Suite_Client::business_options_rollup();
@@ -85,21 +85,15 @@ function bl_api_client_activate() {
   }
   //instatiate activity table with new log and recycled review data if found;
   update_option('bl_api_client_activity',$commit);
-  add_action( 'bl_api_client_cron_hook_1',
-    'bl_api_call_boot',
-    10,
-    2
-  );
-  if ( ! wp_next_scheduled( 'bl_api_client_cron_hook_1' ) ) {
-      wp_schedule_event( time(), 360, 'bl_api_client_cron_hook_1' );
-  }
-
-
 }
 
 function bl_api_client_deactivate() {
   $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
   wp_unschedule_event( $timestamp, 'bl_api_client_cron_hook' );
+  error_log('timestamp for outer cron hook was : ' . strval($timestamp));
+  $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
+  wp_unschedule_event( $timestamp, 'bl_api_client_call_series' );
+  error_log('timestamp for outer cron hook was : ' . strval($timestamp));
 }
 //TEST PATTERN CODE ONLY - for inspecting run-times of scheduled api call jobs
 /*
@@ -117,30 +111,108 @@ if (isset($options)) {
   error_log('db slug not found');
 }
 */
+add_filter( 'cron_schedules', 'bl_api_client_add_cron_intervals' );
 
-function bl_api_call_boot() {
+function bl_api_client_add_cron_intervals( $schedules ) {
+    $schedules['fifteen_seconds'] = array(
+       'interval' => 15,
+       'display'  => esc_html__( 'Every Fifteen Seconds' ),
+    );
+    $schedules['thirty_seconds'] = array(
+       'interval' => 30,
+       'display'  => esc_html__( 'Every Fifteen Seconds' ),
+    );
+    $schedules['one_minute'] = array(
+        'interval' => 60,
+        'display'  => esc_html__( 'Every Sixty Seconds' ),
+    );
+    $schedules['three_minutes'] = array(
+        'interval' => 180,
+        'display'  => esc_html__( 'Every Five Minutes' ),
+    );
+    $schedules['five_minutes'] = array(
+        'interval' => 300,
+        'display'  => esc_html__( 'Every Five Minutes' ),
+    );
+    return $schedules;
+}
+
+
+if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
+  error_log('got cron hook schedule - outer ring ');
+  wp_schedule_event( time(), 'five_minutes', 'bl_api_client_cron_hook' );
+  $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
+  error_log('timestamp for outer cron hook is : ' . strval($timestamp));
+} else {
+  $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
+  error_log('timestamp for next outer cron hook is : ' . strval($timestamp));
+  $timestamp1 = wp_next_scheduled( 'bl_api_client_call_series' );
+  error_log('timestamp for next inner cron hook is : ' . strval($timestamp1));
+}
+
+add_action( 'bl_api_client_cron_hook',
+  'api_call_boot'
+);
+
+add_action( 'bl_api_client_call_series',
+  'api_call_triage'
+);
+
+function api_call_boot() {
   $option = get_option('bl_api_client_activity');
   $row = ['-1,-1','call series scheduler activated'];
   $option['log'][] = $row;
   update_option('bl_api_client_activity',$option);
-  error_log('boot call updated activity log with ' . $row[0] . ' ' . $row[1]);
-  /*
-  add_action( 'bl_api_client_call_series',
-    array('BL_Client_Tasker','api_call_triage' )
-  );
+
   if ( ! wp_next_scheduled( 'bl_api_client_call_series' ) ) {
-      wp_schedule_event( time(), 60, 'bl_api_client_call_series' );
+    error_log('got cron hook schedule - inner ring ');
+    wp_schedule_event( time(),'fifteen_seconds', 'bl_api_client_call_series' );
+    $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
+    error_log('timestamp for inner cron hook is : ' . strval($timestamp));
+  } else {
+    $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
+    error_log('timestamp for next inner cron hook is : ' . strval($timestamp));
   }
-  */
 }
-//CRON JOB
-//Build out flow controls here!!!
-//Cron job should schedule itself but not run at time of scheduling, and . . .
-//only if the lookup info validates;
-//add reiteration of API call for businesses with mutiple entries or
-//multiple locales in CR Suite; add alternation for both Facebook and GMB.
-//for best use of server resources, schedule seperate locales on sepatate jobs
-//
+
+function api_call_triage() {
+  $commit = get_option('bl_api_client_activity');
+  $this_option = get_option('bl_api_client_settings');
+  $commit_log = (isset($commit['log'])) ? end($commit['log']) : [[BL_Client_Tasker::$init_key,'(not set)']];
+  $xy_str = (isset($commit_log[0])) ? $commit_log[0] : BL_Client_Tasker::$init_key;
+  // 'decode' the last activity log
+  $x_y = BL_Client_Tasker::index_task($xy_str);
+  // use valid index numbers to schedule directory call y for biz locale x
+  if ($x_y) {
+    $loc_index = $x_y['loc'];
+    $dir_index = $x_y['dir'];
+    $dir = BL_Review_Monster::$dirs[$dir_index];
+    $new_commit_log = [
+      strval($loc_index) . "," . strval($dir_index),
+      'triage call'
+    ];
+    error_log('found valid task index: ' . $new_commit_log[0]);
+    $commit['log'][] = $new_commit_log;
+    update_option('bl_api_client_activity',$commit);
+    //var_dump($commit);
+    BL_Client_Tasker::review_scrape($loc_index,$dir,$this_option);
+  } else {
+    // null task-indexing value commits one 'stop-code' to the log
+    $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
+    wp_unschedule_event( $timestamp, 'bl_api_client_call_series' );
+    error_log('timestamp for next inner cron hook was : ' . strval($timestamp));
+    $new_commit_log = [
+      '-2,-2',
+      'task stop'
+    ];
+    //if ($new_commit_log[0]!=$xy_str) {
+      error_log('found stop task index: ' . $xy_str);
+      $commit['log'][] = $new_commit_log;
+      update_option('bl_api_client_activity',$commit);
+      //var_dump($commit);
+    //}
+  }
+}
 
 //API CALL FORMAT! work on discovering the correct URL format for GMB pings
 //different lookup-by-URL formats; so far none is accepted:
@@ -159,4 +231,3 @@ function bl_api_call_boot() {
 // refresh the page executing the reviews shortcode handler, and watch it update
 //BL_Client_Tasker::api_call_boot();
 //BL_Client_Tasker::api_call_triage();
-//print_r( _get_cron_array() );
