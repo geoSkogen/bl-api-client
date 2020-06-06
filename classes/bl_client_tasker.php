@@ -42,7 +42,8 @@ class BL_Client_Tasker {
       $commit['log'][] = $new_commit_log;
       update_option('bl_api_client_activity',$commit);
       //var_dump($commit);
-      self::review_scrape($loc_index,$dir,$this_option);
+      self::bl_api_get_request_body($loc_index,$dir,$this_option);
+      //
     } else {
       // null task-indexing value commits one 'stop-code' to the log
       $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
@@ -52,21 +53,22 @@ class BL_Client_Tasker {
         '-2,-2',
         'task stop'
       ];
-      //if ($new_commit_log[0]!=$xy_str) {
+      if ($new_commit_log[0]!=$xy_str) {
+        //determines whether task index just returned null; stops superfluous commits
         error_log('found stop task index: ' . $xy_str);
         $commit['log'][] = $new_commit_log;
         update_option('bl_api_client_activity',$commit);
         //var_dump($commit);
-      //}
+      }
     }
   }
 
   public static function index_task($log) {
     // get index numbers of listing directory and business locale
     // initiate with argument of '-1,-1' in order to return '0,0'
-    if ($log==='-2,-2') { errorlog('null call to index task()'); return null; }
+    if ($log==='-2,-2') { error_log('null call to index task()'); return null; }
     $result = array();
-    error_log("\r\nre-indexing tasks\r\n");
+    error_log("\r\n===================\r\nRe-Indexing Tasks\r\n===================");
     error_log('bl_client field count is ' . strval(BL_API_Client_Settings::get_field_count()) );
     $loc_count = BL_API_Client_Settings::get_field_count();
     $counts = [$loc_count-1,count(BL_Review_Monster::$dirs)-1];
@@ -95,7 +97,7 @@ class BL_Client_Tasker {
     return ($stop===count($keys) && $boot!=count($keys)) ? null : $result;
   }
 
-  public static function review_scrape($index,$directory,$this_option) {
+  public static function bl_api_get_request_body($index,$directory,$this_option) {
     // a conversation with local biz options
     $req_body = null;
     $biz_info = new BL_Biz_Info_Monster($this_option);
@@ -139,14 +141,14 @@ class BL_Client_Tasker {
       }
       error_log("\r\n");
       */
-      //NOTE: data validation for API keys here!!!
+      //NOTE: Add data validation for API keys here!!!
       define('BL_API_KEY', $auth['api_key']);
       define('BL_API_SECRET', $auth['api_secret']);
       if (defined('BL_API_KEY') && defined('BL_API_SECRET')) {
         error_log('found api keys');
         //NOTE: THIS IS THE API CALL - UNCOMMENT TO RUN
         //
-        $result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
+        //$result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
         //$result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
       } else {
         error_log('bl api keys not found');
@@ -158,7 +160,11 @@ class BL_Client_Tasker {
     //NOTE:DATABASE SUBROUTINE - needs dev work:
     // experiment with committing review data to 'activity' table as a callback to the API call;
     // currently doing database commit within the API call static function scope;
+    // it's a big plate of spaghetti - look at BL_Scraper::call_local_dir()
+    // lines 205 - 214 - and
+    // lines 286 - 324
     /*
+    // . . . suppose the API call returns a result without blocking ?
     if ($result->reviews && $result->aggregate_rating) {
       $commit['reviews'] = $result->reviews;
       $commit['aggregate_rating'] = $result->aggregate_rating;

@@ -32,6 +32,8 @@ class BL_Review_Templater {
     //isntantiate the review shrine return string value
     $result = "<div id='my_review_shrine' class='bl_client_reviews_widget'>";
     //iterate the monster's review record
+    // NOTE: add filtration - BL_Review_Monster should have filtration
+    // -by rating, -by locale, -by date
     foreach ($monster->reviews_all as $review_obj) {
       $result .= "<div class='bl_client_review {$review_obj['dir']}'>";
       //iterate each review object property

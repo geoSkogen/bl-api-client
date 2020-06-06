@@ -69,16 +69,19 @@ function bl_api_client_activate() {
   $activity = get_option('bl_api_client_activity');
   $settings = get_option('bl_api_client_settings');
   $commit = ($activity) ? $activity : array(
+  // comment-out line above and uncomment line below to active w/ blank data table
   //$commit = array(
     'google_reviews'=>[],'facebook_reviews'=>[],
     'google_aggregate_rating'=>[],'facebook_aggregate_rating'=>[]
   );
+  // -1,-1 is the key; when BL_Client_Tasker::api_call_triage() finds it in the database,
+  // BL_Client_Tasker::index_task() turns it into executable arguments for the first request body
   $commit['log'] = [['-1,-1','plugin activated']];
   // return indexed associative arrays of request params per CR Suite locale
   // if a locale dosn't fully validate, it adds a null to the array
   $body_params = BL_CR_Suite_Client::business_options_rollup();
   // transfer CR Suite Business Options data into BL API Client Settings table
-  // - per valid biz entry, if null values are present in the array, nothing happens
+  // - per valid biz entry, if a null value is present in the array, nothing happens
   if ($body_params && !$settings['crs_override']) {
     $crs_handshake = BL_Biz_Info_Monster::crs_handshake($body_params,$settings);
     update_option('bl_api_client_settings',$crs_handshake);
@@ -88,6 +91,7 @@ function bl_api_client_activate() {
 }
 
 function bl_api_client_deactivate() {
+  //turns off scheduled cron tasks
   $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
   wp_unschedule_event( $timestamp, 'bl_api_client_cron_hook' );
   error_log('timestamp for outer cron hook was : ' . strval($timestamp));
@@ -111,6 +115,7 @@ if (isset($options)) {
   error_log('db slug not found');
 }
 */
+//define our time intervals
 add_filter( 'cron_schedules', 'bl_api_client_add_cron_intervals' );
 
 function bl_api_client_add_cron_intervals( $schedules ) {
@@ -138,17 +143,18 @@ function bl_api_client_add_cron_intervals( $schedules ) {
         'interval' => 300,
         'display'  => esc_html__( 'Every Five Minutes' ),
     );
-    $schedules['six_minutes'] = array(
-        'interval' => 360,
-        'display'  => esc_html__( 'Every Six Minutes' ),
+    $schedules['ten_minutes'] = array(
+        'interval' => 600,
+        'display'  => esc_html__( 'Every Ten Minutes' ),
     );
     return $schedules;
 }
 
 if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
   error_log('got cron hook schedule - outer ring ');
-  wp_schedule_event( time(), 'six_minutes', 'bl_api_client_cron_hook' );
+  wp_schedule_event( time(), 'ten_minutes', 'bl_api_client_cron_hook' );
   $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
+  //everything below this is debugging code only; remove in production
   error_log('timestamp for outer cron hook is : ' . strval($timestamp));
 } else {
   $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
@@ -157,11 +163,13 @@ if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
   error_log('timestamp for next inner cron hook is : ' . strval($timestamp1));
   error_log('the current time is : ' . strval(time()));
 }
-
+// assign the api call's 'boot' task to the main cron job -
+// it 'seeds' the database and schedules the temporary 'triage' series
 add_action( 'bl_api_client_cron_hook',
   array('BL_Client_Tasker','api_call_boot')
 );
-
+// assign the locale-to-directory 'triage' task to the temporary cron job series
+// it unschedules itself when completed
 add_action( 'bl_api_client_call_series',
   array('BL_Client_Tasker','api_call_triage')
 );
@@ -171,16 +179,16 @@ add_action( 'bl_api_client_call_series',
 //different lookup-by-URL formats; so far none is accepted:
 //https://search.google.com/local/reviews?placeid=ChIJsc2v07GxlVQRRK-jGkZfiw0
 //https://local.google.com/place?id=975978498955128644&use=srp&hl=en
+//Keys are stashed here:
 //ChIJsc2v07GxlVQRRK-jGkZfiw0
 //975978498955128644
 
-//API CALL
-//manual deployment for dev purposes; this should never run on its own;
-//BL API Call should only run on scheduled events at traffic down times
-
-//BL_Client_Tasker::api_call_boot();
-//TEST FRAMEWORK - Uncomment this code to run the api call series
+// API CALL
+// manual deployment for dev purposes; this should never run on its own;
+// BL API Call should only run on scheduled events at traffic down times
+// BL_Client_Tasker::api_call_boot();
+// TEST FRAMEWORK - Uncomment this code to run the api call series
 // IMPORTANT - Recomment it and save immediately after running
 // Change the something in the test data in scraper first, then repeatedly
 // refresh the page executing the reviews shortcode handler, and watch it update
-//BL_Client_Tasker::api_call_triage();
+// BL_Client_Tasker::api_call_triage();
