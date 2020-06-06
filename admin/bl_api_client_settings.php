@@ -293,9 +293,31 @@ class BL_API_Client_Settings {
     echo $result;
   }
 
+  public static function valid_call_now($str) {
+    $arr = explode(',',$str);
+    $score = 0;
+    for($i = 0; $i < count($arr); $i++) {
+      switch(strval($i)) {
+        case '0' :
+          if (intval($arr[$i]) <= self::get_field_count()-1) {
+            $score+=1;
+          }
+          break;
+        case '1' :
+          $score+= (intval($arr[$i]) > -1 && intval($arr[$i] <= 1)) ? 1 : 0;
+          break;
+      }
+    }
+    return ($score===2) ? true : false;
+  }
+
   public static function bl_api_client_call_now() {
     $field_name = 'call_now';
     $db_slug = 'activity';
+    $value = (
+      isset(self::$options['call_now']) &&
+      self::valid_call_now(self::$options['call_now'])
+      ) ? self::$options['call_now'] : '-1,-1';
     $style_rule = 'style="display:none;"';
 
     $result = "<input $style_rule value='1' name='bl_api_client_{$db_slug}[{$field_name}]'/>";
