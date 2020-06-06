@@ -5,6 +5,7 @@ class BL_Review_Monster  {
   public $count = array('google'=>array(),'facebook'=>array());
   public $reviews_all = array();
   public $rating_all = array();
+  public $logs = [];
   public static $props = ['log','reviews','aggregate_rating'];
   public static $dirs = ['google','facebook'];
   public static $review_props = ['author_avatar','author','timestamp','rating','text','id'];
@@ -28,6 +29,7 @@ class BL_Review_Monster  {
       }
     }
     $this->reviews_all = $this->sort_by_date();
+    $this->logs = $options_arr['log'];
   }
 
   public function get_weighted_aggregate() {
@@ -132,6 +134,31 @@ class BL_Review_Monster  {
     }
     $result .= "</table>";
     return $result;
+  }
+
+  public function do_activity_log_table() {
+    $locales = BL_API_Client_Settings::get_field_count();
+    $data = array_slice($this->logs,count($this->logs)-intval($locales));
+    $result = '<h3>Most Recent API Call Logs</h3>';
+    $result .= '<table>';
+    foreach($data as $row) {
+      $indexer = 0;
+      $result .= '<tr>';
+      foreach($row as $datum) {
+        if (!$indexer) {
+          $arg_arr = explode(',',$datum);
+          $locale_index = strval($arg_arr[0])+1;
+          $dir_name = self::$dirs[$arg_arr[1]];
+          $result .= "<td>business locale #$locale_index &mdash; $dir_name<td>";
+        } else {
+          $result .= "<td>$datum<td>";
+        }
+        $indexer++;
+      }
+      $result .= '</tr>';
+    }
+    $result .= '</table>';
+    echo $result;
   }
 
 }

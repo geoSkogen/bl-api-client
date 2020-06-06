@@ -94,7 +94,7 @@ class BL_API_Client_Settings {
   }
 
   public static function settings_api_init() {
-    //cr suite data import using passive-record technique:
+    //CR Suite data import using passive-record technique:
     //if values are found in this object's static properties, no database hit is required
     self::crs_handshake();
     $data_status = (self::$crs_business_options && !self::$crs_override) ?
@@ -179,11 +179,11 @@ class BL_API_Client_Settings {
         }
 
         add_settings_field(
-          $this_field,                   //uniqueID - "param_1", etc.
+          $this_field,                  //uniqueID - "param_1", etc.
           $this_label,                  //uniqueTitle -
-          array('BL_API_Client_Settings','bl_api_client_settings_info_field'),//callback bl_api_client_settings_field();
-          'bl_api_client_settings',                    //page-slug
-          'bl_api_client_settings'            //section (parent settings-section uniqueID)
+          array('BL_API_Client_Settings','bl_api_client_settings_info_field'),//callback
+          'bl_api_client_settings',     //page-slug
+          'bl_api_client_settings'      //section (parent settings-section uniqueID)
         );
       }
     }
@@ -350,31 +350,11 @@ class BL_API_Client_Settings {
         $options['call_now'] = '0';
         //update_option('bl_api_client_activity',$options);
       }
-      //var_dump($options);
-      $review_table = "<input name='submit' type='submit' id='submit' class='button-primary' value='Call Now' />";
       $review_monster = new BL_Review_Monster($options);
+      $review_table = "<input name='submit' type='submit' id='submit' class='button-primary' value='Call Now' />";
+      $review_table .= $review_monster->do_activity_log_table();
       $review_table .= $review_monster->do_reviews_table();
       echo $review_table;
-      /*
-      $new_data = array(
-       array(
-         'rating' => 5,
-         'author' => 'Kathy Asato',
-         'timestamp' => '2020-04-02',
-         'text' => 'We had a great experience with Earthworks Excavating Services. The communication was wonderful.',
-         'author_avatar' => 'https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg',
-         'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
-      ),array(
-         'rating' => 5,
-         'author' => 'Advanced Plumbing',
-         'timestamp' => '2020-03-02',
-         'text' => 'We had a great experience with Earthworks Excavating Services. The communication was wonderful.',
-         'author_avatar' => 'https://lh6.googleusercontent.com/-m-jjYqGDLyE/AAAAAAAAAAI/AAAAAAAAAAA/ynbQXsyEu50/s40-c-rp-mo-br100/photo.jpg',
-         'id' => '68d81651c71f99b6cb857c2c8c2b31464e23d83'          )
-      );
-      */
-      //$options['facebook_reviews'] = $new_data;
-      //update_option('bl_api_client_activity',$options);
     }
   }
 
