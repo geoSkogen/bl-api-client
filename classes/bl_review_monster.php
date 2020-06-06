@@ -138,7 +138,7 @@ class BL_Review_Monster  {
 
   public function do_activity_log_table() {
     $locales = BL_API_Client_Settings::get_field_count();
-    $data = array_slice($this->logs,count($this->logs)-intval($locales));
+    $data = array_slice($this->logs,count($this->logs)-((intval($locales)*2)+2));
     $result = '<h3>Most Recent API Call Logs</h3>';
     $result .= '<table>';
     foreach($data as $row) {
@@ -146,10 +146,21 @@ class BL_Review_Monster  {
       $result .= '<tr>';
       foreach($row as $datum) {
         if (!$indexer) {
-          $arg_arr = explode(',',$datum);
-          $locale_index = strval($arg_arr[0])+1;
-          $dir_name = self::$dirs[$arg_arr[1]];
-          $result .= "<td>business locale #$locale_index &mdash; $dir_name<td>";
+          switch($datum) {
+            case '-1,-1' :
+              $locale_index = '&nbsp&Theta;&nbsp';
+              $dir_name = '&nbsp;&Theta;&nbsp';
+              break;
+            case '-2,-2' :
+              $locale_index = '&nbsp&Omega;&nbsp';
+              $dir_name = '&nbsp&Omega;&nbsp';
+              break;
+            default :
+            $arg_arr = explode(',',$datum);
+            $locale_index = 'business locale #' . strval($arg_arr[0]+1);
+            $dir_name = self::$dirs[$arg_arr[1]];
+          }
+          $result .= "<td>$locale_index &mdash; $dir_name<td>";
         } else {
           $result .= "<td>$datum<td>";
         }

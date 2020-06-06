@@ -345,6 +345,7 @@ class BL_API_Client_Settings {
   }
 
   public static function bl_api_client_dynamic_settings_section($db_slug) {
+    // NOTE: Turn this into a switch statement on $db_slug as argument
     $options = get_option('bl_api_client' . $db_slug);
     if ($db_slug!='_activity') {
       $dropped = (isset($options['drop'])) ? $options['drop'] : '(not set)';

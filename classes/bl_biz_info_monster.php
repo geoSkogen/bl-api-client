@@ -16,7 +16,7 @@ class BL_Biz_Info_Monster {
       $table['field_count'] : 0;
     $this->places = $this->get_places($this->count,$table);
   }
-  //returns indexed array per biz locale - elements are API request params objects
+  //returns indexed array per biz locale - elements are API request body params objects
   //same data structure as BL_CR_Suite_Client::places
   public function get_places($count,$assoc) {
     //var_dump($assoc);

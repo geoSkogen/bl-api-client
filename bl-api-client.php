@@ -2,7 +2,7 @@
 /*
 Plugin Name:  BrightLocal Client
 Description:  Extends CR-Suite with Live Reviews
-Version:      2020.06.06
+Version:      2020.06.08
 Author:       City Ranked Media
 Author URI:
 Text Domain:  bl_api_client
@@ -68,14 +68,52 @@ add_shortcode('bl_client_local_reviews',
 function bl_api_client_activate() {
   $activity = get_option('bl_api_client_activity');
   $settings = get_option('bl_api_client_settings');
-  $commit = ($activity) ? $activity : array(
+  //$commit = ($activity) ? $activity : array(
   // comment-out line above and uncomment line below to active w/ blank data table
-  //$commit = array(
+  $commit = array(
     'google_reviews'=>[],'facebook_reviews'=>[],
     'google_aggregate_rating'=>[],'facebook_aggregate_rating'=>[]
   );
-  // -1,-1 is the key; when BL_Client_Tasker::api_call_triage() finds it in the database,
-  // BL_Client_Tasker::index_task() turns it into executable arguments for the first request body
+  $gstager = [];
+  $fstager = [];
+  /*
+  foreach($commit['google_reviews'] as $review) {
+    error_log($review['author']);
+    if ($review['locale_id']) {
+      error_log('found g locale id');
+    } else {
+      error_log('found no g locale id');
+
+    }
+
+  }
+  foreach($commit['facebook_reviews'] as $review) {
+    error_log($review['author']);
+    if ($review['locale_id']) {
+      error_log('found f locale id');
+    }  else {
+      error_log('found no f locale id');
+    }
+  }
+
+  foreach($commit['google_aggregate_rating'] as $rating) {
+    if ($rating['locale_id']) {
+      error_log('found g agg locale id');
+    }  else {
+      error_log('found no g agg locale id');
+    }
+  }
+
+  foreach($commit['facebook_aggregate_rating'] as $rating) {
+    if ($rating['locale_id']) {
+      error_log('found f agg locale id');
+    }  else {
+      error_log('found no f agg locale id');
+    }
+  }
+  */
+  // when api_call_triage() finds -1,-1 in the database, index_task() turns it
+  // into 0,0 - the executable arguments for the first request body in the series
   $commit['log'] = [['-1,-1','plugin activated']];
   // return indexed associative arrays of request params per CR Suite locale
   // if a locale dosn't fully validate, it adds a null to the array

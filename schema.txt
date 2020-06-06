@@ -39,6 +39,8 @@ using the options table -
 
     zipcode_{int}
 
+    gmb_line_{int}
+
     gmb_link_{int}
 
     facebook_link_{int}
@@ -49,7 +51,7 @@ using the options table -
 
     log - indexed array of timestamps
 
-    {dir}_reviews - array keys: rating, author, timestamp, text, author_avatar, id
+    {dir}_reviews - array keys: rating, author, timestamp, text, author_avatar, id, locale_id
 
     {dir}_aggregate_rating - array keys: rating, count
 

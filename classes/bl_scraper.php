@@ -207,6 +207,7 @@ class BL_Scraper {
     $log_index = (isset($commit['log'])) ? count($commit['log'])-1 : 0;
     $locale_index = explode(',',$xy_str)[0];
     $msg = '(not set)';
+    $err_msg = '';
     // data vars
     $final_reviews_batch = [];
     $other_reviews = [];
@@ -257,6 +258,10 @@ class BL_Scraper {
         error_log('Added job with ID ' . strval($result['job-id']) . ' ' . strval(PHP_EOL));
       } else {
         error_log(print_r($result));
+        $err_msg .= 'API call error summary: ';
+        foreach($result as $key => $val) {
+          $err_msg .= $key . ':' . $val . ' ';
+        }
       }
 
       if ($batchApi->commit($batchId)) {
@@ -281,14 +286,19 @@ class BL_Scraper {
           'rating' => $results['results']['LdFetchReviews'][0]['results'][0]['star-rating'],
           'count' => $results['results']['LdFetchReviews'][0]['results'][0]['reviews-count']
         );
+      } else {
+        $err_msg .= 'BL API library batch commit failure ';
       }
+    } else {
+      $err_msg .=  'invalid batch ID ';
     }
     // ensure each new item has a locale id
     foreach($reviews as $review) {
-      $review['locale_id'] = $locale_index;
+      $this_review = $review;
+      $this_review['locale_id'] = strval($locale_index);
       $final_reviews_batch[] = $review;
     }
-    $aggregrate_rating['locale_id'] = $locale_index;
+    $aggregrate_rating['locale_id'] = strval($locale_index);
     // make record exluding the current locale's previous reviews . . .
     //NOTE: Add error handling, isset()...
     foreach ($commit[$directory . '_reviews'] as $current_review) {
@@ -312,11 +322,12 @@ class BL_Scraper {
     if ($return_val->reviews && $return_val->aggregate_rating) {
       $commit[$directory . '_reviews'] = $all_reviews;
       $commit[$directory . '_aggregate_rating'] = $all_agg_ratings;
-      $msg = time();
-      error_log('review scrape ' . strval($msg));
+      $msg = 'successful review scrape - '. date('F d Y H:i',time());
+      error_log($msg);
     } else {
-      $msg = 'review scrape error occurred';
-      error_log('review scrape error occurred');
+      $msg = 'error: ' . date('F d Y H:i',time());
+      $msg .= '' . $err_msg;
+      error_log($msg);
     }
     $commit['log'][] = [$xy_str,$msg];
     update_option('bl_api_client_activity',$commit);
