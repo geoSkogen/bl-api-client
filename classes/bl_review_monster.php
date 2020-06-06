@@ -31,11 +31,13 @@ class BL_Review_Monster  {
     $this->reviews_all = $this->sort_by_date();
     $this->logs = $options_arr['log'];
   }
-
+  //NOTE:Build out weighted average function - also get agg by locale X biz
   public function get_weighted_aggregate() {
     $result = array('rating'=>0,'count'=>0);
     return $result;
   }
+  // NOTE: add filtration functions - BL_Review_Monster should have filtration
+  // -by rating, -by locale, -by date
 
   public function sort_by_date() {
     $result = [];

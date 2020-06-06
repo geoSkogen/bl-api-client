@@ -68,9 +68,9 @@ add_shortcode('bl_client_local_reviews',
 function bl_api_client_activate() {
   $activity = get_option('bl_api_client_activity');
   $settings = get_option('bl_api_client_settings');
-  //$commit = ($activity) ? $activity : array(
+  $commit = ($activity) ? $activity : array(
   // comment-out line above and uncomment line below to active w/ blank data table
-  $commit = array(
+  //$commit = array(
     'google_reviews'=>[],'facebook_reviews'=>[],
     'google_aggregate_rating'=>[],'facebook_aggregate_rating'=>[]
   );
