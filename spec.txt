@@ -16,4 +16,4 @@ bl_client_tasker.php - line 144
                                 - add validation for API Keys?
 
 bl_scraper.php - lines 295-325
-                                -
+                                - IMPORTANT - run tests to ensure locale IDs are working

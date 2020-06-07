@@ -23,8 +23,21 @@ class BL_Review_Templater {
       error_log("got local reviews stylesheet request");
     }
   }
-  //Integrates all directories, sorts by date
+
+  public static function aggregate_rating_shortcode_handler() {
+    $result = '';
+    //hit your local options table for recent activity
+    $options_arr = get_option('bl_api_client_activity');
+    //var_dump($options_arr);
+    //instantiate the "review monster" active record
+    $monster = new BL_Review_Monster($options_arr);
+    $avg_obj = $monster->get_weighted_aggregate();
+    //return $result;
+    return '(not set)';
+  }
+
   public static function local_reviews_shortcode_handler() {
+    //Integrates all directories, sorts by date
     //hit your local options table for recent activity
     $options_arr = get_option('bl_api_client_activity');
     //var_dump($options_arr);
@@ -78,7 +91,6 @@ class BL_Review_Templater {
       //close the review item div
       $result .= "</div>";
     }
-
     //close the review shrine div
     $result .= "</div>";
     return $result;

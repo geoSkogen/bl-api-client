@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name:  BrightLocal Client
-Description:  Extends CR-Suite with Live Reviews
+Description:  Live Reviews & Ratings for Your Local Business
 Version:      2020.06.08
 Author:       City Ranked Media
 Author URI:
@@ -63,6 +63,10 @@ add_action( 'wp_enqueue_scripts',
 
 add_shortcode('bl_client_local_reviews',
   array('BL_Review_Templater','local_reviews_shortcode_handler')
+);
+
+add_shortcode('bl_client_agg_rating',
+  array('BL_Review_Templater','aggregate_rating_shortcode_handler')
 );
 
 function bl_api_client_activate() {
