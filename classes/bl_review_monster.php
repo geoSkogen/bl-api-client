@@ -155,6 +155,7 @@ class BL_Review_Monster  {
               $dir_name = '&nbsp;&Theta;&nbsp';
               break;
             case '-2,-2' :
+            case '-3,-3' :
               $locale_index = '&nbsp&Omega;&nbsp';
               $dir_name = '&nbsp&Omega;&nbsp';
               break;
@@ -165,7 +166,7 @@ class BL_Review_Monster  {
           }
           $result .= "<td>$locale_index &mdash; $dir_name<td>";
         } else {
-          $result .= "<td>$datum<td>";
+          $result .= "<td>&nbsp;&ndash;&nbsp;&nbsp;&nbsp;$datum<td>";
         }
         $indexer++;
       }

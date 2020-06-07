@@ -323,14 +323,16 @@ class BL_API_Client_Settings {
     $verifier = (isset($bl_biz[$that_field])) ?
         $bl_biz[$that_field] : '';
     $verified = ($verifier === $verify) ? true : false;
+    $option['verified'] = $verified;
     $value_tag = ($placeholder === "(not set)") ? "placeholder" : "value";
     $alert_class = ($verified) ? 'assure_me' : 'alert_me_extra';
     $alert_text = ($verify) ? ( ($verified) ?
-      ' Verified&mdash;Your Tasks Are Scheduled' : " Your Business Names Don't Match "
-      ) : ' Verify Your Business Name to Authorize Tasks ';
+      ' Verified&mdash;Your Tasks Are Scheduled' : " Unverified&mdash;Your Business Names Don't Match "
+      ) : ' Unverified&mdash;Verify Your Business Name to Authorize Tasks ';
     $alert_tag = "<span class='{$alert_class}'>&nbsp;» {$alert_text}&nbsp;» </span>";
     echo "{$alert_tag}<input type='text' class='zeroText'
       name={$this_db_slug}[{$this_field}] {$value_tag}='{$placeholder}'/>";
+    update_option($this_db_slug,$option);
   }
 
   public static function valid_call_now($str) {

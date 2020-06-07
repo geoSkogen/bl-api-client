@@ -192,19 +192,36 @@ function bl_api_client_add_cron_intervals( $schedules ) {
     return $schedules;
 }
 
-if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
-  error_log('got cron hook schedule - outer ring ');
-  wp_schedule_event( time(), 'sixteen_minutes', 'bl_api_client_cron_hook' );
-  $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
-  //everything below this is debugging code only; remove in production
-  error_log('timestamp for outer cron hook is : ' . strval($timestamp));
-} else {
-  $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
-  error_log('timestamp for next outer cron hook is : ' . strval($timestamp));
-  $timestamp1 = wp_next_scheduled( 'bl_api_client_call_series' );
-  error_log('timestamp for next inner cron hook is : ' . strval($timestamp1));
-  error_log('the current time is : ' . strval(time()));
+function bl_api_client_schedule_executor() {
+  $permissions = get_option('bl_api_client_permissions');
+  $activity = get_option('bl_api_client_activity');
+  //
+  if (isset($permissions['verified']) && $permissions['verified']) {
+    if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
+      error_log('got cron hook schedule - outer ring ');
+      wp_schedule_event( time(), 'sixteen_minutes', 'bl_api_client_cron_hook' );
+      $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
+      //everything below this is debugging code only; remove in production
+      error_log('timestamp for outer cron hook is : ' . strval($timestamp));
+    } else {
+      $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
+      error_log('timestamp for next outer cron hook is : ' . strval($timestamp));
+      $timestamp1 = wp_next_scheduled( 'bl_api_client_call_series' );
+      error_log('timestamp for next inner cron hook is : ' . strval($timestamp1));
+      error_log('the current time is : ' . strval(time()));
+    }
+  } else {
+    if (end($activity['log'])[0]!='-3,-3') {
+      error_log('outer cron hook un-scheduled - permissions error');
+      $log =  array('-3,-3','tasks unscheduled - settings unverified');
+      $activity['log'][] = $log;
+      update_option('bl_api_client_activity',$activity);
+      bl_api_client_deactivate();
+    }
+  }
 }
+
+bl_api_client_schedule_executor();
 // assign the api call's 'boot' task to the main cron job -
 // it 'seeds' the database and schedules the temporary 'triage' series
 add_action( 'bl_api_client_cron_hook',

@@ -34,7 +34,7 @@ class BL_API_Client_Options {
       add_submenu_page(
           'bl_api_client',                         //parent menu
           'BrightLocal Client Permissions',                // Page Title
-          'Authorize Your BL API',               // Menu Title
+          'Authorize Your API',               // Menu Title
           'manage_options',             // for Capabilities level of user with:
           'bl_api_client_permissions',             // menu Slug(page)
           array('BL_API_Client_Options','bl_api_client_permissions_page')// CB Function plugin_options_page()
