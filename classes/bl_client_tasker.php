@@ -15,7 +15,7 @@ class BL_Client_Tasker {
 
     if ( ! wp_next_scheduled( 'bl_api_client_call_series' ) ) {
         error_log('got cron hook schedule - inner ring ');
-        wp_schedule_event( time(), 'one_minute', 'bl_api_client_call_series' );
+        wp_schedule_event( time(), 'three_minutes', 'bl_api_client_call_series' );
     } else {
       $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
       error_log('timestamp for next inner cron hook is : ' . strval($timestamp));

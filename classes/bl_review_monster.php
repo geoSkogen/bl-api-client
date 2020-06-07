@@ -143,7 +143,7 @@ class BL_Review_Monster  {
 
   public function do_activity_log_table() {
     $locales = BL_API_Client_Settings::get_field_count();
-    $rev_data = array_slice($this->logs,count($this->logs)-((intval($locales)*2)+2));
+    $rev_data = array_slice($this->logs,count($this->logs)-((intval($locales)*4)+2));
     $data = array_reverse($rev_data);
     $result = '<h3>Most Recent API Call Logs</h3>';
     $result .= '<table>';

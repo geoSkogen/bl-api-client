@@ -258,9 +258,9 @@ class BL_Scraper {
         error_log('Added job with ID ' . strval($result['job-id']) . ' ' . strval(PHP_EOL));
       } else {
         error_log(print_r($result));
-        $err_msg .= 'API call error summary: ';
+        $err_msg .= ' API call error summary: ';
         foreach($result as $key => $val) {
-          $err_msg .= $key . ':' . $val . ' ';
+          $err_msg .= $key . ':' . $val . ', ';
         }
       }
 
@@ -287,20 +287,21 @@ class BL_Scraper {
           'count' => $results['results']['LdFetchReviews'][0]['results'][0]['reviews-count']
         );
       } else {
-        $err_msg .= 'BL API library batch commit failure ';
+        $err_msg .= ' BL API library batch commit failure ';
       }
     } else {
-      $err_msg .=  'invalid batch ID ';
+      $err_msg .=  ' invalid batch ID ';
     }
     // ensure each new item has a locale id
     foreach($reviews as $review) {
       $this_review = $review;
       $this_review['locale_id'] = strval($locale_index+1);
-      $final_reviews_batch[] = $review;
+      $final_reviews_batch[] = $this_review;
     }
-    $aggregrate_rating['locale_id'] = strval($locale_index+1);
+
+    $aggregate_rating['locale_id'] = strval($locale_index+1);
     // make record exluding the current locale's previous reviews . . .
-    //NOTE: Add error handling, isset()...
+    //NOTE: error handling, isset(), or let it bark? We need the warnings for now
     foreach ($commit[$directory . '_reviews'] as $current_review) {
       if ($current_review['locale_id']!=strval($locale_index+1)) {
         $other_reviews[] = $current_review;
@@ -308,7 +309,7 @@ class BL_Scraper {
     }
     // . . . and merge it with the new reviews for this locale
     $all_reviews = array_merge($final_reviews_batch,$other_reviews);
-    //NOTE: Add error handling, isset()...
+    //NOTE: error handling, isset(), or let it bark? We need the warnings for now
     foreach ($commit[$directory . '_aggregate_rating'] as $current_rating_obj) {
       if ($current_rating_obj['locale_id']!=strval($locale_index)) {
         $all_agg_ratings[] = $current_rating_obj;
@@ -325,6 +326,7 @@ class BL_Scraper {
       $msg = 'successful review scrape - '. date('F d Y H:i',time());
       error_log($msg);
     } else {
+      $err_msg .= ' no data found in final reviews batch ';
       $msg = 'error: ' . date('F d Y H:i',time());
       $msg .= '' . $err_msg;
       error_log($msg);

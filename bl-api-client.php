@@ -78,7 +78,6 @@ function bl_api_client_activate() {
     'google_reviews'=>[],'facebook_reviews'=>[],
     'google_aggregate_rating'=>[],'facebook_aggregate_rating'=>[]
   );
-  /*
   foreach($commit['google_reviews'] as $review) {
     error_log($review['author']);
     if ($review['locale_id']) {
@@ -113,7 +112,6 @@ function bl_api_client_activate() {
       error_log('found no f agg locale id');
     }
   }
-  */
   // when api_call_triage() finds -1,-1 in the database, index_task() turns it
   // into 0,0 - the executable arguments for the first request body in the series
   $commit['log'] = [['-1,-1','plugin activated ' . date('F d Y H:i',time())]];
@@ -189,7 +187,15 @@ function bl_api_client_add_cron_intervals( $schedules ) {
     );
     $schedules['sixteen_minutes'] = array(
         'interval' => 960,
-        'display'  => esc_html__( 'Every Ten Minutes' ),
+        'display'  => esc_html__( 'Every Sixteen Minutes' ),
+    );
+    $schedules['thirty_minutes'] = array(
+        'interval' => 1800,
+        'display'  => esc_html__( 'Every Thirty Minutes' ),
+    );
+    $schedules['forty_minutes'] = array(
+        'interval' => 2400,
+        'display'  => esc_html__( 'Every Thirty Minutes' ),
     );
     return $schedules;
 }
@@ -201,7 +207,7 @@ function bl_api_client_schedule_executor() {
   if (isset($permissions['verified']) && $permissions['verified']) {
     if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
       error_log('got cron hook schedule - outer ring ');
-      wp_schedule_event( time(), 'sixteen_minutes', 'bl_api_client_cron_hook' );
+      wp_schedule_event( time(), 'forty_minutes', 'bl_api_client_cron_hook' );
       $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
       //everything below this is debugging code only; remove in production
       error_log('timestamp for outer cron hook is : ' . strval($timestamp));
