@@ -114,7 +114,7 @@ function bl_api_client_activate() {
   */
   // when api_call_triage() finds -1,-1 in the database, index_task() turns it
   // into 0,0 - the executable arguments for the first request body in the series
-  $commit['log'] = [['-1,-1','plugin activated']];
+  $commit['log'] = [['-1,-1','plugin activated ' . date('F d Y H:i',time())]];
   // return indexed associative arrays of request params per CR Suite locale
   // if a locale dosn't fully validate, it adds a null to the array
   $body_params = BL_CR_Suite_Client::business_options_rollup();
@@ -185,12 +185,16 @@ function bl_api_client_add_cron_intervals( $schedules ) {
         'interval' => 600,
         'display'  => esc_html__( 'Every Ten Minutes' ),
     );
+    $schedules['sixteen_minutes'] = array(
+        'interval' => 960,
+        'display'  => esc_html__( 'Every Ten Minutes' ),
+    );
     return $schedules;
 }
 
 if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
   error_log('got cron hook schedule - outer ring ');
-  wp_schedule_event( time(), 'ten_minutes', 'bl_api_client_cron_hook' );
+  wp_schedule_event( time(), 'sixteen_minutes', 'bl_api_client_cron_hook' );
   $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
   //everything below this is debugging code only; remove in production
   error_log('timestamp for outer cron hook is : ' . strval($timestamp));

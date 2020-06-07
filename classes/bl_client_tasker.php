@@ -9,13 +9,13 @@ class BL_Client_Tasker {
 
   public static function api_call_boot() {
     $option = get_option('bl_api_client_activity');
-    $row = ['-1,-1','call series scheduler activated'];
+    $row = ['-1,-1','call series scheduler activated ' . date('F d Y H:i',time())];
     $option['log'][] = $row;
     update_option('bl_api_client_activity',$option);
 
     if ( ! wp_next_scheduled( 'bl_api_client_call_series' ) ) {
         error_log('got cron hook schedule - inner ring ');
-        wp_schedule_event( time(), 'fifteen_seconds', 'bl_api_client_call_series' );
+        wp_schedule_event( time(), 'one_minute', 'bl_api_client_call_series' );
     } else {
       $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
       error_log('timestamp for next inner cron hook is : ' . strval($timestamp));
@@ -36,7 +36,7 @@ class BL_Client_Tasker {
       $dir = BL_Review_Monster::$dirs[$dir_index];
       $new_commit_log = [
         strval($loc_index) . "," . strval($dir_index),
-        'triage call'
+        'triage call - ' . date('F d Y H:i',time())
       ];
       error_log('found valid task index: ' . $new_commit_log[0]);
       $commit['log'][] = $new_commit_log;
@@ -51,7 +51,7 @@ class BL_Client_Tasker {
       error_log('timestamp for next inner cron hook was : ' . strval($timestamp));
       $new_commit_log = [
         '-2,-2',
-        'task stop'
+        'task stop - ' . date('F d Y H:i',time())
       ];
       if ($new_commit_log[0]!=$xy_str) {
         //determines whether task index just returned null; stops superfluous commits
@@ -149,7 +149,7 @@ class BL_Client_Tasker {
         //NOTE: THIS IS THE API CALL - UNCOMMENT TO RUN
         //
         //$result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
-        //$result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
+        //$result = BL_Scraper::sim_call_local_dir($req_body,'fetch-reviews',$dir);
       } else {
         error_log('bl api keys not found');
       }

@@ -140,7 +140,8 @@ class BL_Review_Monster  {
 
   public function do_activity_log_table() {
     $locales = BL_API_Client_Settings::get_field_count();
-    $data = array_slice($this->logs,count($this->logs)-((intval($locales)*2)+2));
+    $rev_data = array_slice($this->logs,count($this->logs)-((intval($locales)*2)+2));
+    $data = array_reverse($rev_data);
     $result = '<h3>Most Recent API Call Logs</h3>';
     $result .= '<table>';
     foreach($data as $row) {
@@ -159,7 +160,7 @@ class BL_Review_Monster  {
               break;
             default :
             $arg_arr = explode(',',$datum);
-            $locale_index = 'business locale #' . strval($arg_arr[0]+1);
+            $locale_index = 'business locale #' . strval(intval($arg_arr[0])+1);
             $dir_name = self::$dirs[$arg_arr[1]];
           }
           $result .= "<td>$locale_index &mdash; $dir_name<td>";

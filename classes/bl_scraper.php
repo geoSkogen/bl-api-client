@@ -295,14 +295,14 @@ class BL_Scraper {
     // ensure each new item has a locale id
     foreach($reviews as $review) {
       $this_review = $review;
-      $this_review['locale_id'] = strval($locale_index);
+      $this_review['locale_id'] = strval($locale_index+1);
       $final_reviews_batch[] = $review;
     }
-    $aggregrate_rating['locale_id'] = strval($locale_index);
+    $aggregrate_rating['locale_id'] = strval($locale_index+1);
     // make record exluding the current locale's previous reviews . . .
     //NOTE: Add error handling, isset()...
     foreach ($commit[$directory . '_reviews'] as $current_review) {
-      if ($current_review['locale_id']!=strval($locale_index)) {
+      if ($current_review['locale_id']!=strval($locale_index+1)) {
         $other_reviews[] = $current_review;
       }
     }

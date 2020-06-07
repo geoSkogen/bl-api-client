@@ -102,7 +102,7 @@ class BL_API_Client_Settings {
 
     add_settings_section(
       'bl_api_client_auth',                         //uniqueID
-      'BrightLocal Authorization - Submit Your API Keys',   //Title
+      'BrightLocal Authentication - Submit Your API Keys',   //Title
       array('BL_API_Client_Settings','bl_api_client_auth_section'),//CallBack Function
       'bl_api_client'                                //page-slug
     );
@@ -119,6 +119,13 @@ class BL_API_Client_Settings {
       'BrightLocal API Activity',   //Title
       array('BL_API_Client_Settings','bl_api_client_activity_section'),//CallBack Function
       'bl_api_client_activity'                                //page-slug
+    );
+
+    add_settings_section(
+      'bl_api_client_permissions',                         //uniqueID
+      'Authorize BrightLocal API Client Tasks',   //Title
+      array('BL_API_Client_Settings','bl_api_client_permissions_section'),//CallBack Function
+      'bl_api_client_permissions'                                //page-slug
     );
 
     add_settings_field(
@@ -160,6 +167,14 @@ class BL_API_Client_Settings {
       'bl_api_client_activity',
       'bl_api_client_activity'
     );
+
+    add_settings_field(
+      'verify',
+      'Verify Your Business Name: ',
+      array('BL_API_Client_Settings','bl_api_client_verify'),
+      'bl_api_client_permissions',
+      'bl_api_client_permissions'
+    );
     //dynamic grouped settings fields - reiterates all items on the list: $bl_api_client_label_toggle
     for ($i = 1; $i < self::get_field_count() + 1; $i++) {
       self::$current_field_index = $i;
@@ -192,6 +207,7 @@ class BL_API_Client_Settings {
     register_setting( 'bl_api_client', 'bl_api_client' );
     register_setting( 'bl_api_client_settings', 'bl_api_client_settings' );
     register_setting( 'bl_api_client_activity', 'bl_api_client_activity' );
+    register_setting( 'bl_api_client_permissions', 'bl_api_client_permissions' );
   }
   //Templates
   ////template 3 - settings section field - dynamically rendered <input/>
@@ -293,6 +309,30 @@ class BL_API_Client_Settings {
     echo $result;
   }
 
+  public static function bl_api_client_verify() {
+    $this_db_slug = 'bl_api_client_permissions';
+    $that_db_slug = 'bl_api_client_settings';
+    $this_field = 'verify';
+    $that_field = 'business_name_1';
+    $option = get_option($this_db_slug);
+    $bl_biz = get_option($that_db_slug);
+    $placeholder = '(not set)';
+    $verify = (isset($option[$this_field]) && ''!=$option[$this_field]) ?
+      $option[$this_field] : null;
+    $placeholder = ($verify) ? $verify : $placeholder;
+    $verifier = (isset($bl_biz[$that_field])) ?
+        $bl_biz[$that_field] : '';
+    $verified = ($verifier === $verify) ? true : false;
+    $value_tag = ($placeholder === "(not set)") ? "placeholder" : "value";
+    $alert_class = ($verified) ? 'assure_me' : 'alert_me_extra';
+    $alert_text = ($verify) ? ( ($verified) ?
+      ' Verified&mdash;Your Tasks Are Scheduled' : " Your Business Names Don't Match "
+      ) : ' Verify Your Business Name to Authorize Tasks ';
+    $alert_tag = "<span class='{$alert_class}'>&nbsp;» {$alert_text}&nbsp;» </span>";
+    echo "{$alert_tag}<input type='text' class='zeroText'
+      name={$this_db_slug}[{$this_field}] {$value_tag}='{$placeholder}'/>";
+  }
+
   public static function valid_call_now($str) {
     $arr = explode(',',$str);
     $score = 0;
@@ -320,7 +360,7 @@ class BL_API_Client_Settings {
       ) ? self::$options['call_now'] : '-1,-1';
     $style_rule = 'style="display:none;"';
 
-    $result = "<input $style_rule value='1' name='bl_api_client_{$db_slug}[{$field_name}]'/>";
+    $result = "<input $style_rule value='$value' name='bl_api_client_{$db_slug}[{$field_name}]'/>";
 
     echo $result;
   }
@@ -333,10 +373,6 @@ class BL_API_Client_Settings {
     self::bl_api_client_dynamic_settings_section('_settings');
   }
 
-  public static function bl_api_client_activity_section() {
-    self::bl_api_client_dynamic_settings_section('_activity');
-  }
-
   public static function sticky_field($dir,$prop,$db_slug,$json_str) {
     $style_rule = 'style="display:none;"';
     $result = '<input ' . $style_rule . ' value=' . $json_str .
@@ -345,40 +381,41 @@ class BL_API_Client_Settings {
   }
 
   public static function bl_api_client_dynamic_settings_section($db_slug) {
-    // NOTE: Turn this into a switch statement on $db_slug as argument
     $options = get_option('bl_api_client' . $db_slug);
-    if ($db_slug!='_activity') {
-      $dropped = (isset($options['drop'])) ? $options['drop'] : '(not set)';
-      if ($dropped === "TRUE") {
-        error_log('got drop');
-        delete_option('bl_api_client' . $db_slug);
-      } else {
-        //error_log("drop=false");
-      }
-      if ($db_slug==='_settings') {
-        self::trim_fields();
-      }
-      wp_enqueue_script('bl_api_client-unset-all', plugin_dir_url(__FILE__) . '../lib/bl_api_client-unset-all.js');
-      ?>
-      <hr/>
-      <div style="display:flex;flex-flow:row wrap;justify-content:space-between;">
-        <input name='submit' type='submit' id='submit' class='button-primary' value='<?php _e("Save Changes") ?>' />
-        <button id='drop_button' class='button-primary' style='border:1.5px solid red;'>
-          <?php _e("Delete All") ?>
-        </button>
-      </div>
-      <?php
+    $dropped = (isset($options['drop'])) ? $options['drop'] : '(not set)';
+    if ($dropped === "TRUE") {
+      error_log('got drop');
+      delete_option('bl_api_client' . $db_slug);
     } else {
-      if (isset($options['call_now']) && $options['call_now']===1) {
-        $options['call_now'] = '0';
-        //update_option('bl_api_client_activity',$options);
-      }
-      $review_monster = new BL_Review_Monster($options);
-      $review_table = "<input name='submit' type='submit' id='submit' class='button-primary' value='Call Now' />";
-      $review_table .= $review_monster->do_activity_log_table();
-      $review_table .= $review_monster->do_reviews_table();
-      echo $review_table;
+      //error_log("drop=false");
     }
+    if ($db_slug==='_settings') {
+      self::trim_fields();
+    }
+    wp_enqueue_script('bl_api_client-unset-all', plugin_dir_url(__FILE__) . '../lib/bl_api_client-unset-all.js');
+    // insert before form element and its first field
+    ?>
+    <hr/>
+    <div style="display:flex;flex-flow:row wrap;justify-content:space-between;">
+      <input name='submit' type='submit' id='submit' class='button-primary' value='<?php _e("Save Changes") ?>' />
+      <button id='drop_button' class='button-primary' style='border:1.5px solid red;'>
+        <?php _e("Delete All") ?>
+      </button>
+    </div>
+    <?php
+  }
+
+  public static function bl_api_client_activity_section() {
+    $options = get_option('bl_api_client' . '_activity');
+    $review_monster = new BL_Review_Monster($options);
+    $review_table = "<input name='submit' type='submit' id='submit' class='button-primary' value='Call Now' />";
+    $review_table .= $review_monster->do_activity_log_table();
+    $review_table .= $review_monster->do_reviews_table();
+    echo $review_table;
+  }
+
+  public static function bl_api_client_permissions_section() {
+    // while the whole moves, and every part stands still
   }
 
 }
