@@ -1,1 +1,19 @@
+===============================
+Currently Outstanding Dev Specs
+===============================
 
+bl_review_monster.php - line 34
+                                - method for weighted average of all locales & directories
+                                - for weighted average by locale or directory
+                                - for aggregate review shortcode handler (see also bl_review_templater.php, line 35)
+                      - line 39
+                                - methods filtering the collection of all reviews:
+                                - by rating!
+                                - by locale?
+                                - by date range?
+
+bl_client_tasker.php - line 144
+                                - add validation for API Keys?
+
+bl_scraper.php - lines 295-325
+                                -

@@ -74,8 +74,6 @@ function bl_api_client_activate() {
     'google_reviews'=>[],'facebook_reviews'=>[],
     'google_aggregate_rating'=>[],'facebook_aggregate_rating'=>[]
   );
-  $gstager = [];
-  $fstager = [];
   /*
   foreach($commit['google_reviews'] as $review) {
     error_log($review['author']);

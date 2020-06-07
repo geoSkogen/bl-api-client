@@ -1,5 +1,6 @@
 <?php
-
+// ALL STATIC - for UX - strictly stylesheets and shortcode handlers
+// public methods instantiate Review Monsters
 class BL_Review_Templater {
 
   public static $props = ['log','reviews','aggregate_rating'];

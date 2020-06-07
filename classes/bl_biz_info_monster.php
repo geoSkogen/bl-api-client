@@ -1,7 +1,13 @@
 <?php
-
+// BrightLocal Biz Info 'Monster' is an instantiated object,
+// an active record for BL_Client_Tasker::bl_api_get_request_body()
+// translates plugin form-entries into valid BL Batch API requests
+// exposes static methods for pre-task data validation
+// NOTE: don't confuse BL_API_Client_Settings::crs_handshake() with
+// BL_Biz_Info_Monster::crs_handshake() . .
+// the former looks at settings in both plugins to make admin decisions
+// the latter simply validates the CR Suite data table for BL Client data import
 class BL_Biz_Info_Monster {
-  //instantiates active-record for plugin settings table
   public $count;
   public $places;
   public $valid_keys = array(
