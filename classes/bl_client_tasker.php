@@ -157,22 +157,14 @@ class BL_Client_Tasker {
       error_log('bl api client required business options keys not found');
     }
 
-    //NOTE:DATABASE SUBROUTINE - needs dev work:
+    //NOTE:DATABASE SUBROUTINE - best design needs programmerly brainstorm:
     // experiment with committing review data to 'activity' table as a callback to the API call;
     // currently doing database commit within the API call static function scope;
     // it's a big plate of spaghetti - look at BL_Scraper::call_local_dir()
     // lines 205 - 214 - and
     // lines 286 - 324
-    /*
-    // . . . suppose the API call returns a result without blocking ?
-    if ($result->reviews && $result->aggregate_rating) {
-      $commit['reviews'] = $result->reviews;
-      $commit['aggregate_rating'] = $result->aggregate_rating;
-    } else {
-      error_log('review scrape error occurred');
-    }
-    */
-    //update_option('bl_api_client_activity',$commit);
+    // The effect is non-blocking and allows the API calls to run in the background,
+    // but, suppose the API call returns a result somehow without blocking ?
   }
 
 }
