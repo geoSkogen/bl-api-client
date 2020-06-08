@@ -159,7 +159,7 @@ class BL_Review_Monster  {
               break;
             case '-2,-2' :
             case '-3,-3' :
-              $locale_index = '&nbsp&alpha;&nbsp';
+              $locale_index = '&nbsp&beta;&lambda;&nbsp';
               $dir_name = '&nbsp&Omega;&nbsp';
               break;
             default :
