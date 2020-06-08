@@ -1,10 +1,14 @@
 <?php
+// 'Monster' is an instantiated object; it only do review
+// used by review page and review snippet shortcode handlers
+// used by plugin settings to print data and API activity tables on WP admin page
 class BL_Review_Monster  {
   public $reviews = array('google'=>array(),'facebook'=>array());
-  public $rating = array('google'=>array(),'facebook'=>array());
+  public $ratings = array('google'=>array(),'facebook'=>array());
   public $count = array('google'=>array(),'facebook'=>array());
   public $reviews_all = array();
   public $rating_all = array();
+  public $logs = [];
   public static $props = ['log','reviews','aggregate_rating'];
   public static $dirs = ['google','facebook'];
   public static $review_props = ['author_avatar','author','timestamp','rating','text','id'];
@@ -12,7 +16,6 @@ class BL_Review_Monster  {
 
   function __construct($options_arr) {
     foreach (self::$dirs as $dir) {
-
       foreach (self::$props as $prop) {
         $key = $dir . '_';
         $key .= $prop;
@@ -21,21 +24,23 @@ class BL_Review_Monster  {
             case 'reviews' :
               $this->reviews[$dir] = $options_arr[$key];
               break;
-            case 'aggregate_rating' :
-              $this->rating[$dir] = $options_arr[$key]['rating'];
-              $this->count[$dir] = $options_arr[$key]['count'];
+            case 'aggregate_ratings' :
+              $this->ratings[$dir] = $options_arr[$key];
               break;
           }
         }
       }
     }
     $this->reviews_all = $this->sort_by_date();
+    $this->logs = $options_arr['log'];
   }
-
+  //NOTE:Build out weighted average function - also get agg by locale X biz
   public function get_weighted_aggregate() {
     $result = array('rating'=>0,'count'=>0);
     return $result;
   }
+  // NOTE: add filtration functions - BL_Review_Monster should have filtration
+  // -by rating, -by locale, -by date
 
   public function sort_by_date() {
     $result = [];
@@ -54,7 +59,11 @@ class BL_Review_Monster  {
     $index_val = 0;
     foreach ($new_schema as $elm) {
       $val = self::normalize_days($elm['timestamp']);
-      $assoc_index[$val] = $index_val;
+      // bug fix - increment the value until there's a unique key:
+      while(isset($assoc_index[$val])) {
+        $val+=0.01;
+      }
+      $assoc_index[strval($val)] = $index_val;
       $index_val++;
     }
     $result = self::get_new_order($assoc_index,$new_schema);
@@ -130,6 +139,44 @@ class BL_Review_Monster  {
     }
     $result .= "</table>";
     return $result;
+  }
+
+  public function do_activity_log_table() {
+    $locales = BL_API_Client_Settings::get_field_count();
+    $rev_data = array_slice($this->logs,count($this->logs)-((intval($locales)*4)+2));
+    $data = array_reverse($rev_data);
+    $result = '<h3>Most Recent API Call Logs</h3>';
+    $result .= '<table>';
+    foreach($data as $row) {
+      $indexer = 0;
+      $result .= '<tr>';
+      foreach($row as $datum) {
+        if (!$indexer) {
+          switch($datum) {
+            case '-1,-1' :
+              $locale_index = '&nbsp&beta;&nbsp';
+              $dir_name = '&nbsp;&lambda;&nbsp';
+              break;
+            case '-2,-2' :
+            case '-3,-3' :
+              $locale_index = '&nbsp&alpha;&nbsp';
+              $dir_name = '&nbsp&Omega;&nbsp';
+              break;
+            default :
+            $arg_arr = explode(',',$datum);
+            $locale_index = 'business locale #' . strval(intval($arg_arr[0])+1);
+            $dir_name = self::$dirs[$arg_arr[1]];
+          }
+          $result .= "<td>$locale_index &mdash; $dir_name<td>";
+        } else {
+          $result .= "<td>&nbsp;&ndash;&nbsp;&nbsp;&nbsp;$datum<td>";
+        }
+        $indexer++;
+      }
+      $result .= '</tr>';
+    }
+    $result .= '</table>';
+    echo $result;
   }
 
 }

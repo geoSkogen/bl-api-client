@@ -1,7 +1,13 @@
 <?php
-
+// BrightLocal Biz Info 'Monster' is an instantiated object,
+// an active record for BL_Client_Tasker::bl_api_get_request_body()
+// translates plugin form-entries into valid BL Batch API requests
+// exposes static methods for pre-task data validation
+// NOTE: don't confuse BL_API_Client_Settings::crs_handshake() with
+// BL_Biz_Info_Monster::crs_handshake() . .
+// the former looks at settings in both plugins to make admin decisions
+// the latter simply validates the CR Suite data table for BL Client data import
 class BL_Biz_Info_Monster {
-  //instantiates active-record for plugin settings table
   public $count;
   public $places;
   public $valid_keys = array(
@@ -16,7 +22,7 @@ class BL_Biz_Info_Monster {
       $table['field_count'] : 0;
     $this->places = $this->get_places($this->count,$table);
   }
-  //returns indexed array per biz locale - elements are API request params objects
+  //returns indexed array per biz locale - elements are API request body params objects
   //same data structure as BL_CR_Suite_Client::places
   public function get_places($count,$assoc) {
     //var_dump($assoc);
@@ -30,7 +36,9 @@ class BL_Biz_Info_Monster {
             $req_body[$this->valid_keys[$valid_key]] = $assoc[$this_key];
         }
       }
-      $places[] = $req_body;
+      if (count(array_keys($req_body))===count(array_keys($this->valid_keys))) {
+        $places[] = $req_body;
+      }
     }
     return $places;
   }
@@ -54,6 +62,45 @@ class BL_Biz_Info_Monster {
     }
     //error_log(var_dump($settings_table));
     return $settings_table;
+  }
+
+  public static function valid_api_params($options,$index,$body,$directory) {
+    $valid_options = null;
+    $score = 0;
+    $tracker = '';
+    $db_dir = ($directory==='google') ? 'gmb' : $directory;
+    $tracker = (isset($options[$db_dir . '_line_' . strval($index+1)])) ?
+    $options[$db_dir . '_line_' . strval($index+1)] : $tracker;
+    /* triage directory specifics & validate - return error messages to info page */
+    error_log('got dir tracker?  ' . $db_dir . '_line_' . strval($index+1) );
+    foreach( array_keys(self::$data_keys) as $valid_key) {
+      if ($body[$valid_key]) {
+        switch($valid_key) {
+          case 'postcode'  :
+          //
+            $valid_options[$valid_key] = $body[$valid_key];
+            break;
+          case 'country' :
+          //
+            $valid_options[$valid_key] = $body[$valid_key];
+            break;
+          case 'telephone' :
+          //
+            $valid_options[$valid_key] = ($tracker) ? : $body[$valid_key];
+            if ($tracker) {
+              error_log('got dir tracker: ' . strval($tracker) );
+            } else {
+              error_log('using land line: ' . strval($body[$valid_key]) );
+            }
+            break;
+          default :
+            $valid_options[$valid_key] = $body[$valid_key];
+        }
+      }
+    }
+    // add error handling around array keys of potential null value
+    return (count(array_keys($valid_options))===count(array_keys(self::$data_keys))) ?
+      $valid_options : null ;
   }
 
 }

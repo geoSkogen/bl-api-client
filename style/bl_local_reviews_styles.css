@@ -40,7 +40,7 @@ p.bl_client_review_prop.timestamp {
 		margin: 0;
 		margin-bottom: 15px;
 	}
-    img.bl_client_review_prop.author_avatar {
-        width: 10% !important;
-    }
+  img.bl_client_review_prop.author_avatar {
+    width: 10% !important;
+  }
 }

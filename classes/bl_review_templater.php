@@ -1,5 +1,6 @@
 <?php
-
+// ALL STATIC - for UX - strictly stylesheets and shortcode handlers
+// public methods instantiate Review Monsters
 class BL_Review_Templater {
 
   public static $props = ['log','reviews','aggregate_rating'];
@@ -8,19 +9,45 @@ class BL_Review_Templater {
   public static $star_img_path = '/wp-content/plugins/bl-api-client/assets/gold-star.png';
 
   public static function local_reviews_style() {
-    wp_register_style('bl_local_reviews_styles', plugin_dir_url(__FILE__) . '../style/' . 'bl_local_reviews_styles' . '.css');
-    wp_enqueue_style('bl_local_reviews_styles');
-    error_log("got local reivews styleshseet request");
+    $page_slug_whitelist = ['review','testimonial'];
+    $is_reviews_page = false;
+    foreach ($page_slug_whitelist as $slug) {
+      if (strpos($_SERVER['REQUEST_URI'],$slug)) {
+        $is_reviews_page = true ;
+        break;
+      }
+    }
+    if ($is_reviews_page) {
+      wp_register_style('bl_local_reviews_styles', plugin_dir_url(__FILE__) . '../style/' . 'bl_local_reviews_styles' . '.css');
+      wp_enqueue_style('bl_local_reviews_styles');
+      error_log("got local reviews stylesheet request");
+    }
   }
-  //Integrates all directories, sorts by date 
-  public static function local_reviews_shortcode_handler() {
+
+  public static function aggregate_rating_shortcode_handler() {
+    $result = '';
     //hit your local options table for recent activity
     $options_arr = get_option('bl_api_client_activity');
+    //var_dump($options_arr);
+    //instantiate the "review monster" active record
+    $monster = new BL_Review_Monster($options_arr);
+    $avg_obj = $monster->get_weighted_aggregate();
+    //return $result;
+    return '(not set)';
+  }
+
+  public static function local_reviews_shortcode_handler() {
+    //Integrates all directories, sorts by date
+    //hit your local options table for recent activity
+    $options_arr = get_option('bl_api_client_activity');
+    //var_dump($options_arr);
     //instantiate the "review monster" active record
     $monster = new BL_Review_Monster($options_arr);
     //isntantiate the review shrine return string value
     $result = "<div id='my_review_shrine' class='bl_client_reviews_widget'>";
     //iterate the monster's review record
+    // NOTE: add filtration - BL_Review_Monster should have filtration
+    // -by rating, -by locale, -by date
     foreach ($monster->reviews_all as $review_obj) {
       $result .= "<div class='bl_client_review {$review_obj['dir']}'>";
       //iterate each review object property
@@ -64,7 +91,6 @@ class BL_Review_Templater {
       //close the review item div
       $result .= "</div>";
     }
-
     //close the review shrine div
     $result .= "</div>";
     return $result;

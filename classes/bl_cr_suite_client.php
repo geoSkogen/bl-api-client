@@ -1,8 +1,11 @@
 <?php
+// CR Suite 'Client' is ALL STATIC - a collection of public methods for
+// getting a snapshot of the CR Suite business options table and using the data
 class BL_CR_Suite_Client {
-  //exports BL API request body params from CR Suite directly
-  //also exposes static data and methods for plugin settings admin page
+  //exports BL API request body params from CR Suite directly at activation
+  //exposes static data and methods for plugin settings admin page
   //allows CR biz info to dynamically populate BL Client biz info
+  // ( in the latter case via BL_API_Client_Settings::crs_handshake() )
   public static $business_props = array(
     'name'=>'business-names',
     'address'=>'street-address',
@@ -42,8 +45,9 @@ class BL_CR_Suite_Client {
   //returns indexed array per biz locale - elements are API request params objects
   //same data structure as BL_Biz_Info_Monster->places;
   public static function business_options_rollup() {
+    //error_log('crs biz options validatior running');
     self::init_business_options();
-    $result = array();
+    $result = (self::$business_options) ? array() : null;
     $row = array();
     $count = (isset(self::$business_options['business_locations'])) ?
       intval(self::$business_options['business_locations']) : 1;
