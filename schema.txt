@@ -55,6 +55,10 @@ using the options table -
 
     {dir}_aggregate_rating - array keys: rating, count
 
+bl_api_client_permissions
+
+    verify - string
+    verified - boolean      
 
 ========================================
 SETTINGS API - CRS HANDSHAKE STACK TRACE
