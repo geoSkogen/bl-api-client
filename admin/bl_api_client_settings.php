@@ -101,31 +101,31 @@ class BL_API_Client_Settings {
       'Found Your Business Info in CR Suite' : 'Enter Your Business Info';
 
     add_settings_section(
-      'bl_api_client_auth',                         //uniqueID
+      'bl_api_client_auth',                                  //uniqueID
       'BrightLocal Authentication - Submit Your API Keys',   //Title
       array('BL_API_Client_Settings','bl_api_client_auth_section'),//CallBack Function
-      'bl_api_client'                                //page-slug
+      'bl_api_client'                                        //page-slug
     );
 
     add_settings_section(
-      'bl_api_client_settings',                         //uniqueID
-      'BrightLocal Review Profiles - ' . $data_status,   //Title
+      'bl_api_client_settings',                                //uniqueID
+      'BrightLocal Review Profiles - ' . $data_status,         //Title
       array('BL_API_Client_Settings','bl_api_client_settings_section'),//CallBack Function
       'bl_api_client_settings'                                //page-slug
     );
 
     add_settings_section(
-      'bl_api_client_activity',                         //uniqueID
-      'BrightLocal API Activity',   //Title
+      'bl_api_client_activity',                               //uniqueID
+      'BrightLocal API Activity',                             //Title
       array('BL_API_Client_Settings','bl_api_client_activity_section'),//CallBack Function
       'bl_api_client_activity'                                //page-slug
     );
 
     add_settings_section(
-      'bl_api_client_permissions',                         //uniqueID
-      'Authorize BrightLocal API Client Tasks',   //Title
+      'bl_api_client_permissions',                             //uniqueID
+      'Authorize BrightLocal API Client Tasks',                //Title
       array('BL_API_Client_Settings','bl_api_client_permissions_section'),//CallBack Function
-      'bl_api_client_permissions'                                //page-slug
+      'bl_api_client_permissions'                               //page-slug
     );
 
     add_settings_field(
@@ -417,6 +417,7 @@ class BL_API_Client_Settings {
   }
 
   public static function bl_api_client_permissions_section() {
+    //
     // while the whole moves, and every part stands still
   }
 

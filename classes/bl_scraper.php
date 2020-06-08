@@ -333,6 +333,7 @@ class BL_Scraper {
     }
     $commit['log'][] = [$xy_str,$msg];
     update_option('bl_api_client_activity',$commit);
+    //NOTE: return val needed - or will this cause blocking effects?
     //return $return_val;
   }
 }

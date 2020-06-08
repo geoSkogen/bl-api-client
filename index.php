@@ -1,1 +1,1 @@
-<?php //We make the path by walking.
+<?php // We make the path by walking.

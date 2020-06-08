@@ -4,9 +4,9 @@ class BL_API_Client_Options {
 
   public static function bl_api_client_register_menu_page() {
       add_menu_page(
-          'BrightLocal Client Authentication',                        // Page Title
+          'BrightLocal Client Authentication',       // Page Title
           'BrightLocal Client',                       // Menu Title
-          'manage_options',             // for Capabilities level of user with:
+          'manage_options',              // for Capabilities level of user with:
           'bl_api_client',                    // menu Slug(page)
           array('BL_API_Client_Options','bl_api_client_auth_page'), // CB Function cb_bl_api_client_options_page()
           'dashicons-store',  // Menu Icon

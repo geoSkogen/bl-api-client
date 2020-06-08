@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name:  BrightLocal Client
+Plugin Name:  BrightLocal Client Reviews
 Description:  Live Reviews & Ratings for Your Local Business
 Version:      2020.06.08
 Author:       City Ranked Media
-Author URI:
+Author URI:   https://cityranked.com/
 Text Domain:  bl_api_client
 */
 defined( 'ABSPATH' ) or die( 'We make the path by walking.');

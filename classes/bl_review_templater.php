@@ -1,6 +1,6 @@
 <?php
 // ALL STATIC - for UX - strictly stylesheets and shortcode handlers
-// public methods instantiate Review Monsters
+// shortcodes are public methods that instantiate Review Monsters for live data
 class BL_Review_Templater {
 
   public static $props = ['log','reviews','aggregate_rating'];

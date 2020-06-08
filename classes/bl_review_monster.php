@@ -1,7 +1,7 @@
 <?php
-// 'Monster' is an instantiated object; it only do review
-// used by review page and review snippet shortcode handlers
-// used by plugin settings to print data and API activity tables on WP admin page
+// Review 'Monster' is an instantiated object; it will only do review.
+// -used by review page and review snippet shortcode handlers
+// -used by plugin settings to print data and API activity tables on WP admin page
 class BL_Review_Monster  {
   public $reviews = array('google'=>array(),'facebook'=>array());
   public $ratings = array('google'=>array(),'facebook'=>array());

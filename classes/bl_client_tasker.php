@@ -1,10 +1,10 @@
 <?php
 class BL_Client_Tasker {
-
+  // Tasser is ALL STATIC - organizes scheduling and validation of API call data
   public static $init_key = '-1,-1';
 
   function __construct() {
-
+  //
   }
 
   public static function api_call_boot() {
