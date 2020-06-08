@@ -28,7 +28,6 @@ class BL_Review_Templater {
     $result = '';
     //hit your local options table for recent activity
     $options_arr = get_option('bl_api_client_activity');
-    //var_dump($options_arr);
     //instantiate the "review monster" active record
     $monster = new BL_Review_Monster($options_arr);
     $avg_obj = $monster->get_weighted_aggregate();
@@ -40,7 +39,6 @@ class BL_Review_Templater {
     //Integrates all directories, sorts by date
     //hit your local options table for recent activity
     $options_arr = get_option('bl_api_client_activity');
-    //var_dump($options_arr);
     //instantiate the "review monster" active record
     $monster = new BL_Review_Monster($options_arr);
     //isntantiate the review shrine return string value

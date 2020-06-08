@@ -78,40 +78,6 @@ function bl_api_client_activate() {
     'google_reviews'=>[],'facebook_reviews'=>[],
     'google_aggregate_rating'=>[],'facebook_aggregate_rating'=>[]
   );
-  foreach($commit['google_reviews'] as $review) {
-    error_log($review['author']);
-    if ($review['locale_id']) {
-      error_log('found g locale id');
-    } else {
-      error_log('found no g locale id');
-
-    }
-
-  }
-  foreach($commit['facebook_reviews'] as $review) {
-    error_log($review['author']);
-    if ($review['locale_id']) {
-      error_log('found f locale id');
-    }  else {
-      error_log('found no f locale id');
-    }
-  }
-
-  foreach($commit['google_aggregate_rating'] as $rating) {
-    if ($rating['locale_id']) {
-      error_log('found g agg locale id');
-    }  else {
-      error_log('found no g agg locale id');
-    }
-  }
-
-  foreach($commit['facebook_aggregate_rating'] as $rating) {
-    if ($rating['locale_id']) {
-      error_log('found f agg locale id');
-    }  else {
-      error_log('found no f agg locale id');
-    }
-  }
   // when api_call_triage() finds -1,-1 in the database, index_task() turns it
   // into 0,0 - the executable arguments for the first request body in the series
   $commit['log'] = [['-1,-1','plugin activated ' . date('F d Y H:i',time())]];
@@ -129,7 +95,7 @@ function bl_api_client_activate() {
 }
 
 function bl_api_client_deactivate() {
-  //turns off scheduled cron tasks
+  // turn off scheduled cron tasks
   $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
   wp_unschedule_event( $timestamp, 'bl_api_client_cron_hook' );
   error_log('timestamp for outer cron hook was : ' . strval($timestamp));
@@ -137,23 +103,8 @@ function bl_api_client_deactivate() {
   wp_unschedule_event( $timestamp, 'bl_api_client_call_series' );
   error_log('timestamp for inner cron hook was : ' . strval($timestamp));
 }
-//TEST PATTERN CODE ONLY - for inspecting run-times of scheduled api call jobs
-/*
-$options = get_option('bl_api_client_activity');
-if (isset($options)) {
-  error_log('found db slug');
-  error_log('iterating db entries');
-  if ($options['aggregate_rating']) {
-    foreach ($options['aggregate_rating'] as $key => $value) {
-      error_log($key);
-      error_log($value);
-    }
-  }
-} else {
-  error_log('db slug not found');
-}
-*/
-//define our time intervals
+
+// define our custom time interval requirements
 add_filter( 'cron_schedules', 'bl_api_client_add_cron_intervals' );
 
 function bl_api_client_add_cron_intervals( $schedules ) {
@@ -228,7 +179,7 @@ function bl_api_client_schedule_executor() {
     }
   }
 }
-
+//
 bl_api_client_schedule_executor();
 // assign the api call's 'boot' task to the main cron job -
 // it 'seeds' the database and schedules the temporary 'triage' series
@@ -249,13 +200,3 @@ add_action( 'bl_api_client_call_series',
 //Keys are stashed here:
 //ChIJsc2v07GxlVQRRK-jGkZfiw0
 //975978498955128644
-
-// API CALL
-// manual deployment for dev purposes; this should never run on its own;
-// BL API Call should only run on scheduled events at traffic down times
-// BL_Client_Tasker::api_call_boot();
-// TEST FRAMEWORK - Uncomment this code to run the api call series
-// IMPORTANT - Recomment it and save immediately after running
-// Change the something in the test data in scraper first, then repeatedly
-// refresh the page executing the reviews shortcode handler, and watch it update
-// BL_Client_Tasker::api_call_triage();

@@ -58,7 +58,7 @@ using the options table -
 bl_api_client_permissions
 
     verify - string
-    verified - boolean      
+    verified - boolean
 
 ========================================
 SETTINGS API - CRS HANDSHAKE STACK TRACE
@@ -78,3 +78,44 @@ BL_API_Client_Settings::crs_handshake() is called in three places:
 --line 81 in settings_api_init(), to instantiate CRS data in the plugin settings
     3)
     settings_api_init() is called by wordpress admin_init()
+
+================================================================================
+================================================================================
+
+    //TEST PATTERN ONLY - use to debug locale_id tagging
+    /*
+    foreach($commit['google_reviews'] as $review) {
+      error_log($review['author']);
+      if ($review['locale_id']) {
+        error_log('found g locale id');
+      } else {
+        error_log('found no g locale id');
+
+      }
+
+    }
+    foreach($commit['facebook_reviews'] as $review) {
+      error_log($review['author']);
+      if ($review['locale_id']) {
+        error_log('found f locale id');
+      }  else {
+        error_log('found no f locale id');
+      }
+    }
+
+    foreach($commit['google_aggregate_rating'] as $rating) {
+      if ($rating['locale_id']) {
+        error_log('found g agg locale id');
+      }  else {
+        error_log('found no g agg locale id');
+      }
+    }
+
+    foreach($commit['facebook_aggregate_rating'] as $rating) {
+      if ($rating['locale_id']) {
+        error_log('found f agg locale id');
+      }  else {
+        error_log('found no f agg locale id');
+      }
+    }
+    */
