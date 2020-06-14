@@ -163,8 +163,9 @@ function bl_api_client_schedule_executor() {
     $activity['log'] = [];
   }
   //
-  if (isset($permissions['verified']) && $permissions['verified']) {
-    /*
+  if ( isset($permissions['verified']) &&
+       $permissions['verified'] &&
+       !$permissions['cron_override']) {
     if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
       error_log('got cron hook schedule - outer ring ');
       wp_schedule_event( time(), 'sixty_minutes', 'bl_api_client_cron_hook' );
@@ -178,9 +179,17 @@ function bl_api_client_schedule_executor() {
       error_log('timestamp for next inner cron hook is : ' . strval($timestamp1));
       error_log('the current time is : ' . strval(time()));
     }
-    */
   } else {
-    if (end($activity['log'])[0]!='-3,-3') {
+    if ($permissions['cron_override']) {
+      error_log('bl api client running in manual mode');
+      if (end($activity['log'])[0]!='-4,-4') {
+        error_log('outer cron hook un-scheduled - manual override event');
+        $log =  array('-4,-4','tasks unscheduled - manual override');
+        $activity['log'][] = $log;
+        update_option('bl_api_client_activity',$activity);
+        bl_api_client_deactivate();
+      }
+    } else if (end($activity['log'])[0]!='-3,-3') {
       error_log('outer cron hook un-scheduled - permissions error');
       $log =  array('-3,-3','tasks unscheduled - settings unverified');
       $activity['log'][] = $log;
@@ -193,17 +202,16 @@ function bl_api_client_schedule_executor() {
 bl_api_client_schedule_executor();
 // assign the api call's 'boot' task to the main cron job -
 // it 'seeds' the database and schedules the temporary 'triage' series
-/*
+
 add_action( 'bl_api_client_cron_hook',
   array('BL_Client_Tasker','api_call_boot')
 );
-*/
+
 // assign the locale-to-directory 'triage' task to the temporary cron job series
 // it unschedules itself when completed
 add_action( 'bl_api_client_call_series',
   array('BL_Client_Tasker','api_call_triage')
 );
-
 //DEV NOTES
 //API CALL FORMAT! work on discovering the correct URL format for GMB pings
 //different lookup-by-URL formats; so far none is accepted:

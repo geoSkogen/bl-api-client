@@ -162,6 +162,10 @@ class BL_Review_Monster  {
               $locale_index = '&nbsp&beta;&lambda;&nbsp';
               $dir_name = '&nbsp&Omega;&nbsp';
               break;
+            case '-4,-4' :
+              $locale_index = '&nbsp&beta;&lambda;&nbsp';
+              $dir_name = '&nbsp&mu;&nbsp';
+              break;
             default :
             $arg_arr = explode(',',$datum);
             $locale_index = 'business locale #' . strval(intval($arg_arr[0])+1);

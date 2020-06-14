@@ -21,6 +21,7 @@ class BL_API_Client_Settings {
   public static $crs_prepends = array();
   public static $crs_locale_count = 0;
   public static $crs_override = null;
+  public static $cron_override = 1;
   public static $options = array();
   public static $caveat_text = 'Using a tracking line for your GMB phone number? Enter it separately here.';
 
@@ -44,6 +45,7 @@ class BL_API_Client_Settings {
       self::$options = get_option('bl_api_client_settings');
       self::$crs_override = ( isset(self::$options['crs_override']) )  ?
         intval(self::$options['crs_override']) : 0;
+
         /*
         error_log('reset bl client options passive record - retuned crs override ');
         error_log(strval(get_option('bl_api_client_settings')['crs_override']));
@@ -51,6 +53,13 @@ class BL_API_Client_Settings {
     } else {
       //error_log('found bl client passive record w/ options intact');
     }
+
+    if (!isset(self::$cron_override)) {
+      self::$options = get_option('bl_api_client_permissions');
+      self::$crs_override = ( isset(self::$options['cron_override']) )  ?
+        intval(self::$options['cron_override']) : 1;
+    }
+
     return self::$crs_business_options;
   }
 
@@ -176,6 +185,14 @@ class BL_API_Client_Settings {
     );
 
     add_settings_field(
+      'cron_override',
+      'Review Fetch Task: Automatic | Manual',
+      array('BL_API_Client_Settings','bl_api_client_cron_override'),
+      'bl_api_client_permissions',
+      'bl_api_client_permissions'
+    );
+
+    add_settings_field(
       'call_now',
       'Fetch Reviews',
       array('BL_API_Client_Settings','bl_api_client_call_now'),
@@ -279,7 +296,7 @@ class BL_API_Client_Settings {
       self::$options[$this_field] : strval(1);
     $bl_client_ghost_val = (isset(self::$options[$ghost_field]) && "" != self::$options[$ghost_field]) ?
       self::$options[$ghost_field] : strval(1);
-
+    // a decide whether to use CR Suite's # of B&Ms or BL Client's # of B&Ms
     if (self::$crs_locale_count && !self::$crs_override) {
       $val = (intval($bl_client_val) > 4) ?
         $bl_client_val : strval(self::$crs_locale_count);
@@ -325,32 +342,52 @@ class BL_API_Client_Settings {
     $option = get_option($this_db_slug);
     $bl_biz = get_option($that_db_slug);
     $placeholder = '(not set)';
-
+    // check if the two instances of business name match
     $verify = (isset($option[$this_field]) && ''!=$option[$this_field]) ?
       $option[$this_field] : null;
     $placeholder = ($verify) ? $verify : $placeholder;
     $verifier = (isset($bl_biz[$that_field])) ?
         $bl_biz[$that_field] : '';
     $verified = ($verifier === $verify) ? true : false;
-
+    // update the database so we don't have to submit the stupid form twice
     $option['verified'] = $verified;
     update_option($this_db_slug,$option);
-
+    // get dynmaic values for html attributes and contents
     $value_tag = ($placeholder === "(not set)") ? "placeholder" : "value";
     $alert_class = ($verified) ? 'assure_me' : 'alert_me_extra';
-
     $alert_text = ($verify) ? ( ($verified) ?
-      ' Verified&mdash;Your Tasks Are Scheduled' : " Unverified&mdash;Your Business Names Don't Match "
+      ' Verified&mdash;Your Tasks Are Enabled' : " Unverified&mdash;Your Business Names Don't Match "
       ) : ' Unverified&mdash;Verify Your Business Name to Authorize Tasks ';
     $alert_tag = "<span class='{$alert_class}'>&nbsp;» {$alert_text}&nbsp;» </span>";
-
+    //
     echo "{$alert_tag}<input type='text' class='zeroText'
       name={$this_db_slug}[{$this_field}] {$value_tag}='{$placeholder}'/>";
     echo "<input style='display:none;' name={$this_db_slug}[verified] value=$verified />";
-    //
   }
 
+  public static function bl_api_client_cron_override() {
+    $result = '';
+    /*
+    error_log('field query crs override');
+    error_log(strval(self::$cron_override));
+    */
+    $is_selected = ['',''];
+    $is_selected[intval(self::$cron_override)] = 'checked';
+    $result .= "<div class='flexOuterStart'/>";
+    $result .= "<input type='radio' name='bl_api_client_permissions[cron_override]' value='0' ";
+    $result .= " {$is_selected[0]} />";
+    $result .= "<label for='crs_override'>Automatic</label>";
+    $result .= "<input type='radio' name='bl_api_client_permissions[cron_override]' value='1' ";
+    $result .= " {$is_selected[1]} />";
+    $result .= "<label for='crs_override'>Manual</label>";
+    $result .= "</div>";
+
+    echo $result;
+  }
+
+
   public static function get_call_now_val($activity) {
+    // determines index numbers of last successful API call - for form rendering
     $result = '0,0';
     $log = (isset($activity['log']) && count($activity['log'])) ?
         array_reverse($activity['log']) : [];
@@ -378,17 +415,18 @@ class BL_API_Client_Settings {
   }
 
   public static function bl_api_client_call_now() {
+    // form schema
     $field_name = 'call_index';
     $box_name = 'call_now';
-
+    // all the table names
     $log_slug = 'activity';
     $perm_slug = 'permissions';
     $info_slug = 'settings';
     $this_slug = 'call_now';
-
+    //
     $style_rule = 'style="display:none;"';
     $selected = ['','',''];
-
+    // get ALL the tables
     $activity = ( get_option("bl_api_client_{$log_slug}")) ?
        get_option("bl_api_client_{$log_slug}") : array();
     $permissions =  ( get_option("bl_api_client_{$perm_slug}") ) ?
@@ -397,24 +435,31 @@ class BL_API_Client_Settings {
        get_option("bl_api_client_{$info_slug}") : array();
     $options = ( get_option("bl_api_client_{$this_slug}") ) ?
        get_option("bl_api_client_{$this_slug}") : array();
-
+    // determine pre-set values for the form settings based on last use
     $xy = self::get_call_now_val($activity);
-    $selected[intval($xy[1])] = 'selected';
+    $selected[intval($xy[2])] = 'selected';
     $locale_val = intval($xy[0])+1;
-
-    if ( isset($options['call_now']) &&
-      $options['call_now']!=false &&
-      isset($permissions['verified']) &&
-      $permissions['verified']) {
+    // call_now input defaults to true but can be turned off
+    if ( isset($options[$this_slug]) &&
+         $options[$this_slug]!=false &&
+         isset($permissions['verified']) &&
+         $permissions['verified']) {
       error_log('CALL NOW ');
       error_log('got valid call now params');
-      $options['call_now'] = false;
+      // get the review fetch arguments from this page's form settings
+      $log = [$options['call_index'],'manual call'];
       $index = $options['call_index'][0];
       $directory = BL_Review_Monster::$dirs[intval($options['call_index'][2])];
+      $options[$this_slug] = false;
+      $activity['log'][] = $log;
       error_log(strval($index));
       error_log($directory);
+      update_option("bl_api_client_{$this_slug}",$options);
+      update_option("bl_api_client_{$log_slug}",$activity);
+
       BL_Client_Tasker::bl_api_get_request_body($index,$directory,$settings);
     } else {
+      /*
       error_log('API call not verified');
       error_log('call now:');
       error_log(strval($options['call_now']));
@@ -422,33 +467,35 @@ class BL_API_Client_Settings {
       error_log(strval($permissions['verified']));
       error_log('verify:');
       error_log(strval($permissions['verify']));
+      */
     }
 
     $menu = "<div class='flexOuterStart'>";
-    //$menu .= "<label for='call_now' class='call_now_label'><b>Make API Call Now</b></label>";
-    $menu .= "<input id='call_now' type='checkbox' selected checked
-      name=bl_api_client_{$this_slug}[{$box_name}] value='true' />";
+    $menu .= "<input id='call_now' type='checkbox'
+      name=bl_api_client_{$this_slug}[{$box_name}] value='false' />";
     $menu .= "<label for='locale_no' class='call_now_label'>for Location Number</label>";
     $menu .= "<input id='locale_no' type='number' min='1' max='" .
       strval(self::get_field_count()) . "' value='{$locale_val}' />";
-    $menu .= "<label for='directory' class='call_now_label'>to Listing Directory</label>";
+    $menu .= "<label for='directory' class='call_now_label'>from Listing Directory</label>";
     $menu .= "<select id='directory' class='zeroTest'><option value='0' {$selected[0]}>GMB</option>";
     $menu .= "<option value='1'{$selected[1]}>Facebook</option></select></div>";
-
+    // hidden field
     $result = "<input $style_rule id='xy' value='$xy' name='bl_api_client_{$this_slug}[{$field_name}]'/>";
 
     echo $menu;
     echo $result;
 
   }
-
+  // currently not in use
   public static function sticky_field($dir,$prop,$db_slug,$json_str) {
     $style_rule = 'style="display:none;"';
     $result = '<input ' . $style_rule . ' value=' . $json_str .
       ' name=' . $db_slug . '[' . $dir . '_' . $prop . ']/>';
     return $result;
   }
+
   ////template 2 - after settings section title
+
   public static function bl_api_client_auth_section() {
     self::bl_api_client_dynamic_settings_section('');
   }

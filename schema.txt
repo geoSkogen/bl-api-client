@@ -49,7 +49,11 @@ using the options table -
 
   bl_api_client_activity - where {dir} is facebook and google
 
-    log - indexed array of timestamps
+    log - indexed array of timestamps and api call index arguments
+
+          ["num_str1, num_str2","event type - error/success" ]
+          - where num_str1 is the business location row number and
+          num_str2 is the listing directory index; 
 
     {dir}_reviews - array keys: rating, author, timestamp, text, author_avatar, id, locale_id
 

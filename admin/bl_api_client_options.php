@@ -34,7 +34,7 @@ class BL_API_Client_Options {
       add_submenu_page(
           'bl_api_client',                         //parent menu
           'BrightLocal Client API Calls',                // Page Title
-          'BL Client Call Now',               // Menu Title
+          'Request Reviews',               // Menu Title
           'manage_options',             // for Capabilities level of user with:
           'bl_api_client_call_now',             // menu Slug(page)
           array('BL_API_Client_Options','bl_api_client_call_now_page')// CB Function plugin_options_page()
