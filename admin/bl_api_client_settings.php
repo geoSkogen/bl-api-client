@@ -53,13 +53,6 @@ class BL_API_Client_Settings {
     } else {
       //error_log('found bl client passive record w/ options intact');
     }
-
-    if (!isset(self::$cron_override)) {
-      self::$options = get_option('bl_api_client_permissions');
-      self::$crs_override = ( isset(self::$options['cron_override']) )  ?
-        intval(self::$options['cron_override']) : 1;
-    }
-
     return self::$crs_business_options;
   }
 
@@ -367,11 +360,15 @@ class BL_API_Client_Settings {
 
   public static function bl_api_client_cron_override() {
     $result = '';
+    $permissions = get_option('bl_api_client_permissions');
+    self::$cron_override = (isset($permissions['cron_override'])) ?
+      $permissions['cron_override'] : 1;
     /*
     error_log('field query crs override');
     error_log(strval(self::$cron_override));
     */
     $is_selected = ['',''];
+
     $is_selected[intval(self::$cron_override)] = 'checked';
     $result .= "<div class='flexOuterStart'/>";
     $result .= "<input type='radio' name='bl_api_client_permissions[cron_override]' value='0' ";

@@ -154,7 +154,7 @@ class BL_Client_Tasker {
         error_log('found api keys');
         //NOTE: THIS IS THE API CALL - UNCOMMENT TO RUN
         // RE: $result -- see comments below;
-        $result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
+        //$result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
         //$result = BL_Scraper::sim_call_local_dir($req_body,'fetch-reviews',$dir);
       } else {
         error_log('bl api keys not found');
