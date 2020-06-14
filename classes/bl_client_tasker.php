@@ -46,7 +46,7 @@ class BL_Client_Tasker {
       // $biz_info = get_option('bl_api_client_settings');
       // --example for primary locale's GMB:
       // self::bl_api_get_request_body(0,'google',$biz_info);
-      // -- example for secondary locale's facebook:
+      // --example for secondary locale's facebook:
       // self::bl_api_get_request_body(1,'facebook',$biz_info);
       self::bl_api_get_request_body($loc_index,$dir,$this_option);
       //

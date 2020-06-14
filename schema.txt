@@ -58,7 +58,13 @@ using the options table -
 bl_api_client_permissions
 
     verify - string
+
     verified - boolean
+
+    call_now - boolean
+
+    call_index - string - 2 comma-separated numeric values
+
 
 ========================================
 SETTINGS API - CRS HANDSHAKE STACK TRACE

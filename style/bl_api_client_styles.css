@@ -43,6 +43,12 @@ select.zeroTest {
   margin: 0;
 }
 
+select.zeroTest {
+  min-width: 8em !important;
+}
+
+
+
 .slight {
   opacity: 0.33;
 }

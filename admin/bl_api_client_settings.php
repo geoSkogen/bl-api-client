@@ -115,17 +115,24 @@ class BL_API_Client_Settings {
     );
 
     add_settings_section(
-      'bl_api_client_activity',                               //uniqueID
-      'BrightLocal API Activity',                             //Title
-      array('BL_API_Client_Settings','bl_api_client_activity_section'),//CallBack Function
-      'bl_api_client_activity'                                //page-slug
-    );
-
-    add_settings_section(
       'bl_api_client_permissions',                             //uniqueID
       'Authorize BrightLocal API Client Tasks',                //Title
       array('BL_API_Client_Settings','bl_api_client_permissions_section'),//CallBack Function
       'bl_api_client_permissions'                               //page-slug
+    );
+
+    add_settings_section(
+      'bl_api_client_call_now',                             //uniqueID
+      'Make Calls to the BrightLocal API',                //Title
+      array('BL_API_Client_Settings','bl_api_client_call_now_section'),//CallBack Function
+      'bl_api_client_call_now'                               //page-slug
+    );
+
+    add_settings_section(
+      'bl_api_client_activity',                               //uniqueID
+      'BrightLocal API Activity',                             //Title
+      array('BL_API_Client_Settings','bl_api_client_activity_section'),//CallBack Function
+      'bl_api_client_activity'                                //page-slug
     );
 
     add_settings_field(
@@ -170,10 +177,10 @@ class BL_API_Client_Settings {
 
     add_settings_field(
       'call_now',
-      'Call Now',
+      'Fetch Reviews',
       array('BL_API_Client_Settings','bl_api_client_call_now'),
-      'bl_api_client_permissions',
-      'bl_api_client_permissions'
+      'bl_api_client_call_now',
+      'bl_api_client_call_now'
     );
     //dynamic grouped settings fields - reiterates all items on the list: $bl_api_client_label_toggle
     for ($i = 1; $i < self::get_field_count() + 1; $i++) {
@@ -208,6 +215,7 @@ class BL_API_Client_Settings {
     register_setting( 'bl_api_client_settings', 'bl_api_client_settings' );
     register_setting( 'bl_api_client_activity', 'bl_api_client_activity' );
     register_setting( 'bl_api_client_permissions', 'bl_api_client_permissions' );
+    register_setting( 'bl_api_client_call_now', 'bl_api_client_call_now' );
   }
   //Templates
   ////template 3 - settings section field - dynamically rendered <input/>
@@ -317,22 +325,29 @@ class BL_API_Client_Settings {
     $option = get_option($this_db_slug);
     $bl_biz = get_option($that_db_slug);
     $placeholder = '(not set)';
+
     $verify = (isset($option[$this_field]) && ''!=$option[$this_field]) ?
       $option[$this_field] : null;
     $placeholder = ($verify) ? $verify : $placeholder;
     $verifier = (isset($bl_biz[$that_field])) ?
         $bl_biz[$that_field] : '';
     $verified = ($verifier === $verify) ? true : false;
+
     $option['verified'] = $verified;
+    update_option($this_db_slug,$option);
+
     $value_tag = ($placeholder === "(not set)") ? "placeholder" : "value";
     $alert_class = ($verified) ? 'assure_me' : 'alert_me_extra';
+
     $alert_text = ($verify) ? ( ($verified) ?
       ' Verified&mdash;Your Tasks Are Scheduled' : " Unverified&mdash;Your Business Names Don't Match "
       ) : ' Unverified&mdash;Verify Your Business Name to Authorize Tasks ';
     $alert_tag = "<span class='{$alert_class}'>&nbsp;» {$alert_text}&nbsp;» </span>";
+
     echo "{$alert_tag}<input type='text' class='zeroText'
       name={$this_db_slug}[{$this_field}] {$value_tag}='{$placeholder}'/>";
-    update_option($this_db_slug,$option);
+    echo "<input style='display:none;' name={$this_db_slug}[verified] value=$verified />";
+    //
   }
 
   public static function get_call_now_val($activity) {
@@ -340,16 +355,20 @@ class BL_API_Client_Settings {
     $log = (isset($activity['log']) && count($activity['log'])) ?
         array_reverse($activity['log']) : [];
     foreach ($log as $entry) {
+      /*
       error_log('using default intvals for call now value?');
       error_log($entry[0]);
       error_log($entry[1]);
+      */
       $xy = explode(',',$entry[0]);
       $msg = (strpos($entry[1],'review scrape')) ? true : false;
       if ( intval($xy[0]) > -1 && intval($xy[1]) > -1 && $msg ) {
+        /*
         error_log('VALIDATING INTVALS FOR CALL NOW VALUE:');
         error_log('last successful scrape:');
         error_log($xy[0]);
         error_log($xy[1]);
+      */
         $task_assoc = BL_Client_Tasker::index_task($entry[0]);
         $result = strval($task_assoc['loc']) . ',' . strval($task_assoc['dir']);
         break;
@@ -359,30 +378,75 @@ class BL_API_Client_Settings {
   }
 
   public static function bl_api_client_call_now() {
-    $field_name = 'call_now';
-    $db_slug = 'activity';
+    $field_name = 'call_index';
+    $box_name = 'call_now';
+
+    $log_slug = 'activity';
+    $perm_slug = 'permissions';
+    $info_slug = 'settings';
+    $this_slug = 'call_now';
+
     $style_rule = 'style="display:none;"';
     $selected = ['','',''];
 
-    $options = ( get_option("bl_api_client_{$db_slug}")) ?
-       get_option("bl_api_client_{$db_slug}") : array();
-    $xy = self::get_call_now_val($options);
+    $activity = ( get_option("bl_api_client_{$log_slug}")) ?
+       get_option("bl_api_client_{$log_slug}") : array();
+    $permissions =  ( get_option("bl_api_client_{$perm_slug}") ) ?
+       get_option("bl_api_client_{$perm_slug}") : array();
+    $settings = ( get_option("bl_api_client_{$info_slug}") ) ?
+       get_option("bl_api_client_{$info_slug}") : array();
+    $options = ( get_option("bl_api_client_{$this_slug}") ) ?
+       get_option("bl_api_client_{$this_slug}") : array();
+
+    $xy = self::get_call_now_val($activity);
     $selected[intval($xy[1])] = 'selected';
     $locale_val = intval($xy[0])+1;
 
+    if ( isset($options['call_now']) &&
+      $options['call_now']!=false &&
+      isset($permissions['verified']) &&
+      $permissions['verified']) {
+      error_log('CALL NOW ');
+      error_log('got valid call now params');
+      $options['call_now'] = false;
+      $index = $options['call_index'][0];
+      $directory = BL_Review_Monster::$dirs[intval($options['call_index'][2])];
+      error_log(strval($index));
+      error_log($directory);
+      BL_Client_Tasker::bl_api_get_request_body($index,$directory,$settings);
+    } else {
+      error_log('API call not verified');
+      error_log('call now:');
+      error_log(strval($options['call_now']));
+      error_log('verified:');
+      error_log(strval($permissions['verified']));
+      error_log('verify:');
+      error_log(strval($permissions['verify']));
+    }
+
     $menu = "<div class='flexOuterStart'>";
-    $menu .= "<label for='call_now' class='call_now_label'><b>Make API Call</b></label>";
-    $menu .= "<input id='call_now' type='checkbox' />";
+    //$menu .= "<label for='call_now' class='call_now_label'><b>Make API Call Now</b></label>";
+    $menu .= "<input id='call_now' type='checkbox' selected checked
+      name=bl_api_client_{$this_slug}[{$box_name}] value='true' />";
     $menu .= "<label for='locale_no' class='call_now_label'>for Location Number</label>";
-    $menu .= "<input id='locale_no' type='number' min='1' max='" . strval(self::get_field_count()) . "' value='{$locale_val}' />";
+    $menu .= "<input id='locale_no' type='number' min='1' max='" .
+      strval(self::get_field_count()) . "' value='{$locale_val}' />";
     $menu .= "<label for='directory' class='call_now_label'>to Listing Directory</label>";
     $menu .= "<select id='directory' class='zeroTest'><option value='0' {$selected[0]}>GMB</option>";
     $menu .= "<option value='1'{$selected[1]}>Facebook</option></select></div>";
 
-    $result = "<input $style_rule value='$xy' name='bl_api_client_settings[{$field_name}]'/>";
+    $result = "<input $style_rule id='xy' value='$xy' name='bl_api_client_{$this_slug}[{$field_name}]'/>";
 
     echo $menu;
     echo $result;
+
+  }
+
+  public static function sticky_field($dir,$prop,$db_slug,$json_str) {
+    $style_rule = 'style="display:none;"';
+    $result = '<input ' . $style_rule . ' value=' . $json_str .
+      ' name=' . $db_slug . '[' . $dir . '_' . $prop . ']/>';
+    return $result;
   }
   ////template 2 - after settings section title
   public static function bl_api_client_auth_section() {
@@ -391,13 +455,6 @@ class BL_API_Client_Settings {
 
   public static function bl_api_client_settings_section() {
     self::bl_api_client_dynamic_settings_section('_settings');
-  }
-
-  public static function sticky_field($dir,$prop,$db_slug,$json_str) {
-    $style_rule = 'style="display:none;"';
-    $result = '<input ' . $style_rule . ' value=' . $json_str .
-      ' name=' . $db_slug . '[' . $dir . '_' . $prop . ']/>';
-    return $result;
   }
 
   public static function bl_api_client_dynamic_settings_section($db_slug) {
@@ -430,6 +487,7 @@ class BL_API_Client_Settings {
     $review_monster = new BL_Review_Monster($options);
 
     $review_table = "<input name='submit' type='submit' id='call_now_1' class='button-primary' value='&beta;&lambda;' /><br/><br/>";
+
     $review_table .= $review_monster->do_activity_log_table();
     $review_table .= $review_monster->do_reviews_table();
 
@@ -437,8 +495,15 @@ class BL_API_Client_Settings {
   }
 
   public static function bl_api_client_permissions_section() {
-    //
-    // . . . while the whole moves, and every part stands still
+    // . . . while the whole moves
+    // and every part stands still.
+  }
+
+  public static function bl_api_client_call_now_section() {
+    wp_enqueue_script(
+      'bl_api_client-submit-call-now',
+      plugin_dir_url(__FILE__) . '../lib/bl_api_client-submit-call-now.js'
+    );
   }
 
 }
