@@ -13,6 +13,7 @@ bl_review_monster.php - line 34
                                 - by date range?
 
 bl_client_tasker.php - line 144
+                                - add database cleanup task for activity log!
                                 - add validation for API Keys?
 
 bl_scraper.php - lines 295-325

@@ -23,6 +23,10 @@ included in the current version 06.15.2020 of this plugin. Vulnerabilities
 fitting the preceding description should be reported as issues to the above
 GitHub repositories.
 
+If you are using the most recent version of this plugin and believe the
+dependencies still require updating for security reasons, follow these steps:
+
+
 ================================================================================
 HOW YOU DO THIS - User Documentation
 ================================================================================

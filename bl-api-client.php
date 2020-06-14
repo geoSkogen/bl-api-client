@@ -2,7 +2,7 @@
 /*
 Plugin Name:  BrightLocal Client Reviews - Alpha Build
 Description:  Live Reviews & Ratings for Your Local Business
-Version:      2020.06.08
+Version:      2020.06.15
 Author:       City Ranked Media
 Author URI:   https://cityranked.com/
 Text Domain:  bl_api_client
@@ -148,17 +148,25 @@ function bl_api_client_add_cron_intervals( $schedules ) {
         'interval' => 2400,
         'display'  => esc_html__( 'Every Thirty Minutes' ),
     );
+    $schedules['sixty_minutes'] = array(
+        'interval' => 2400,
+        'display'  => esc_html__( 'Every Thirty Minutes' ),
+    );
     return $schedules;
 }
 
 function bl_api_client_schedule_executor() {
   $permissions = get_option('bl_api_client_permissions');
   $activity = get_option('bl_api_client_activity');
+  if (!isset($activity['log'])) {
+    $activity = array();
+    $activity['log'] = [];
+  }
   //
   if (isset($permissions['verified']) && $permissions['verified']) {
     if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
       error_log('got cron hook schedule - outer ring ');
-      wp_schedule_event( time(), 'forty_minutes', 'bl_api_client_cron_hook' );
+      wp_schedule_event( time(), 'sixty_minutes', 'bl_api_client_cron_hook' );
       $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
       //everything below this is debugging code only; remove in production
       error_log('timestamp for outer cron hook is : ' . strval($timestamp));

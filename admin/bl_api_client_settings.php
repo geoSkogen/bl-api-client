@@ -161,17 +161,17 @@ class BL_API_Client_Settings {
     );
 
     add_settings_field(
-      'call_now',
-      '&beta;&lambda;',
-      array('BL_API_Client_Settings','bl_api_client_call_now'),
-      'bl_api_client_activity',
-      'bl_api_client_activity'
-    );
-
-    add_settings_field(
       'verify',
       'Verify Your Business Name: ',
       array('BL_API_Client_Settings','bl_api_client_verify'),
+      'bl_api_client_permissions',
+      'bl_api_client_permissions'
+    );
+
+    add_settings_field(
+      'call_now',
+      'Call Now',
+      array('BL_API_Client_Settings','bl_api_client_call_now'),
       'bl_api_client_permissions',
       'bl_api_client_permissions'
     );
@@ -335,35 +335,53 @@ class BL_API_Client_Settings {
     update_option($this_db_slug,$option);
   }
 
-  public static function valid_call_now($str) {
-    $arr = explode(',',$str);
-    $score = 0;
-    for($i = 0; $i < count($arr); $i++) {
-      switch(strval($i)) {
-        case '0' :
-          if (intval($arr[$i]) <= self::get_field_count()-1) {
-            $score+=1;
-          }
-          break;
-        case '1' :
-          $score+= (intval($arr[$i]) > -1 && intval($arr[$i] <= 1)) ? 1 : 0;
-          break;
+  public static function get_call_now_val($activity) {
+    $result = '0,0';
+    $log = (isset($activity['log']) && count($activity['log'])) ?
+        array_reverse($activity['log']) : [];
+    foreach ($log as $entry) {
+      error_log('using default intvals for call now value?');
+      error_log($entry[0]);
+      error_log($entry[1]);
+      $xy = explode(',',$entry[0]);
+      $msg = (strpos($entry[1],'review scrape')) ? true : false;
+      if ( intval($xy[0]) > -1 && intval($xy[1]) > -1 && $msg ) {
+        error_log('VALIDATING INTVALS FOR CALL NOW VALUE:');
+        error_log('last successful scrape:');
+        error_log($xy[0]);
+        error_log($xy[1]);
+        $task_assoc = BL_Client_Tasker::index_task($entry[0]);
+        $result = strval($task_assoc['loc']) . ',' . strval($task_assoc['dir']);
+        break;
       }
     }
-    return ($score===2) ? true : false;
+    return $result;
   }
 
   public static function bl_api_client_call_now() {
     $field_name = 'call_now';
     $db_slug = 'activity';
-    $value = (
-      isset(self::$options['call_now']) &&
-      self::valid_call_now(self::$options['call_now'])
-      ) ? self::$options['call_now'] : '-1,-1';
     $style_rule = 'style="display:none;"';
+    $selected = ['','',''];
 
-    $result = "<input $style_rule value='$value' name='bl_api_client_{$db_slug}[{$field_name}]'/>";
+    $options = ( get_option("bl_api_client_{$db_slug}")) ?
+       get_option("bl_api_client_{$db_slug}") : array();
+    $xy = self::get_call_now_val($options);
+    $selected[intval($xy[1])] = 'selected';
+    $locale_val = intval($xy[0])+1;
 
+    $menu = "<div class='flexOuterStart'>";
+    $menu .= "<label for='call_now' class='call_now_label'><b>Make API Call</b></label>";
+    $menu .= "<input id='call_now' type='checkbox' />";
+    $menu .= "<label for='locale_no' class='call_now_label'>for Location Number</label>";
+    $menu .= "<input id='locale_no' type='number' min='1' max='" . strval(self::get_field_count()) . "' value='{$locale_val}' />";
+    $menu .= "<label for='directory' class='call_now_label'>to Listing Directory</label>";
+    $menu .= "<select id='directory' class='zeroTest'><option value='0' {$selected[0]}>GMB</option>";
+    $menu .= "<option value='1'{$selected[1]}>Facebook</option></select></div>";
+
+    $result = "<input $style_rule value='$xy' name='bl_api_client_settings[{$field_name}]'/>";
+
+    echo $menu;
     echo $result;
   }
   ////template 2 - after settings section title
@@ -410,15 +428,17 @@ class BL_API_Client_Settings {
   public static function bl_api_client_activity_section() {
     $options = get_option('bl_api_client' . '_activity');
     $review_monster = new BL_Review_Monster($options);
-    $review_table = "<input name='submit' type='submit' id='submit' class='button-primary' value='&beta;&lambda;' />";
+
+    $review_table = "<input name='submit' type='submit' id='call_now_1' class='button-primary' value='&beta;&lambda;' /><br/><br/>";
     $review_table .= $review_monster->do_activity_log_table();
     $review_table .= $review_monster->do_reviews_table();
+
     echo $review_table;
   }
 
   public static function bl_api_client_permissions_section() {
     //
-    // while the whole moves, and every part stands still
+    // . . . while the whole moves, and every part stands still
   }
 
 }

@@ -1,6 +1,6 @@
 <?php
 class BL_Client_Tasker {
-  // Tasser is ALL STATIC - organizes scheduling and validation of API call data
+  // Tasker is ALL STATIC - organizes scheduling and validation of API call data
   public static $init_key = '-1,-1';
 
   function __construct() {
@@ -15,7 +15,7 @@ class BL_Client_Tasker {
 
     if ( ! wp_next_scheduled( 'bl_api_client_call_series' ) ) {
         error_log('got cron hook schedule - inner ring ');
-        wp_schedule_event( time(), 'three_minutes', 'bl_api_client_call_series' );
+        wp_schedule_event( time(), 'five_minutes', 'bl_api_client_call_series' );
     } else {
       $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
       error_log('timestamp for next inner cron hook is : ' . strval($timestamp));
@@ -41,7 +41,13 @@ class BL_Client_Tasker {
       error_log('found valid task index: ' . $new_commit_log[0]);
       $commit['log'][] = $new_commit_log;
       update_option('bl_api_client_activity',$commit);
-      //var_dump($commit);
+      // START the API call validation chain
+      // CALL MANUALLY to make single request after getting biz info from DATABASE
+      // $biz_info = get_option('bl_api_client_settings');
+      // --example for primary locale's GMB:
+      // self::bl_api_get_request_body(0,'google',$biz_info);
+      // -- example for secondary locale's facebook:
+      // self::bl_api_get_request_body(1,'facebook',$biz_info);
       self::bl_api_get_request_body($loc_index,$dir,$this_option);
       //
     } else {
@@ -58,7 +64,6 @@ class BL_Client_Tasker {
         error_log('found stop task index: ' . $xy_str);
         $commit['log'][] = $new_commit_log;
         update_option('bl_api_client_activity',$commit);
-        //var_dump($commit);
       }
     }
   }
@@ -119,6 +124,7 @@ class BL_Client_Tasker {
 
     if (isset($this_option[$link_prop]) && '' != $this_option[$link_prop]) {
       error_log('found ' . $link_prop . '; starting api call body validation');
+      // NEXT step in API validation chain
       self::bl_api_get_reviews($directory,$index,$req_body,$this_option);
     } else {
       error_log($link_prop . ' not found; skipping api call body validation');
@@ -147,8 +153,8 @@ class BL_Client_Tasker {
       if (defined('BL_API_KEY') && defined('BL_API_SECRET')) {
         error_log('found api keys');
         //NOTE: THIS IS THE API CALL - UNCOMMENT TO RUN
-        //
-        $result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
+        // RE: $result -- see comments below;
+        //$result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
         //$result = BL_Scraper::sim_call_local_dir($req_body,'fetch-reviews',$dir);
       } else {
         error_log('bl api keys not found');

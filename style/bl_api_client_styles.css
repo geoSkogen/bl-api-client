@@ -28,6 +28,7 @@ nav {
 }
 
 input.zeroTest,
+select.zeroTest,
 input.zeroText,
 input.zeroTestModal {
   margin: 1em;
@@ -37,7 +38,8 @@ input.zeroTestModal {
   font-size: 16px;
 }
 
-input.zeroText {
+input.zeroText,
+select.zeroTest {
   margin: 0;
 }
 
@@ -183,4 +185,13 @@ input[type="radio"] {
   font-weight: 800;
   padding: 0 0.5em;
   opacity: 0.66;
+}
+
+.call_now_label {
+  padding: 0.5em 0.5em 0 0.5em !important;
+}
+
+
+input[type="checkbox"] {
+  margin: 0.5em !important;
 }

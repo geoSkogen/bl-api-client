@@ -82,15 +82,17 @@ class BL_API_Client_Options {
     $db_slug='_activity';
     $submit_text = '&beta;&lambda;';
     ?>
-    <div class='form-wrap no_form'>
+    <div class='form-wrap call_now'>
       <h3>BrightLocal API Client Activity</h3>
+    <!--  <form method='post' action='options.php'> -->
       <?php
          settings_fields( 'bl_api_client' . $db_slug );
          do_settings_sections( 'bl_api_client' . $db_slug );
       ?>
       <p class='submit'>
-        <button name='call_now' id='call_now' class='button-primary'/><?php _e($submit_text); ?></button>
+        <input type='submit' name='call_now' id='call_now_2' class='button-primary' value='<?php _e($submit_text); ?>'/>
       </p>
+    <!--  </form> -->
     </div>
     <?php
   }
