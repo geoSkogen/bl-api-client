@@ -106,11 +106,15 @@ class BL_Scraper {
         error_log('aggregate rating<br/>');
         error_log($results['results']['LdFetchReviews'][0]['results'][0]['star-rating']);
         //log results--add timestamp to db
-        $reviews = $results['results']['LdFetchReviews'][0]['results'][0]['reviews'];
-        $aggregate_rating = array(
-          'rating' => $results['results']['LdFetchReviews'][0]['results'][0]['star-rating'],
-          'count' => $results['results']['LdFetchReviews'][0]['results'][0]['reviews-count']
-        );
+        $reviews = (isset($results['results']['LdFetchReviews'][0]['results'][0]['reviews'])) ?
+          $results['results']['LdFetchReviews'][0]['results'][0]['reviews'] : null;
+        $aggregate_rating = (
+          isset($results['results']['LdFetchReviews'][0]['results'][0]['star-rating']) &&
+          isset($results['results']['LdFetchReviews'][0]['results'][0]['reviews-count'])
+          ) ? array(
+            'rating' => $results['results']['LdFetchReviews'][0]['results'][0]['star-rating'],
+            'count' => $results['results']['LdFetchReviews'][0]['results'][0]['reviews-count']
+            ) : null;
       } else {
         $err_msg .= ' BL API library batch commit failure ';
       }
@@ -118,28 +122,38 @@ class BL_Scraper {
       $err_msg .=  ' invalid batch ID ';
     }
     // ensure each new item has a locale id
-    foreach($reviews as $review) {
-      $this_review = $review;
-      $this_review['locale_id'] = strval($locale_index+1);
-      $final_reviews_batch[] = $this_review;
+    if ($reviews) {
+      foreach($reviews as $review) {
+        $this_review = $review;
+        $this_review['locale_id'] = strval($locale_index+1);
+        $final_reviews_batch[] = $this_review;
+      }
     }
 
-    $aggregate_rating['locale_id'] = strval($locale_index+1);
+    if ($aggregate_rating) {
+      $aggregate_rating['locale_id'] = strval($locale_index+1);
+    }
     // make record exluding the current locale's previous reviews . . .
     //NOTE: error handling, isset(), or let it bark? We need the warnings for now
-    foreach ($commit[$directory . '_reviews'] as $current_review) {
-      if ($current_review['locale_id']!=strval($locale_index+1)) {
-        $other_reviews[] = $current_review;
+    if (isset($commit[$directory . '_reviews']) && is_array($commit[$directory . '_reviews'])) {
+      foreach ($commit[$directory . '_reviews'] as $current_review) {
+        if ($current_review['locale_id']!=strval($locale_index+1)) {
+          $other_reviews[] = $current_review;
+        }
       }
     }
     // . . . and merge it with the new reviews for this locale
     $all_reviews = array_merge($final_reviews_batch,$other_reviews);
     //NOTE: error handling, isset(), or let it bark? We need the warnings for now
-    foreach ($commit[$directory . '_aggregate_rating'] as $current_rating_obj) {
-      if ($current_rating_obj['locale_id']!=strval($locale_index)) {
-        $all_agg_ratings[] = $current_rating_obj;
+    if ( isset($commit[$directory . '_aggregate_rating']) &&
+         is_array($commit[$directory . '_aggregate_rating'])
+       ) {
+      foreach ($commit[$directory . '_aggregate_rating'] as $current_rating_obj) {
+        if ($current_rating_obj['locale_id']!=strval($locale_index)) {
+          $all_agg_ratings[] = $current_rating_obj;
+        }
       }
-    }
+    }  
     $all_agg_ratings[] = $aggregate_rating;
     // the function's return value object is API call result ONLY . . .
     $return_val->reviews = (count($final_reviews_batch)) ? $final_reviews_batch : null;

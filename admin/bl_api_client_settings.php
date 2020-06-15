@@ -444,7 +444,7 @@ class BL_API_Client_Settings {
       error_log('CALL NOW ');
       error_log('got valid call now params');
       // get the review fetch arguments from this page's form settings
-      $log = [$options['call_index'],'manual call'];
+      $log = [$options['call_index'],'manual call '  . date('F d Y H:i',time())];
       $index = $options['call_index'][0];
       $directory = BL_Review_Monster::$dirs[intval($options['call_index'][2])];
       $options[$this_slug] = false;
