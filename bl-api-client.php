@@ -180,7 +180,7 @@ function bl_api_client_schedule_executor() {
       error_log('the current time is : ' . strval(time()));
     }
   } else {
-    if ($permissions['cron_override']) {
+    if (isset($permissions['cron_override']) && $permissions['cron_override']) {
       error_log('bl api client running in manual mode');
       if (end($activity['log'])[0]!='-4,-4') {
         error_log('outer cron hook un-scheduled - manual override event');
