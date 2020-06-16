@@ -1,0 +1,2104 @@
+<?php
+array(100) {
+  [0]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Mary Arrell"
+    ["timestamp"]=>
+    string(10) "2020-06-13"
+    ["text"]=>
+    string(89) "Zack Jenkins was polite, professional & diid a great job. We will use Pioneer Pest again."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-mpGEuLF1Rw8/AAAAAAAAAAI/AAAAAAAAAAA/K1mup1VF-44/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "008039504170a51825d21ff5853fc49ec2689fc1"
+  }
+  [1]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(9) "John Kent"
+    ["timestamp"]=>
+    string(10) "2020-06-09"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-LQnlemm3YXU/AAAAAAAAAAI/AAAAAAAAAAA/LIAxxjF7MRo/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "5d58ee2daf9a0420957a49111474c073cac19685"
+  }
+  [2]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Rose diment"
+    ["timestamp"]=>
+    string(10) "2020-06-09"
+    ["text"]=>
+    string(276) "Eric was very professional. He came in a mask and shoe coverings.  He asked all the right questions, explained what needed to be done. He was very efficient. Overall I was very pleased with how prompt Pioneer got a field technician here! I would highly recommend this company."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-pojSZ8Zdf8g/AAAAAAAAAAI/AAAAAAAAAAA/PyF9XSw91MU/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "9c59b2563fd5034db60565a2c8ff1280ffa39dde"
+  }
+  [3]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(14) "Melanie Nelson"
+    ["timestamp"]=>
+    string(10) "2020-06-09"
+    ["text"]=>
+    string(279) "I'm very satisfied with the service from Pioneer Pest Management. I had a spider emergency, and I had a technician at my house within a few business days of reaching out. The technician, Tyler B., was quick, friendly, efficient, and went the extra mile for me at no extra charge."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-IelrJiUB5bA/AAAAAAAAAAI/AAAAAAAAAAA/s7YLV2xCZoM/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "7eb05913172e737c5c8130cde671e5444b0cb2d8"
+  }
+  [4]=>
+  array(8) {
+    ["rating"]=>
+    int(4)
+    ["author"]=>
+    string(14) "Brian Anderson"
+    ["timestamp"]=>
+    string(10) "2020-06-02"
+    ["text"]=>
+    string(165) "The guy that came to get rid of our problem was very nice! He was quick and got rid of our problem right away! I would totally recommend going here! Amazing service!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(114) "https://lh4.googleusercontent.com/-7EcZA583nUM/AAAAAAAAAAI/AAAAAAAAAAA/6zcBRQpk7Lg/s40-c-rp-mo-ba2-br100/photo.jpg"
+    ["id"]=>
+    string(40) "afd47cf27b88f621d1223c0735c45494305a88a9"
+  }
+  [5]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(10) "Matt Rhine"
+    ["timestamp"]=>
+    string(10) "2020-06-02"
+    ["text"]=>
+    string(58) "The service was perfect, and provided everything I needed."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-7I_UEjvlWis/AAAAAAAAAAI/AAAAAAAAAAA/_NCHYn5vAXU/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "48e14f55bd6e43554fd9c1b3f8994285ed0f1ce7"
+  }
+  [6]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(14) "Nichole Parman"
+    ["timestamp"]=>
+    string(10) "2020-06-02"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-BgsRq3Ds2yE/AAAAAAAAAAI/AAAAAAAAAAA/_ntDIxQfkkA/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "ac10c2f5bbdfdf078743c9600d7c2d888d789979"
+  }
+  [7]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(7) "Vicki T"
+    ["timestamp"]=>
+    string(10) "2020-06-02"
+    ["text"]=>
+    string(150) "Tyler has been the best Tech we have ever had! If I could choose my tech each time, I would choose Tyler every time. Super friendly and knowledgeable!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-QRwU8jg0ims/AAAAAAAAAAI/AAAAAAAAAAA/1W4Dn5aajrk/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "21623bde86f8aebdaa7caa810e751e2b2627b906"
+  }
+  [8]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(18) "Abigayle Mitschele"
+    ["timestamp"]=>
+    string(10) "2020-06-02"
+    ["text"]=>
+    string(193) "Tyler is the absolute best, professional,  on time,  very friendly. My home is pest free, which is very important to me because I'm absolutely terrified of spiders :) thank you for all you do!!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-o5eTvEm9vMw/AAAAAAAAAAI/AAAAAAAAAAA/iuxLVv1xJIk/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "2455da0ed2221e091832a37c2349e04b9d354ddd"
+  }
+  [9]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Sharon Scott"
+    ["timestamp"]=>
+    string(10) "2020-05-19"
+    ["text"]=>
+    string(569) "I've always had good service from Pioneer Pest Management.  But the guy (Zack) who came up to help me this week was really exceptional.  He went above and beyond to both kill the wasps and to take care that they would never bother us again.  And the job was not easy - it was 15 feet up on a shop roof.  He used three kinds of mesh and sealed things up so nicely, and gave me pictures to show exactly what he did.  The price was right, a fantastic job was done, and Zack was a total pleasure to deal with.  I'll certainly be calling Zack in the future when I need help!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-_0ewE1j6Ov0/AAAAAAAAAAI/AAAAAAAAAAA/uCsP8hgfFbc/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "5bce08a83f33c2ac0babef05449a37262b0d034f"
+  }
+  [10]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Jay Gilberg"
+    ["timestamp"]=>
+    string(10) "2020-05-16"
+    ["text"]=>
+    string(69) "Great job Zach--two birds with one hand! Thank you for your help. Jay"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-QWeCjfAEvCQ/AAAAAAAAAAI/AAAAAAAAAAA/L_QAb_EwiZw/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "322d2f530badba75a6b257a1c8b9b0bc5c5ef492"
+  }
+  [11]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(15) "Kayla McCaffrey"
+    ["timestamp"]=>
+    string(10) "2020-05-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-y4i0z-Fcw5E/AAAAAAAAAAI/AAAAAAAAAAA/lWGTxujm634/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "cb4ea498d25d197ca68185a592f671a80e75f75e"
+  }
+  [12]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "James Wunder"
+    ["timestamp"]=>
+    string(10) "2020-05-16"
+    ["text"]=>
+    string(315) "We just had Tyler come by our house for a mouse problem. He was incredibly professional and helpful. He explained everything he found and let us ask all of our questions. He was awesome and we would highly recommend him!! We will be calling him if we have any other critter problems in the future.   -James & Alexis"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-TVUHBSY_MXU/AAAAAAAAAAI/AAAAAAAAAAA/GVK62uBqdfg/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "8b98feeddd3abada4f3e6008a148310a1964a946"
+  }
+  [13]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Vicki Blair"
+    ["timestamp"]=>
+    string(10) "2020-05-16"
+    ["text"]=>
+    string(247) "Pioneer Pest Management has taking care of rodent, wasp and ant issues at my house for the past five or so years. Like I've found to be the case with all their technicians, Tyler was friendly, helpful, informative and professional. Thanks so much!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-2ytfJCdFmXg/AAAAAAAAAAI/AAAAAAAAAAA/ffPFrKP8oLc/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "3e49d3fadcc8db4b358179d232c3650c4eaf7ade"
+  }
+  [14]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "James Mathis"
+    ["timestamp"]=>
+    string(10) "2020-05-16"
+    ["text"]=>
+    string(79) "Great service. The serviceman that came out was very knowledgeable and helpful."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-npt97BWpMlg/AAAAAAAAAAI/AAAAAAAAAAA/NkZM0SbDTRg/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "9faa1ff45c53c5eda189904428b3ce61f7be9806"
+  }
+  [15]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(17) "Travis Malakowsky"
+    ["timestamp"]=>
+    string(10) "2020-05-16"
+    ["text"]=>
+    string(187) "Can never say enough about the service of this place. Always so nice and helpful! And the ants are gone! Thank you Tyler for coming out with your great attitude, and doing an awesome job!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-5ORZX9Z0d3M/AAAAAAAAAAI/AAAAAAAAAAA/WH7c57Yo7Yo/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "056f0b02c72d96f8a8616a189f4135b0166cec51"
+  }
+  [16]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Shelley Voigt"
+    ["timestamp"]=>
+    string(10) "2020-04-16"
+    ["text"]=>
+    string(149) "Technician Tyler has done an excellent job eliminating the mice problem I had. They are completely eliminated without toxic chemicals inside my home."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-_KPclP8zLV4/AAAAAAAAAAI/AAAAAAAAAAA/K8x4GQY6Wgw/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "7005fe728df3919ad16e338ba99ad5d183e8774b"
+  }
+  [17]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "James Troxell"
+    ["timestamp"]=>
+    string(10) "2020-04-16"
+    ["text"]=>
+    string(426) "The technician that came was very was very punctual. He was extremely knowledgeable of how our pests worked. He was also extremely knowledgeable of how the company worked and very clearly and simple explained all of the options the company offered for our current pest problem and maintaining pest management in the future if we would like to in the future. Will defiantly recommend them to everyone who needs pest management."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-VdV90U87v_g/AAAAAAAAAAI/AAAAAAAAAAA/Fxo8_nVlkws/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "72a854d29a60c3085b32c394d82b1b17d023b264"
+  }
+  [18]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Julia Veach"
+    ["timestamp"]=>
+    string(10) "2020-04-16"
+    ["text"]=>
+    string(738) "We called Pioneer Pest Management and I had great experience just making my appointment. They're very informative and know what they're doing. A couple days later we had someone come out to our apartment because we've had swarms of ants all over our apartment. (They have been worse than last year.) So we finally decided store bought traps weren't enough to get rid of them. The employee they sent was friendly and explained everything he was doing. He discussed pricing with us and did great job. I haven't seen a single ant since they sprayed and put traps out. They said its takes about 20 days for the ants to take it back to their nest. So far I've seen no ants. Their service also comes with warranty. I'm so impressed.  Thank you."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-Bnn9z4aSi6E/AAAAAAAAAAI/AAAAAAAAAAA/hQ8VwB6QcXk/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "6b132a09f07c6e3d65b79c8e220a0d9491eca9c4"
+  }
+  [19]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "John Correa"
+    ["timestamp"]=>
+    string(10) "2020-04-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-ugkGpMkcVPM/AAAAAAAAAAI/AAAAAAAAAAA/JZk2hrZDdJk/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "ab5c8bc8133ad1c27afecec6055bf42635c53de5"
+  }
+  [20]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(15) "Stefan Marineau"
+    ["timestamp"]=>
+    string(10) "2020-04-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-f2HdAYpV_tc/AAAAAAAAAAI/AAAAAAAAAAA/YtP1I95fbI0/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "1313ed06aaa573ee91d60857d5edc806a7756970"
+  }
+  [21]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Chris Whinery"
+    ["timestamp"]=>
+    string(10) "2020-03-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-_rq1OhMnVeM/AAAAAAAAAAI/AAAAAAAAAAA/Do49B5bfEkk/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "5cc56643bb0499a0a843223dd4c5ec0ca5c5d099"
+  }
+  [22]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Mike Cyphers"
+    ["timestamp"]=>
+    string(10) "2020-03-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-JpnNIcFnwGM/AAAAAAAAAAI/AAAAAAAAAAA/De8yWcrYH7k/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "cba0412e924aa2b61f44e7ee6882b38e759763ec"
+  }
+  [23]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(6) "Maia L"
+    ["timestamp"]=>
+    string(10) "2020-03-16"
+    ["text"]=>
+    string(103) "Tyler was amazing! He was very nice and to the point. Will be using Pioneer as my regular pest company."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-LNAti_cMxgs/AAAAAAAAAAI/AAAAAAAAAAA/KscD3nmLhmc/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "2b29ea426a80c26e1803cd531729a214b2c47e4f"
+  }
+  [24]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Kara Berglund"
+    ["timestamp"]=>
+    string(10) "2020-03-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-amyHQ6U9Q5A/AAAAAAAAAAI/AAAAAAAAAAA/lwfSnCSB-Kc/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "7ddc0103af35f531c06bf35ecc2682b77b384867"
+  }
+  [25]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(16) "stacey o'connell"
+    ["timestamp"]=>
+    string(10) "2020-03-16"
+    ["text"]=>
+    string(88) "Zack was great! Explained everything thoroughly and was just a pleasure to have help us!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-H9sjdCN0FKY/AAAAAAAAAAI/AAAAAAAAAAA/lwG667vmdsA/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b6983fa129d0a883b35339c465f95dca0a8a7127"
+  }
+  [26]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(14) "Jackson Graham"
+    ["timestamp"]=>
+    string(10) "2020-02-16"
+    ["text"]=>
+    string(253) "Fabulous service and very professional. The technician was very thorough, answered all my questions, and fixed our mice problem so quickly! Gave me peace of mind after a stressful week of trying to do it on our own first. Wish I’d called them sooner!!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-Gxu5lIZ9EEw/AAAAAAAAAAI/AAAAAAAAAAA/Pa86f4d2HM0/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "fdeb256e1ee8b2980b491c9b84fca87eec621ee1"
+  }
+  [27]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Robin Stuart"
+    ["timestamp"]=>
+    string(10) "2020-02-16"
+    ["text"]=>
+    string(390) "Ryan is the most awesome bird whisperer! He convinced the pesky bird family to relocate from our attic ducting and put up bird guards so they can't move back in! He was fast, knowledgeable and super friendly! I highly recommend him and Pioneer Pest services for any of your bird wrangling needs! Thanks Ryan and Pioneer Pest Services😊We wil use you in the future if the need ever arises!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(114) "https://lh4.googleusercontent.com/-eXYgc0qisuU/AAAAAAAAAAI/AAAAAAAAAAA/sGB0SRj-E3k/s40-c-rp-mo-ba3-br100/photo.jpg"
+    ["id"]=>
+    string(40) "96cb614f3fd3ca7896f8d212b58c1e3223fe9d43"
+  }
+  [28]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(22) "Carole Collett-Wheeler"
+    ["timestamp"]=>
+    string(10) "2020-02-16"
+    ["text"]=>
+    string(799) "I called Pioneer Pest Management when I realized the  tiny ants I was seeing periodically- and I thought had dealt with we’re back again. My neighbor had used Pioneer and highly recommended them. When Eric and Zack came out , I was sure there wouldn’t be an ant in sight. I couldn’t have been more wrong! Eric and Zack had a flashlight and revealed an unbelievable number of ants heading towards the cat food and in the cat food. Long story short, they quickly analyzed where the ants were living and took care of my house. They took the time to explain what they were doing and what to expect going forward. They answered all my questions- I had a lot- and couldn’t have been nicer or more professional. I highly recommend Eric and Zack to anyone who has unwanted pests. They’re so great!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-_HGlsfLjQaU/AAAAAAAAAAI/AAAAAAAAAAA/05Ana0feoEY/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b894c7c1bc198f50258f3633b4732586325cdcd9"
+  }
+  [29]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(16) "Yelena Demyanyuk"
+    ["timestamp"]=>
+    string(10) "2020-02-16"
+    ["text"]=>
+    string(376) "Called for pest control insection which was promptly scheduled at my convenience. Polite staff arrived on time, they wore  shoe covers everytime they had to go inside. Did very through inspection and the initial treatment.  Thus far I am very pleased with the quality of customer service and I could not wait to see the result of the treatment for significant ant infestation."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-dBXAN9AZyuc/AAAAAAAAAAI/AAAAAAAAAAA/N7i9Revn_1E/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b09c720331084ad6c6c9e8d99dfd5615d21d1680"
+  }
+  [30]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(14) "Nicole Russell"
+    ["timestamp"]=>
+    string(10) "2020-02-16"
+    ["text"]=>
+    string(152) "Very pleased with Pioneer Pest Management. I appreciate that our technician wasn’t a pushy salesman. He was very prompt, courteous, and knowledgeable."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-Rop-2OyP6-g/AAAAAAAAAAI/AAAAAAAAAAA/x74BV1A7Gcw/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "beb6a1c90c75f177d3a8bb08842c0272c32f5304"
+  }
+  [31]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(16) "Danielle Michaud"
+    ["timestamp"]=>
+    string(10) "2020-02-16"
+    ["text"]=>
+    string(612) "We are very happy to be partnering with Pioneer Pest Management for monitoring ants and other pests around our home. Our first visit in the fall was with Clint, who was extremely outgoing and friendly, as well as knowledgeable. Our second service more recently was with Tyler, who was also great to work with. He took the extra time to hop on a ladder and check out our external vent filters to ensure that we didn't have birds getting into our attic when I mentioned it might be a concern. Both services were on time (if not early!) and it's been really nice to work with people who have such fun personalities."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-EfxJWy3DkB8/AAAAAAAAAAI/AAAAAAAAAAA/v0m2YLs03Mg/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b1341037d8722c92331ca45b93c3885a6a8c3bec"
+  }
+  [32]=>
+  array(8) {
+    ["rating"]=>
+    int(4)
+    ["author"]=>
+    string(10) "Sue Quaife"
+    ["timestamp"]=>
+    string(10) "2020-02-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-oN5tE4aplI4/AAAAAAAAAAI/AAAAAAAAAAA/sgVI78GKBog/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "6ee74caaf07b00b7aee21ef0edbc5dd22697d7e3"
+  }
+  [33]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(10) "Scott Wohl"
+    ["timestamp"]=>
+    string(10) "2020-02-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-DHrnVe36HHo/AAAAAAAAAAI/AAAAAAAAAAA/x2nKuGpJ4yc/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "3d307d25bdeee1692f793ead4d51397fcc66276a"
+  }
+  [34]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Geremy Popp"
+    ["timestamp"]=>
+    string(10) "2020-01-16"
+    ["text"]=>
+    string(173) "Pioneer has exceptional customer service. Brandon the tech was hands down the best at what he does and how he treats customers. I would highly recommend Pioneer and Brandon."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-S00hFFkW2nQ/AAAAAAAAAAI/AAAAAAAAAAA/kmFbWpEBqeU/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b95a9ee44c85e6dd831f3d6f44e261d5cfcad4f9"
+  }
+  [35]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Nancy Olson"
+    ["timestamp"]=>
+    string(10) "2020-01-16"
+    ["text"]=>
+    string(317) "I've used Pioneer Pest throughout the years and again recently.  They always offer excellent service, eco-sensitive resolutions to pest problems, are on time, knowledgeable and friendly.  My problem this time involved three visits over the past few weeks.  Tech Ryan was outstanding.  I highly recommend this company."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-I0EwKVWZEbQ/AAAAAAAAAAI/AAAAAAAAAAA/nxvkbyKJBWM/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "1ee819ad70d9210fd97c75cc7cb3872cb8790d72"
+  }
+  [36]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(7) "kmiki 2"
+    ["timestamp"]=>
+    string(10) "2020-01-16"
+    ["text"]=>
+    string(409) "Tyler was so helpful and I really appreciated his willingness to do the job with such professionalism and positive attitude! I had a mouse problem that hit hard and fast and it was horrible to deal with, I’m glad that Pioneer Pest Management was so good to respond quickly and effectively. I also really appreciate that they had email communication too as I work late and can’t always call during the day."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-pyd_Zxy_2uc/AAAAAAAAAAI/AAAAAAAAAAA/qA7Qwnw8tAs/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "8f986ae4595e1a9c0e8a1e28481f08692e8936c6"
+  }
+  [37]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(15) "Shayna Hamilton"
+    ["timestamp"]=>
+    string(10) "2020-01-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-FFO65h_Odcw/AAAAAAAAAAI/AAAAAAAAAAA/yopB3Q9gSWE/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "9eaae34d61c83e50742fd05d7de8804bae085bb9"
+  }
+  [38]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(3) "T W"
+    ["timestamp"]=>
+    string(10) "2020-01-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(114) "https://lh5.googleusercontent.com/-zrCprCLjyGw/AAAAAAAAAAI/AAAAAAAAAAA/dm7-BwCLzms/s40-c-rp-mo-ba3-br100/photo.jpg"
+    ["id"]=>
+    string(40) "901c404901dec6792e9459a65054f46925598856"
+  }
+  [39]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Brett Sivits"
+    ["timestamp"]=>
+    string(10) "2019-12-16"
+    ["text"]=>
+    string(80) "Fantastic.  Professional service without the hard sell. Extremely knowledgeable."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(114) "https://lh3.googleusercontent.com/-Jwty-MS8iS4/AAAAAAAAAAI/AAAAAAAAAAA/Iik7RBr7AvU/s40-c-rp-mo-ba4-br100/photo.jpg"
+    ["id"]=>
+    string(40) "104ab9eedba711039433bbff35a41c8d551c73c7"
+  }
+  [40]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(14) "Meredith huyck"
+    ["timestamp"]=>
+    string(10) "2019-12-16"
+    ["text"]=>
+    string(214) "They were able to come out quickly for an refinance WOD inspection.  I received a call the day before giving me a 2 hour window, and Tim came right on time.  Tim was professional, courteous, and quick but thorough."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-7RYq_OQhQNA/AAAAAAAAAAI/AAAAAAAAAAA/n32mSynimcs/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "8c1871cebd6846097a0ecabbade32f8cfbf4fa02"
+  }
+  [41]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Valerie Cupp"
+    ["timestamp"]=>
+    string(10) "2019-12-16"
+    ["text"]=>
+    string(335) "Tyler got our pest situation under control with minimal visits and educated us on preventing any future activity as well as advice on what to look for when we go looking for a new house. This service was above and beyond what we had expected. Very happy to be using Pioneer Pest for our future pest control maintenance. Thanks so much!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-cQY6X0dAyYk/AAAAAAAAAAI/AAAAAAAAAAA/YqSRr_BGW-Q/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "183875fbeb763aa4cb287d22b5176d47b6e83d11"
+  }
+  [42]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Liz DelPaine"
+    ["timestamp"]=>
+    string(10) "2019-12-16"
+    ["text"]=>
+    string(285) "Awesome Customer Service, Excellent Service. Timely, knowledgable and kind. Would recommend! Happy to have found such great people. The service tech was awesome. He was professional, reassuring, knowledgeable, and went the extra mile to communicate and take care of our needs. 5 Stars!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-KnBolaEeHBk/AAAAAAAAAAI/AAAAAAAAAAA/OP3dt2eOEkc/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "6863654ec9028b60cb290f7531aba2f2ee4ac010"
+  }
+  [43]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Mark Robinson"
+    ["timestamp"]=>
+    string(10) "2019-11-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-QyxVTvJ4B-I/AAAAAAAAAAI/AAAAAAAAAAA/7-SXa3OuXpY/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b588469ff08baef115b10be37fc88ee4f5b81802"
+  }
+  [44]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Jason Ramsey"
+    ["timestamp"]=>
+    string(10) "2019-11-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-7CKcPW4uP1M/AAAAAAAAAAI/AAAAAAAAAAA/OK6gmSerf9M/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "bb366b4c534b7ee50eb477938e552f59f6c9f4ef"
+  }
+  [45]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(10) "Karen Wulf"
+    ["timestamp"]=>
+    string(10) "2019-11-16"
+    ["text"]=>
+    string(155) "These guys do a great job getting rid of those pesky aunts we used to just live with. Especially like Tyler, who is friendly and efficient. Thanks so much!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-Gk0CsHhzlZI/AAAAAAAAAAI/AAAAAAAAAAA/LnYdJcCHfW4/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "380175153aaca017a77f7075825a2f3adb4fa09f"
+  }
+  [46]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(8) "Sheryl H"
+    ["timestamp"]=>
+    string(10) "2019-11-16"
+    ["text"]=>
+    string(313) "Tyler was fantastic. He was professional, courteous, thorough, and was very knowledgable regarding our rodent issue. He did a walk through with my husband and me and pointed out areas of concern.  He did a follow up one week later to check the areas of concern and close any possible entry points. Very impressed!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-aOkOwVmNOtY/AAAAAAAAAAI/AAAAAAAAAAA/qM4Azufae6g/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "eef4418dad31b6022d727ba620c5564d9d0babe7"
+  }
+  [47]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(10) "Katie kana"
+    ["timestamp"]=>
+    string(10) "2019-11-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-UsCFLiMGoRc/AAAAAAAAAAI/AAAAAAAAAAA/RL8ERQmeVbc/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "94b8eaaf03c27f78b9d65dc1b34e52c604fe7931"
+  }
+  [48]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(10) "Deby Beaty"
+    ["timestamp"]=>
+    string(10) "2019-11-16"
+    ["text"]=>
+    string(55) "Easy to work with, reliable, thorough and knowlegeable."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-fTwV3-1eJ0A/AAAAAAAAAAI/AAAAAAAAAAA/JVeFDpIBo1U/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b39b0a775e9bc1f214ba5c8921a6ff1f2b217cee"
+  }
+  [49]=>
+  array(8) {
+    ["rating"]=>
+    int(1)
+    ["author"]=>
+    string(12) "Tristen Ross"
+    ["timestamp"]=>
+    string(10) "2019-11-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-g8VNxZ5o3ss/AAAAAAAAAAI/AAAAAAAAAAA/75jzLyW4VdQ/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b6c8e17195fa50f76e084d7e966b3c6c30e94b63"
+  }
+  [50]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(15) "Raymond Sindell"
+    ["timestamp"]=>
+    string(10) "2019-11-16"
+    ["text"]=>
+    string(235) "Knowledgeable and friendly service.  A bit pricey, but quality is definitely there.  Free estimate was very helpful in deciding what I needed.    They take care of spiders, all bugs, ants, rodents, wasps.  Would call them back for sure"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(114) "https://lh6.googleusercontent.com/-Qlw3ks6ruFQ/AAAAAAAAAAI/AAAAAAAAAAA/gigLXdBGYko/s40-c-rp-mo-ba5-br100/photo.jpg"
+    ["id"]=>
+    string(40) "284f7f185bfeb2093ae8b9a11e6ed0350fc2f623"
+  }
+  [51]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(14) "David Surridge"
+    ["timestamp"]=>
+    string(10) "2019-11-16"
+    ["text"]=>
+    string(316) "Great company.  I have had very positives experiences with them.  (And one negative they fixed so promptly I was super impressed with the back side customer service )  Today had an ant problem inside.  Tech David was informative sharing his plan of attack and making sure I was on board! Great service.  Great value."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-x04QKLbmcM8/AAAAAAAAAAI/AAAAAAAAAAA/9sxP9rSOurk/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "7f9e2256c940ff173760db280ca31cdb9ea53b3d"
+  }
+  [52]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(9) "DK Foster"
+    ["timestamp"]=>
+    string(10) "2019-11-16"
+    ["text"]=>
+    string(716) "When we found out we had rats in and around our house we were extremely concerned and called Pioneer. Tyler came out and inspected and went over his findings and what our options were. He was extremely knowledgeable and professional. I had concerns about using the bait boxes and he was very patient and helped me understand so that I was comfortable with our plan and it seems to have worked well. After the first few days we saw no more activity though we left the boxes for longer just to be sure. Tyler was equally as patient and professional on the follow up visits and if we ever have any problems in the future he would certainly be our first call. My husband and I wholeheartedly recommend Pioneer and Tyler."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-Wn105g4XgX8/AAAAAAAAAAI/AAAAAAAAAAA/L1phOEoAjmI/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "5bf0d3e82b56b00cd59a3b39f8180a96ec1b6660"
+  }
+  [53]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Steve Flaker"
+    ["timestamp"]=>
+    string(10) "2019-11-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-lgCtfV5j82Y/AAAAAAAAAAI/AAAAAAAAAAA/WZAnIBmJbnA/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "ff0afd82db184b3f2c85de3a874fe285d194b661"
+  }
+  [54]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Robyn Klopman"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    string(174) "Ryan was the tech that came out to the house.  He was very professional and explained everything.  I would definitely recommend Pioneer Pest Management to friends and family."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-XpDQPELxArU/AAAAAAAAAAI/AAAAAAAAAAA/jAA0JnAHmIE/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "a07d919355796d3b2856da4f8b7a35eafe3f5940"
+  }
+  [55]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Paula Davis"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-O6e-34y51jo/AAAAAAAAAAI/AAAAAAAAAAA/qQDJxjerxCg/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b505991958b711dff924cabb1a804323190bfe0c"
+  }
+  [56]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Bradyn Miller"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    string(123) "Very efficient company. Mike was honest, respectful, and a hard worker. Will call again, (although I hope I never need to)!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-Q4xGbnSdyMc/AAAAAAAAAAI/AAAAAAAAAAA/81H8cSQyS7A/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "8f448039839cba96c2b82263d6e943a72b27583b"
+  }
+  [57]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Jeff Nitschke"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    string(125) "Tyler was awesome!  Very knowledgeable and got rid of our mice with one treatment. I would recommend Pioneer pest to anyone!!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-s1VKClberB0/AAAAAAAAAAI/AAAAAAAAAAA/8EopWKbsC_c/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "6c745969d49f6a5a227fd25dd7cab157293bcd3d"
+  }
+  [58]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(14) "DeVonte Calvin"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    string(102) "Ryan was a wonderful help and was very friendly and personable. We are very pleased with this service."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-IJJDE_l2668/AAAAAAAAAAI/AAAAAAAAAAA/XElGiCM5c3I/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "ca2f104525cd41f67bc7dbdfc5fa214d5e736db9"
+  }
+  [59]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Mary Truong"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    string(254) "They were very professional and polite. They came when they were scheduled to come. They weren't pushy salesmen. They patched some holes leading to the attic for us to keep out our occasional attic visitor. Overall, I was very pleased with their service."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-UG5dh1tTHus/AAAAAAAAAAI/AAAAAAAAAAA/57LZzVamZHo/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "4046df831d0f22311055b7a2efbcef5f768aac80"
+  }
+  [60]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(7) "Dan Van"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    string(107) "Very professional. Tyler showed up promptly, seemed very thorough, and did a good job of explaining things."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(114) "https://lh4.googleusercontent.com/-aNCvEVpY1ZU/AAAAAAAAAAI/AAAAAAAAAAA/k_9qCDdoGOw/s40-c-rp-mo-ba4-br100/photo.jpg"
+    ["id"]=>
+    string(40) "ad3eb0aec8fa2953812b2669ea82564cfb42a531"
+  }
+  [61]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(10) "Jay Conner"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    string(205) "Easton, with Pioneer Pest Management was very knowledgeable and efficient in explaining our pest problem. His recommendation for eradication of the problem was spot on. We’re very pleased at the results."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-XEE9hsssPNY/AAAAAAAAAAI/AAAAAAAAAAA/Frlh2wX3qrg/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "c65f31ee6e8e01d80060bd56730b014b006d87b8"
+  }
+  [62]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Connie McGee"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    string(319) "Pioneer is awesome! Tyler just came out for a free inspection and gave me great advice to control our mice population.  We have had them come out for wasps and ants too. Super reasonable and honest. I will call them EVERY time. Ian who scheduled the inspection was awesome too by the way!  Great to work with you guys!!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-lu73LERn9mc/AAAAAAAAAAI/AAAAAAAAAAA/u_GbJc04iy0/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "af09168fe7cd869c9c43017ecfb27c70a623ca02"
+  }
+  [63]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Greg Damico"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-VZNgadyaOkg/AAAAAAAAAAI/AAAAAAAAAAA/j4vRN2ptnbo/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "79f14b05dbd6b6ee090a14108a2ac1e5c13b2b76"
+  }
+  [64]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(22) "Sveta Popova-Doroshkin"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    string(186) "Tyler provided great service. He was on time, professional, and quick. Will be calling them again, if needed. Highly recommend this company.  -happy customers, Daniel and Sveta Doroshkin"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(114) "https://lh6.googleusercontent.com/-mKOb_6WRk-4/AAAAAAAAAAI/AAAAAAAAAAA/6E6pOeoNRGA/s40-c-rp-mo-ba3-br100/photo.jpg"
+    ["id"]=>
+    string(40) "fd0db29be66be76a1ebabf6d4e9c7cdce15bd082"
+  }
+  [65]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(5) "Bob Y"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-3PM0ftzMUSM/AAAAAAAAAAI/AAAAAAAAAAA/QPYA-0VZq1Y/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "4639826130ffdc95013b5624b5b49237c8e7d8e5"
+  }
+  [66]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(14) "Donald Bergren"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    string(32) "Very professional and courteous."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(114) "https://lh5.googleusercontent.com/-84kRniS6QIg/AAAAAAAAAAI/AAAAAAAAAAA/gMgRFDtAm-Y/s40-c-rp-mo-ba2-br100/photo.jpg"
+    ["id"]=>
+    string(40) "c8ea784c8b218a9684f4aeccef359128a8433b1a"
+  }
+  [67]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(15) "Shirlee Sheline"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    string(621) "The representative did a great job going over our concerns and wasted little time in identifying our problem and went to work on the immediate problem and told us of the other services he could help us with.  He sprayed for ants, spiders, and other roaming insects then set rodent traps in, around, and under our house.  He followed up when he said he would and checked all his work.  The original problem was rectified and we are very pleased.  He was very helpful, knowledgeable and professional.  We are happy to have him come to our house to do follow ups as needed.  I highly recommend him if the opportunity arises."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-HZADpCxq_kU/AAAAAAAAAAI/AAAAAAAAAAA/97Jyn7ZOwWo/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "16150d0d29861473b58294f59dcc06a9ffffd384"
+  }
+  [68]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Louis Fields"
+    ["timestamp"]=>
+    string(10) "2019-10-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-yWaL_olE5KA/AAAAAAAAAAI/AAAAAAAAAAA/th4W-BQz95w/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "bedf3b86da768f29b724f749898f034ed9c5be6b"
+  }
+  [69]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Tanis Howard"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-U_-yJFhqAC8/AAAAAAAAAAI/AAAAAAAAAAA/rbp0lkPG1sk/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b4f3b2569d16bf9a2d68a3341c65eca2637649c7"
+  }
+  [70]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(9) "Mike Nick"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    string(72) "Tyler was very helpful on solving our problem, appreciate his hard work."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-x2vNrEZxt6s/AAAAAAAAAAI/AAAAAAAAAAA/TKP2s_rQBsI/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "1a3d6decb8236a163b669f6c62d3a30c29f50d9e"
+  }
+  [71]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Karl Niiranen"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    string(138) "He was very pleasant and explained everything to us what he was doing very knowledgeable  I would recommend to my friends  thank you. Karl"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-kwYHz6dp4jA/AAAAAAAAAAI/AAAAAAAAAAA/C0co7YPTxLo/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "cda2b8dbd1ab3c01ffc88ac4375d1879159c3614"
+  }
+  [72]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(9) "Ken Elgin"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    string(47) "Showed up on time. Courteous and knowledgeable."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-AenrGI6ybCw/AAAAAAAAAAI/AAAAAAAAAAA/brp2GkTSjWY/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "5d82e0416856daf6336ba93bce626aa18e3be756"
+  }
+  [73]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Glenn Stevens"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    string(439) "I've used Pioneer Pest Mgt for a few years now.  Recently, I had a mouse in the walls.  I called Pioneer Pest.  Tyler promptly came out, inspected the house, exterior and interior, and then set up traps in the attic.  I never heard the mouse again.  Tyler came back a few days later and confirmed that two mice had been captured and he removed them.  I have been very satisfied with Pioneer Pest service and would recommend them to others."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-U7PvmjDVBU0/AAAAAAAAAAI/AAAAAAAAAAA/eHgbZIXiG00/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "576a888be04e1383076e2ffc1177104fddad02c8"
+  }
+  [74]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(16) "stephen reynolds"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    string(75) "I have been a customer for over a year they are affordable and very helpful"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-ls8Eghl-E94/AAAAAAAAAAI/AAAAAAAAAAA/XxfROZ1Vajg/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "f9b58d4acef2d53075ed4662372e8416fc2880e4"
+  }
+  [75]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(19) "Candice Featherston"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    string(60) "Always prompt, professional and thorough with their service!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-NhcQNz8SFvE/AAAAAAAAAAI/AAAAAAAAAAA/UBN5AZPDlSk/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "288ea33a844a0f70e456118cdd507a2f198c93fa"
+  }
+  [76]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(17) "Chauntel Sullivan"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    string(57) "Always professional, friendly, knowledgeable & effective!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-scMrKXOgCX0/AAAAAAAAAAI/AAAAAAAAAAA/d84ZfjADe_c/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "6cbd863c87e7d52fbe427087b703217683886d52"
+  }
+  [77]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Karla Brown"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    string(129) "Great service!  Great communication leading up to the service, service tech was on time and very professional.  Great Experience!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-ZGUR-1uMVzY/AAAAAAAAAAI/AAAAAAAAAAA/a4c28iXbAQU/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "ade477675a585ed5a9b207c3f16f21d583297e0a"
+  }
+  [78]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(10) "Dylan Bout"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    string(447) "Just moved into a new place, and was surprised to find we had not only ants and spiders, but a pretty significant rat infestation! Tyler came in and safely and efficiently evicted all of our pests! His knowledge regarding the pests/treatments and his personality absolutely exceeded all expectations. From the looks of things, Pioneer prioritizes hiring exceptional employees and it shows through the service provided! Thank you Tyler and Pioneer!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-K9s9jyk1Xxs/AAAAAAAAAAI/AAAAAAAAAAA/89dkJX8TReU/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "e374e672a3d4229f559f80f1a833dc38579f7bf4"
+  }
+  [79]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Lauren Nebels"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-D8A2ICihiyg/AAAAAAAAAAI/AAAAAAAAAAA/mDgv3ytB-W0/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "29b6fc51ee9cd9d2d37344c942603c2601b08565"
+  }
+  [80]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(15) "Alison Buchanan"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    string(129) "Tyler did a great job-very professional, efficient and took the time to answer all of my questions. Thanks for the great service!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-rj_YK4wu_jU/AAAAAAAAAAI/AAAAAAAAAAA/0JqFBx5lGT0/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "e051830977dd088ce2fe131df12cee125538de1d"
+  }
+  [81]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Jay Oebnour"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    string(433) "Our experience with Pioneer Pest Management was helpful and professional at every level.  Phone contact was courteous and offered immediate assistance with our ant problem  Technician Laston Baker was courteous, efficient and knowledgeable.   Should the need arise, we would not hesitate to call Pioneer Pest  Management in the future and would recommend this company for all pest management concerns.  Carol Obenour  August 16, 2019"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-_T8x5PoyfhU/AAAAAAAAAAI/AAAAAAAAAAA/HkXVwOUVkOU/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "8a45b9ec67378b0946d8cf5944211dd32b9b3ed2"
+  }
+  [82]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(14) "Hannah Petroff"
+    ["timestamp"]=>
+    string(10) "2019-09-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-vKzHeLkNrYI/AAAAAAAAAAI/AAAAAAAAAAA/ooG5fncoBzk/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "8648e38258828c975e05342e34f659a519626131"
+  }
+  [83]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(14) "Honorina Allen"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(293) "Pioneer Pest Management is the best.  Tyler came out to my home, very knowledgeable, very hard working, very willing to explain what he was going to do and why...very confident that we are in good hands.  I will be happy to tell everyone I know that needs help with Pests, Pioneer is the best."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-jsvgpnGWrgY/AAAAAAAAAAI/AAAAAAAAAAA/lJydxY2Ifj4/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "635b4cad2a5a80ab9b38d07001d2fc9ab03cef8f"
+  }
+  [84]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(15) "Stephanie Tyler"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(442) "They scheduled me in so quickly and were very reasonably priced for the service I got. I had my whole home inspected and protected. The tech was knowledgeable and explained the different options I could choose. They warranty their service and explained that it was ant season and to keep an eye out. We had another ant infestation a few weeks later and they came back out at no charge and were very friendly. Will be using them in the future."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-OZ2sbxlmHg0/AAAAAAAAAAI/AAAAAAAAAAA/4qUWcvgefDQ/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "c7faa22671f072fd7c64a3ff467b77de4118c81c"
+  }
+  [85]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(17) "JenniNEric Butler"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(249) "I had such a pleasant experience with our initial visit today. Easton did a great job explaining everything and even walked me through the different insect entry points he found around my home. Excellent customer service and so glad I chose Pioneer!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/--usQnfsjDog/AAAAAAAAAAI/AAAAAAAAAAA/-pJw2KcORpU/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "d3b7c92284770889eb43b9d961c5b6dda924f358"
+  }
+  [86]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(15) "patricia bryant"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(140) "Mike was the best, had much good information, and I find he totally trustworthy.  I would highly recommend this company, honest and sincere."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-uILj81cN-F0/AAAAAAAAAAI/AAAAAAAAAAA/ugPxIsIpk-g/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "546280750c3fa0eb620db15df96683efa2cc79b2"
+  }
+  [87]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "William Krell"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(31) "Very professional and friendly."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-EjUQVj-0uSw/AAAAAAAAAAI/AAAAAAAAAAA/y3qfgG70QzY/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "ade86e0e2ab4902da8bcca4cfb89ca2a195ea2fb"
+  }
+  [88]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(20) "Sophia Goode-Hawkins"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(77) "Tyler was friendly and efficient. Great service and our pest problem is gone."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-eoK738J0TCs/AAAAAAAAAAI/AAAAAAAAAAA/J8rKS2ZNzGQ/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "43895eb11a6955db18556e8896fbf6dc5f1a5892"
+  }
+  [89]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Jake Melcher"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(84) "Great service, knowledgeable staff that took the time to educate me, good solutions."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(114) "https://lh5.googleusercontent.com/-3LvX8ru7d5o/AAAAAAAAAAI/AAAAAAAAAAA/YF-4aPwUD8E/s40-c-rp-mo-ba3-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b1630ca529b3b34c08e9a615acd44659d0f57142"
+  }
+  [90]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(9) "Amy Allen"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(519) "We are so happy to have found Pioneer Pest! The office staff listen to your concerns and get you set up with the right kind of appointment from the get go. They have an excellent process for appointment reminders and communications. Every single Tech that has come out have been some of the most caring folks, they actively listen and provide recommendations that get the job done right! They have been great about keeping our home pest free with products that won’t harm our curious puppy. We happily recommend them!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh4.googleusercontent.com/-vl_P9kA0sjA/AAAAAAAAAAI/AAAAAAAAAAA/LHIwaIBqsf8/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "e1720fb3d1714ee9f99bc4d807dbdeb8e82be1a3"
+  }
+  [91]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(11) "Robert Ames"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(54) "Very good experience.  Very professional and friendly."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-3XLiwbSffjg/AAAAAAAAAAI/AAAAAAAAAAA/RVLqNxPiSAc/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "1fdd32be7c6e20790c5ff7f9e882f41851c8174b"
+  }
+  [92]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(16) "Brigit Sanderson"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(315) "Tyler was the best.  He was very accommodating and showed the upmost respect.  He was very knowledgeable about controlling the pests we are having trouble with and answered all our concerns regarding our pets and their safety.  All my friends told me Pioneer Pest Management was the place to go and they were right."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-a0TdMSQ1qcw/AAAAAAAAAAI/AAAAAAAAAAA/DORhut8NVoU/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "d71a9044e56006ccc19b27467278de04f99ffe77"
+  }
+  [93]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Kristy Nelson"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(100) "Tyler had great customer service. Explained everything thoroughly. Was very pleased with the service"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-iAgOO3cGNpQ/AAAAAAAAAAI/AAAAAAAAAAA/3dcTQvutr2c/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "0791ff9b9876bac9c853eb12b11907c9d7115d9f"
+  }
+  [94]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Melina Jesser"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(207) "Pioneer did a great job! The technician was super friendly and informative, he did a very thorough job inside and outside the house. I would definitely recommend them and will definitely be using them again!"
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-kqouhBXlbt0/AAAAAAAAAAI/AAAAAAAAAAA/_uIoWaZNibE/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "267e52db535cddad2e845dd5c14fa5a754e71807"
+  }
+  [95]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(12) "Brian Larrow"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-HTP0r6WonNM/AAAAAAAAAAI/AAAAAAAAAAA/AhvShr7qFkE/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "792596c833e88f1a14644561d92df40e698eb701"
+  }
+  [96]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "Lynn Dicesare"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(169) "I have been using Pioneer Pest Control for over 10 years now. I highly recommend this service. Service is always timely, thorough, and all concerns are always addressed."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-T4ZfdpflUN8/AAAAAAAAAAI/AAAAAAAAAAA/rhy5m5jUa3I/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "b3364cd4a072495d774f5568c0066c6368cd71cf"
+  }
+  [97]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(14) "Travis Poulson"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh3.googleusercontent.com/-HbJ7BiasAlY/AAAAAAAAAAI/AAAAAAAAAAA/JiCn9R4GkPU/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "a150ccbc60ebcc3626ef80aaf576141f5ec5aece"
+  }
+  [98]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(13) "james janssen"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    string(49) "Rian was great. Super friendly and knowledgeable."
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh6.googleusercontent.com/-wqUMC5THF-E/AAAAAAAAAAI/AAAAAAAAAAA/IakESmVlu9o/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "774a80ef5e41b6df245211bb7e409bcdb6388535"
+  }
+  [99]=>
+  array(8) {
+    ["rating"]=>
+    int(5)
+    ["author"]=>
+    string(6) "Paul S"
+    ["timestamp"]=>
+    string(10) "2019-08-16"
+    ["text"]=>
+    NULL
+    ["positive"]=>
+    array(0) {
+    }
+    ["critical"]=>
+    array(0) {
+    }
+    ["author_avatar"]=>
+    string(110) "https://lh5.googleusercontent.com/-NVTfrefC_Z4/AAAAAAAAAAI/AAAAAAAAAAA/m2_4JOe6DVM/s40-c-rp-mo-br100/photo.jpg"
+    ["id"]=>
+    string(40) "9853e1e4e848e57b7ba5fd6058a25a4881ff1df2"
+  }
+}
+?>

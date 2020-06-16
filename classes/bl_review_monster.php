@@ -37,6 +37,26 @@ class BL_Review_Monster  {
   //NOTE:Build out weighted average function - also get agg by locale X biz
   public function get_weighted_aggregate() {
     $result = array('rating'=>0,'count'=>0);
+    $count = 0;
+    $rating = o;
+    foreach(self::$dirs as $dir) {
+      if (  isset($this->ratings[$dir]) && count($this->ratings[$dir]) ) {
+        foreach($this->ratings[$dir] as $rating_object) {
+
+        }
+      }
+
+    }
+    return $result;
+  }
+
+  public function get_rating_by($filter,$arg) {
+    $result = array('rating'=>0,'count'=>0);
+    return $result;
+  }
+
+  public function get_reviews_by($filter,$arg) {
+    $result = array('rating'=>0,'count'=>0);
     return $result;
   }
   // NOTE: add filtration functions - BL_Review_Monster should have filtration
@@ -179,7 +199,7 @@ class BL_Review_Monster  {
       }
       $result .= '</tr>';
     }
-    $result .= '</table>';
+    $result .= '</table><br/>';
     echo $result;
   }
 

@@ -14,11 +14,15 @@ class BL_Scraper {
   }
   // REAL API CALL - NOTE: needs annotation for verbose debugging :
   // -- while running on WP Engine with no cache and max PHP execution time,
-  // API calls log sucessful commits but database isn't being updated -
-  // Either 1) somewhere between line 272 and 304, the reviews aren't pushing
-  // to the new object with valid locale ids, or 2) somewhere between line 304
-  // and 340, the execution is not completing sometimes and valid reviews don't
-  // get into the database before timeout
+  // API calls log sucessful commits but database isn't being updated
+  // - or API calls are failing - trace
+  // 1) somewhere between line 272 and 304, the reviews aren't pushing
+  // to the new object with valid locale ids, or -
+  // 2) somewhere between line 304 and 340, the execution is not completing
+  // sometimes and valid reviews don't get into the database before timeout, because -
+  // 3) During loop execution from lines 94--100, $results is getting data,
+  // the 'while' statement can't fulfull its condition, and needs a set or switch of
+  // alternative conditions to fulfill so we can at least get some data or make it shut up.
   public static function call_local_dir($options,$api_endpoint,$directory) {
     //$options - request body key=>val pairs
     $return_val = new stdClass();
@@ -26,14 +30,15 @@ class BL_Scraper {
     // data values for API response
     $reviews = [];
     $aggregate_rating = [];
-    // meta values
+    // task-routing values
     $commit_log = (isset($commit['log'])) ? end($commit['log']) : [BL_Client_Tasker::$init_key,'(not set)'];
     $xy_str = (isset($commit_log[0])) ? $commit_log[0] : BL_Client_Tasker::$init_key;
     $log_index = (isset($commit['log'])) ? count($commit['log'])-1 : 0;
     $locale_index = explode(',',$xy_str)[0];
+    $db_dir = ($directory==='google') ? 'gmb' : $directory;
     $msg = '(not set)';
     $err_msg = '';
-    // data vars
+    // data vars -
     $final_reviews_batch = [];
     $other_reviews = [];
     $all_reviews = [];
@@ -46,8 +51,7 @@ class BL_Scraper {
     $sig = base64_encode(hash_hmac('sha1', BL_API_KEY.$expires, BL_API_SECRET, true));
     error_log( urlencode($sig) ); // for get requests
     error_log( $sig );
-
-    $db_dir = ($directory==='google') ? 'gmb' : $directory;
+    // instantiate API client
     $api = new Api(BL_API_KEY, BL_API_SECRET);
     $batchApi = new BatchApi($api);
     // NOTE: THIS IS THE LISTENER FOR THE PROFILE URL - needs validation & testing!
@@ -77,8 +81,7 @@ class BL_Scraper {
       $result = $api->call('/v4/ld/'. $api_endpoint . $append_endpoint, $body_params);
       // This is how you would make a similar request for your own profile URL . . .
       //$result = $api->call('/v4/ld/fetch-profile-url', $body_params);
-      // . . . response body handling not included; so far, lookup-by-link return errors
-
+      // . . . response body handling not included; so far, lookup-by-link returns errors
       if ($result['success']) {
         error_log('Added job with ID ' . strval($result['job-id']) . ' ' . strval(PHP_EOL));
       } else {
@@ -88,7 +91,7 @@ class BL_Scraper {
           $err_msg .= $key . ':' . $val . ', ';
         }
       }
-
+      //
       if ($batchApi->commit($batchId)) {
         error_log( 'Committed batch successfully.'. PHP_EOL);
         // poll for results here?
@@ -96,16 +99,18 @@ class BL_Scraper {
           $results = $batchApi->get_results($batchId);
           //sleep(10); // . . . e.g., to limit how often you poll?
         } while (!in_array($results['status'], array('Stopped', 'Finished')));
-        //refer to the data-sample.txt file
+        // DATA
+        //refer to the /xmpl/data-sample.txt file
+
         //THIS IS THE PATH TO THE REVIEWS ARRAY!
-        error_log('reviews<br/>');
         //error_log(var_dump($results['results']['LdFetchReviews'][0]['results'][0]['reviews']));
+
         //THIS IS THE PATH TO THE REVIEWS Count & Agg Rating!
         error_log('aggregate count<br/>');
         error_log($results['results']['LdFetchReviews'][0]['results'][0]['reviews-count']);
         error_log('aggregate rating<br/>');
         error_log($results['results']['LdFetchReviews'][0]['results'][0]['star-rating']);
-        //log results--add timestamp to db
+
         $reviews = (isset($results['results']['LdFetchReviews'][0]['results'][0]['reviews'])) ?
           $results['results']['LdFetchReviews'][0]['results'][0]['reviews'] : null;
         $aggregate_rating = (
@@ -123,6 +128,7 @@ class BL_Scraper {
     }
     // ensure each new item has a locale id
     if ($reviews) {
+      error_log('got reviews: ' . stval($reviews));
       foreach($reviews as $review) {
         $this_review = $review;
         $this_review['locale_id'] = strval($locale_index+1);
@@ -134,7 +140,6 @@ class BL_Scraper {
       $aggregate_rating['locale_id'] = strval($locale_index+1);
     }
     // make record exluding the current locale's previous reviews . . .
-    //NOTE: error handling, isset(), or let it bark? We need the warnings for now
     if (isset($commit[$directory . '_reviews']) && is_array($commit[$directory . '_reviews'])) {
       foreach ($commit[$directory . '_reviews'] as $current_review) {
         if ($current_review['locale_id']!=strval($locale_index+1)) {
@@ -144,7 +149,7 @@ class BL_Scraper {
     }
     // . . . and merge it with the new reviews for this locale
     $all_reviews = array_merge($final_reviews_batch,$other_reviews);
-    //NOTE: error handling, isset(), or let it bark? We need the warnings for now
+    // do the same with the aggregate rating objects
     if ( isset($commit[$directory . '_aggregate_rating']) &&
          is_array($commit[$directory . '_aggregate_rating'])
        ) {
@@ -153,7 +158,7 @@ class BL_Scraper {
           $all_agg_ratings[] = $current_rating_obj;
         }
       }
-    }  
+    }
     $all_agg_ratings[] = $aggregate_rating;
     // the function's return value object is API call result ONLY . . .
     $return_val->reviews = (count($final_reviews_batch)) ? $final_reviews_batch : null;
@@ -172,7 +177,7 @@ class BL_Scraper {
     }
     $commit['log'][] = [$xy_str,$msg];
     update_option('bl_api_client_activity',$commit);
-    //NOTE: return val needed - or will this cause blocking effects?
+    //NOTE: return val needed? - or will this cause blocking effects? Does it matter?
     //return $return_val;
   }
 

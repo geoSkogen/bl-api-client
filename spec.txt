@@ -20,3 +20,7 @@ bl_scraper.php - lines 295-325
 
                                   COMPLETED! 6.8.2020
                                 - IMPORTANT - run tests to ensure locale IDs are working
+admin -
+                                  COMPLETED! 6.15.2020
+                                - add manual deployment by locale by directory
+                                - add toggle between manual and auto
