@@ -24,7 +24,7 @@ class BL_Review_Monster  {
             case 'reviews' :
               $this->reviews[$dir] = $options_arr[$key];
               break;
-            case 'aggregate_ratings' :
+            case 'aggregate_rating' :
               $this->ratings[$dir] = $options_arr[$key];
               break;
           }
@@ -38,25 +38,38 @@ class BL_Review_Monster  {
   public function get_weighted_aggregate() {
     $result = array('rating'=>0,'count'=>0);
     $count = 0;
-    $rating = o;
+    $rating = 0;
     foreach(self::$dirs as $dir) {
       if (  isset($this->ratings[$dir]) && count($this->ratings[$dir]) ) {
         foreach($this->ratings[$dir] as $rating_object) {
-
+          $rating += intval($rating_object['rating']) * intval($rating_object['count']);
+          $count += intval($rating_object['count']);
         }
+      } else {
+        error_log('ratings dir not found:');
+        error_log($dir);
       }
-
     }
+    $result['rating'] = $rating/$count;
+    $result['count'] = $count;
     return $result;
   }
 
   public function get_rating_by($filter,$arg) {
     $result = array('rating'=>0,'count'=>0);
+    switch($filter) {
+      case 'directory' :
+        break;
+      case 'locale' :
+        break;
+      default :
+
+    }
     return $result;
   }
 
   public function get_reviews_by($filter,$arg) {
-    $result = array('rating'=>0,'count'=>0);
+    $result = array();
     return $result;
   }
   // NOTE: add filtration functions - BL_Review_Monster should have filtration

@@ -25,14 +25,15 @@ class BL_Review_Templater {
   }
 
   public static function aggregate_rating_shortcode_handler() {
-    $result = '';
+    $result = '(not set)';
     //hit your local options table for recent activity
     $options_arr = get_option('bl_api_client_activity');
     //instantiate the "review monster" active record
     $monster = new BL_Review_Monster($options_arr);
     $avg_obj = $monster->get_weighted_aggregate();
-    //return $result;
-    return '(not set)';
+    $result = "<h2>Rated:{$avg_obj['rating']}</h2>";
+    $result .= "<h2>Out of {$avg_obj['count']} reviews</h2>";
+    return $result;
   }
 
   public static function local_reviews_shortcode_handler() {

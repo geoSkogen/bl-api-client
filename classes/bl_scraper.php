@@ -151,8 +151,8 @@ class BL_Scraper {
     $all_reviews = array_merge($final_reviews_batch,$other_reviews);
     // do the same with the aggregate rating objects
     if ( isset($commit[$directory . '_aggregate_rating']) &&
-         is_array($commit[$directory . '_aggregate_rating'])
-       ) {
+         is_array($commit[$directory . '_aggregate_rating'])) {
+
       foreach ($commit[$directory . '_aggregate_rating'] as $current_rating_obj) {
         if ($current_rating_obj['locale_id']!=strval($locale_index)) {
           $all_agg_ratings[] = $current_rating_obj;

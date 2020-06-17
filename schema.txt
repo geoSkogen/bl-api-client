@@ -53,22 +53,28 @@ using the options table -
 
           ["num_str1, num_str2","event type - error/success" ]
           - where num_str1 is the business location row number and
-          num_str2 is the listing directory index; 
+          num_str2 is the listing directory index;
+
+    MOVE Reviews TO POSTS - custom post type: review, with custom    
 
     {dir}_reviews - array keys: rating, author, timestamp, text, author_avatar, id, locale_id
 
-    {dir}_aggregate_rating - array keys: rating, count
+    {dir}_aggregate_rating - array keys: rating, count, locale_id
 
-bl_api_client_permissions
+
+  bl_api_client_permissions
 
     verify - string
 
     verified - boolean
 
+    days_interval - numeric string - 1-31
+
+ bl_api_client_call_now
+
     call_now - boolean
 
     call_index - string - 2 comma-separated numeric values
-
 
 ========================================
 SETTINGS API - CRS HANDSHAKE STACK TRACE

@@ -1,4 +1,4 @@
-===============================
+p===============================
 Currently Outstanding Dev Specs
 ===============================
 CRITICAL
@@ -13,7 +13,6 @@ Using these terms
        add_action( 'admin_init', array('CRSReviewInit', 'crs_review_meta') );
 
        need to add meta key values for author avatar, directory, locale id, post date
-
 
 Server execution timeout problem - summary;
   Default API Call is for the first 100 reviews; can pull up to 500 in one 'page' if
