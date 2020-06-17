@@ -186,6 +186,14 @@ class BL_API_Client_Settings {
     );
 
     add_settings_field(
+      'days_interval',
+      'Check for New Reviews Every',
+      array('BL_API_Client_Settings','bl_api_client_days_interval'),
+      'bl_api_client_permissions',
+      'bl_api_client_permissions'
+    );
+
+    add_settings_field(
       'call_now',
       'Fetch Reviews',
       array('BL_API_Client_Settings','bl_api_client_call_now'),
@@ -382,6 +390,21 @@ class BL_API_Client_Settings {
     echo $result;
   }
 
+  public static function bl_api_client_days_interval() {
+    $result = '';
+    $permissions = get_option('bl_api_client_permissions');
+    $days_interval = (isset($permissions['days_interval'])) ?
+      $permissions['days_interval'] : '7';
+    /*
+    error_log('field query crs override');
+    error_log(strval(self::$cron_override));
+    */
+    $result .= "<input type='number' class='zeroText' style='width:4em;' min='1' max='31'
+      name='bl_api_client_permissions[days_interval]' value='{$days_interval}' ";
+    $result .= "<label for='days_interval' class='call_now_label'>Days</label>";
+
+    echo $result;
+  }
 
   public static function get_call_now_val($activity) {
     // determines index numbers of last successful API call - for form rendering
