@@ -23,7 +23,7 @@ class BL_Scraper {
   // 3) During loop execution from lines 94--100, $results is getting data,
   // the 'while' statement can't fulfull its condition, and needs a set or switch of
   // alternative conditions to fulfill so we can at least get some data or make it shut up.
-  public static function call_local_dir($options,$api_endpoint,$directory) {
+  public static function call_local_dir($options,$api_endpoint,$directory,$ymd) {
     //$options - request body key=>val pairs
     $return_val = new stdClass();
     $commit = get_option('bl_api_client_activity');
@@ -69,6 +69,8 @@ class BL_Scraper {
       $append_endpoint = '-by-business-data';
       $body_params = $options;
       $body_params['local-directory'] = $directory;
+      $body_params['date-from'] = $ymd;
+      error_log('api call start date set for ' . $ymd);
     //}
 
     $batchId = $batchApi->create();
@@ -92,6 +94,7 @@ class BL_Scraper {
         }
       }
       //
+
       if ($batchApi->commit($batchId)) {
         error_log( 'Committed batch successfully.'. PHP_EOL);
         // poll for results here?
@@ -123,12 +126,14 @@ class BL_Scraper {
       } else {
         $err_msg .= ' BL API library batch commit failure ';
       }
+
     } else {
       $err_msg .=  ' invalid batch ID ';
     }
+    
     // ensure each new item has a locale id
     if ($reviews) {
-      error_log('got reviews: ' . stval($reviews));
+      error_log('got reviews: ' . strval($reviews));
       foreach($reviews as $review) {
         $this_review = $review;
         $this_review['locale_id'] = strval($locale_index+1);

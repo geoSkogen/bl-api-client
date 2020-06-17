@@ -401,7 +401,7 @@ class BL_API_Client_Settings {
     */
     $result .= "<input type='number' class='zeroText' style='width:4em;' min='1' max='31'
       name='bl_api_client_permissions[days_interval]' value='{$days_interval}' ";
-    $result .= "<label for='days_interval' class='call_now_label'>Days</label>";
+    $result .= "<label for='days_interval' class='call_now_label'>&nbsp;&nbsp;Days</label>";
 
     echo $result;
   }
@@ -425,9 +425,11 @@ class BL_API_Client_Settings {
         error_log('last successful scrape:');
         error_log($xy[0]);
         error_log($xy[1]);
-      */
+        */
         $task_assoc = BL_Client_Tasker::index_task($entry[0]);
-        $result = strval($task_assoc['loc']) . ',' . strval($task_assoc['dir']);
+        $result = ($task_assoc) ?
+          strval($task_assoc['loc']) . ',' . strval($task_assoc['dir']) :
+          '0,0';
         break;
       }
     }
@@ -457,6 +459,7 @@ class BL_API_Client_Settings {
        get_option("bl_api_client_{$this_slug}") : array();
     // determine pre-set values for the form settings based on last use
     $xy = self::get_call_now_val($activity);
+    //print_r($activity['log']);
     $selected[intval($xy[2])] = 'selected';
     $locale_val = intval($xy[0])+1;
     // call_now input defaults to true but can be turned off

@@ -108,6 +108,17 @@ function bl_api_client_deactivate() {
 add_filter( 'cron_schedules', 'bl_api_client_add_cron_intervals' );
 
 function bl_api_client_add_cron_intervals( $schedules ) {
+
+    $seconds_int = BL_Client_Tasker::get_schedule_interval();
+    $seconds_key = 'bl_api_client_' . strval($seconds_int);
+    $seconds_label = 'Every ' . strval($seconds_int) . ' Seconds';
+    error_log('raw secs');
+    error_log(strval($seconds_int));
+
+    $schedules[$seconds_key] = array(
+      'interval'=> $seconds_int,
+      'display'=> esc_html__( $seconds_label )
+    );
     $schedules['fifteen_seconds'] = array(
        'interval' => 15,
        'display'  => esc_html__( 'Every Fifteen Seconds' ),
@@ -167,8 +178,10 @@ function bl_api_client_schedule_executor() {
        $permissions['verified'] &&
        !$permissions['cron_override']) {
     if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
-      error_log('got cron hook schedule - outer ring ');
-      wp_schedule_event( time(), 'sixty_minutes', 'bl_api_client_cron_hook' );
+      $seconds_int = BL_Client_Tasker::get_schedule_interval();
+      $seconds_key = 'bl_api_client_' . strval($seconds_int);
+      error_log('got cron hook schedule - outer ring: ' . $seconds_key);
+      wp_schedule_event( time(), $seconds_key, 'bl_api_client_cron_hook' );
       $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
       //everything below this is debugging code only; remove in production
       error_log('timestamp for outer cron hook is : ' . strval($timestamp));

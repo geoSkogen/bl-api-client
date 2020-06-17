@@ -2,6 +2,8 @@
 class BL_Client_Tasker {
   // Tasker is ALL STATIC - organizes scheduling and validation of API call data
   public static $init_key = '-1,-1';
+  public static $interval_days_int = 0;
+  public static $interval_start_ymd = '';
 
   function __construct() {
   //
@@ -66,6 +68,32 @@ class BL_Client_Tasker {
         update_option('bl_api_client_activity',$commit);
       }
     }
+  }
+
+  public static function get_schedule_interval() {
+    if (!self::$interval_days_int) {
+      $permissions = get_option('bl_api_client_permissions');
+      $interval = isset($permissions['days_interval']) ?
+        intval($permissions['days_interval'] ) : 7;
+      $start_date = mktime(0, 0, 0, date("m"), date("d")-intval($interval),   date("Y"));
+      $start_ymd = date('Y-m-d',$start_date);
+      self::$interval_days_int = $interval;
+      self::$interval_start_ymd = $start_ymd;
+    }
+    return self::$interval_days_int * 60 * 60 * 24;
+  }
+
+  public static function get_interval_start_ymd() {
+    if (!self::$interval_days_int) {
+      $permissions = get_option('bl_api_client_permissions');
+      $interval = isset($permissions['days_interval']) ?
+        intval($permissions['days_interval'] ) : 7;
+      $start_date = mktime(0, 0, 0, date("m"), date("d")-intval($interval),   date("Y"));
+      $start_ymd = date('Y-m-d',$start_date);
+      self::$interval_days_int = $interval;
+      self::$interval_start_ymd = $start_ymd;
+    }
+    return self::$interval_start_ymd;
   }
 
   public static function index_task($log) {
@@ -134,6 +162,17 @@ class BL_Client_Tasker {
   public static function bl_api_get_reviews($dir,$index,$req_body,$this_option) {
     // data validation follwed by call to scraper
     $auth = get_option('bl_api_client');
+    /*
+    $permissions = get_option('bl_api_client_permissions');
+    $interval = isset($permissions['days_interval']) ?
+      $permissions['days_interval'] : '7';
+    $start_date = mktime(0, 0, 0, date("m"), date("d")-intval($interval),   date("Y"));
+    $start_ymd = date('Y-m-d',$start_date);
+    */
+    $start_ymd = self::get_interval_start_ymd();
+    error_log('last ymd');
+    error_log(strval($start_ymd));
+
     error_log('cron scheduler is running api call');
     error_log("\r\n\n\nREQUEST BDOY PARAMS VALIDATION TEST\r\n");
     $valid_req_body = BL_Biz_Info_Monster::valid_api_params($this_option,$index,$req_body,$dir);
@@ -154,7 +193,7 @@ class BL_Client_Tasker {
         error_log('found api keys');
         //NOTE: THIS IS THE API CALL - UNCOMMENT TO RUN
         // RE: $result -- see comments below;
-        $result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir);
+        $result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir,$start_ymd);
         //$result = BL_Scraper::sim_call_local_dir($req_body,'fetch-reviews',$dir);
       } else {
         error_log('bl api keys not found');
