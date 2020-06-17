@@ -174,5 +174,3 @@ class BL_Client_Tasker {
   }
 
 }
-
- ?>

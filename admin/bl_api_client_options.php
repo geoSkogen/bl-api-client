@@ -111,5 +111,3 @@ class BL_API_Client_Options {
     <?php
   }
 }
-
-?>

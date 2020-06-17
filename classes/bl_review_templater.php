@@ -163,4 +163,3 @@ class BL_Review_Templater {
   }
   */
 }
-?>

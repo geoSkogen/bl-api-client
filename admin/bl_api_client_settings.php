@@ -551,4 +551,3 @@ class BL_API_Client_Settings {
   }
 
 }
-?>

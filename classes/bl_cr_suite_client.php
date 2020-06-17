@@ -84,4 +84,3 @@ class BL_CR_Suite_Client {
     }
   }
 }
-?>
