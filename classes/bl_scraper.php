@@ -135,7 +135,7 @@ class BL_Scraper {
     // of the options table
     // ensure each new item has a locale id
     if ($reviews) {
-      error_log('got reviews: ' . strval($reviews));
+      error_log('got reviews: ' . strval(count($reviews)));
       foreach($reviews as $review) {
         $this_review = $review;
         $this_review['locale_id'] = strval($locale_index+1);
@@ -192,19 +192,26 @@ class BL_Scraper {
 
   // NO API CALL - returns fake data for testing puposes only
   // Don't include this in production code
-  public static function sim_call_local_dir($options,$api_endpoint,$directory) {
-
+  public static function sim_call_local_dir($options,$api_endpoint,$directory,$ymd) {
+    //$options - request body key=>val pairs
     $return_val = new stdClass();
     $commit = get_option('bl_api_client_activity');
-    // meta values
+    // data values for API response
+    $reviews = [];
+    $aggregate_rating = [];
+    // task-routing values
     $commit_log = (isset($commit['log'])) ? end($commit['log']) : [BL_Client_Tasker::$init_key,'(not set)'];
     $xy_str = (isset($commit_log[0])) ? $commit_log[0] : BL_Client_Tasker::$init_key;
     $log_index = (isset($commit['log'])) ? count($commit['log'])-1 : 0;
     $locale_index = explode(',',$xy_str)[0];
+    $db_dir = ($directory==='google') ? 'gmb' : $directory;
     $msg = '(not set)';
-    //data values
-    $reviews = [];
-    $aggregate_rating = [];
+    $err_msg = '';
+    // data vars -
+    $final_reviews_batch = [];
+    $other_reviews = [];
+    $all_reviews = [];
+    $all_agg_ratings = [];
     /*
     define('BL_API_KEY', 'f972131781582b6dfead1afa4f8082fe79a4765f');
     define('BL_API_SECRET', '58190962d27d9');
@@ -213,10 +220,14 @@ class BL_Scraper {
     $sig = base64_encode(hash_hmac('sha1', BL_API_KEY.$expires, BL_API_SECRET, true));
     error_log( urlencode($sig) ); // for get requests
     error_log( $sig );
-
-    $db_dir = ($directory==='google') ? 'gmb' : $directory;
+    // instantiate API client
     $api = new Api(BL_API_KEY, BL_API_SECRET);
     $batchApi = new BatchApi($api);
+    // NOTE: THIS IS THE LISTENER FOR THE PROFILE URL - needs validation & testing!
+    // Leave this commented out until lookup-by-URL actually returns a non-error
+    // NOTE: BL_Client_Tasker::bl_api_get_request_body() still uses the presence/absence
+    // of a profile URL (e.g.,['gmb_link']) to determine whether to make the call or not
+    // so, it will be in the request body and needs validation if used
     /*
     if (isset($options[$db_dir . '_link'])) {
       $append_endpoint = '';
@@ -227,6 +238,8 @@ class BL_Scraper {
       $append_endpoint = '-by-business-data';
       $body_params = $options;
       $body_params['local-directory'] = $directory;
+      $body_params['date-from'] = $ymd;
+      error_log('api call start date set for ' . $ymd);
     //}
 
     $batchId = $batchApi->create();
@@ -326,49 +339,59 @@ class BL_Scraper {
     );
     $aggregate_rating = array('count'=>111,'rating'=>3.3);
     }
-    // data vars
-    $final_reviews_batch = [];
-    $other_reviews = [];
-    $all_reviews = [];
-    $all_agg_ratings = [];
-    // ensure each new item has a locale id
-    foreach($reviews as $review) {
-      $review['locale_id'] = $locale_index;
-      $final_reviews_batch[] = $review;
-    }
-    $aggregrate_rating['locale_id'] = $locale_index;
-    // make record exluding the current locale's previous reviews
-    // and merge it with the new reviews for this locale
-
-    // add error handling, isset()...
-    foreach ($commit[$directory . '_reviews'] as $current_review) {
-      if ($current_review['locale_id']!=strval($locale_index)) {
-        $other_reviews[] = $current_review;
+    if ($reviews) {
+      error_log('got reviews: ' . strval(count($reviews)));
+      foreach($reviews as $review) {
+        $this_review = $review;
+        $this_review['locale_id'] = strval($locale_index+1);
+        $this_review['listing_directory'] = $directory;
+        $final_reviews_batch[] = $this_review;
       }
     }
+
+    if ($aggregate_rating) {
+      $aggregate_rating['locale_id'] = strval($locale_index+1);
+    }
+    // make record exluding the current locale's previous reviews . . .
+    if (isset($commit['reviews']) && is_array($commit['reviews'])) {
+      foreach ($commit['reviews'] as $current_review) {
+        if ( $current_review['listing_directory'] != $directory ||
+             $current_review['locale_id']!=strval($locale_index+1) ) {
+          $other_reviews[] = $current_review;
+        }
+      }
+    }
+    // . . . and merge it with the new reviews for this locale
     $all_reviews = array_merge($final_reviews_batch,$other_reviews);
-    // add error handling, isset()...
-    foreach ($commit[$directory . '_aggregate_rating'] as $current_rating_obj) {
-      if ($current_rating_obj['locale_id']!=strval($locale_index)) {
-        $all_agg_ratings[] = $current_rating_obj;
+    // do the same with the aggregate rating objects
+    if ( isset($commit[$directory . '_aggregate_rating']) &&
+         is_array($commit[$directory . '_aggregate_rating'])) {
+
+      foreach ($commit[$directory . '_aggregate_rating'] as $current_rating_obj) {
+        if ($current_rating_obj['locale_id']!=strval($locale_index)) {
+          $all_agg_ratings[] = $current_rating_obj;
+        }
       }
     }
     $all_agg_ratings[] = $aggregate_rating;
+    // the function's return value object is API call result ONLY . . .
     $return_val->reviews = (count($final_reviews_batch)) ? $final_reviews_batch : null;
     $return_val->aggregate_rating = (count($aggregate_rating)) ? $aggregate_rating : null;
-
+    // . . . but the database commit is everthing, plus what it just got from the API call:
     if ($return_val->reviews && $return_val->aggregate_rating) {
-      $commit[$directory . '_reviews'] = $all_reviews;
+      $commit['reviews'] = $all_reviews;
       $commit[$directory . '_aggregate_rating'] = $all_agg_ratings;
-      $msg = time();
-      error_log('review scrape ' . strval($msg));
+      $msg = 'successful review scrape - '. date('F d Y H:i',time());
+      error_log($msg);
     } else {
-      $msg = 'review scrape error occurred';
-      error_log('review scrape error occurred');
+      $err_msg .= ' no data found in final reviews batch ';
+      $msg = 'error: ' . date('F d Y H:i',time());
+      $msg .= '' . $err_msg;
+      error_log($msg);
     }
     $commit['log'][] = [$xy_str,$msg];
-    //var_dump($commit);
     update_option('bl_api_client_activity',$commit);
+    //NOTE: return val needed? - or will this cause blocking effects? Does it matter?
     //return $return_val;
   }
 }
