@@ -5,12 +5,12 @@ CRITICAL
 DATA Structure Revisions Needed! Use CRS Reviews Custom Post type
 Reviews need to be stored as posts in the database with custom taxa and metas
 Using these terms
-       suite/admin/class-review-init.php to register custom post type
-       suite/damin/class-php-review-importer.php
+       /suite/admin/class-review-init.php to register custom post type
+       /suite/damin/class-php-review-importer.php to get them into the database
 
+       add_action( 'init', array( 'CRSReviewInit', 'review_custom_post_type' ) );
        add_action( 'init', array( 'CRSReviewInit', 'crs_review_star_tax' ) );
        add_action( 'init', array( 'CRSReviewInit', 'crs_review_star_numbers' ) );
-       add_action( 'admin_init', array('CRSReviewInit', 'crs_review_meta') );
 
        need to add meta key values for author avatar, directory, locale id, post date
 
@@ -18,13 +18,15 @@ Server execution timeout problem - summary;
   Default API Call is for the first 100 reviews; can pull up to 500 in one 'page' if
   set to 'all', but approaching 100 review range is where the server execution
   timeout limit seems to occur quite consistently.
-  Hopefully we can eliminate these occasions by limiting the size of the API call.
+  COMPLETED:
+  We can eliminate these occasions by limiting the size of the API call.
   Since the update tasks are time based, it makes sense to set a small lookback window
-  of time and run the importer that often for that previous period.  That also means
-  we need a way to get the old reviews into the database
+  of time and run the importer that often for that previous period.
+  NOT COMPLETED:
+  That also means we need a way to get the old reviews into the database
 
 bl_review_monster.php - line 34
-                                - method for weighted average of all locales & directories
+                                - COMPLETED! method for weighted average of all locales & directories
                                 - for weighted average by locale or directory
                                 - for aggregate review shortcode handler (see also bl_review_templater.php, line 35)
                       - line 39
@@ -37,8 +39,8 @@ bl_client_tasker.php - line 144
                                 - add database cleanup task for activity log!
                                 - add validation for API Keys?
 
-bl_scraper.php - lines 295-325
-
+bl_scraper.php - lines 295-325   CRITICAL
+                                - retool database commit for crs_review post type
                                   COMPLETED! 6.8.2020
                                 - IMPORTANT - run tests to ensure locale IDs are working
 admin -

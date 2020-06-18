@@ -226,6 +226,71 @@ add_action( 'bl_api_client_call_series',
   array('BL_Client_Tasker','api_call_triage')
 );
 
+/*
+
+================
+BL Review Schema
+================
+author,
+author_avatar,
+timestamp,
+rating,
+text,
+id,
+listing-directory,
+locale-id
+
+*/
+
+$review = array(
+  'author' => 'spaghetti',
+  'id'=> '125',
+  'author_avatar'=>'Tim',
+  'timestamp'=>'2020-06-08',
+  'rating'=>'5',
+  'text'=>'this is fun.'
+);
+$locale_index = '1';
+$directory = 'google';
+
+$meta_values_array['review-author'] = $review['author'];
+$meta_values_array['review-id'] = $review['id'];
+$meta_values_array['author-email'] = '(not set)';
+$meta_values_array['author-avatar'] = $review['author_avatar'];
+$meta_values_array['listing-directory'] = $directory;
+$meta_values_array['locale-id'] = $locale_index;
+
+$review_number =  $review['rating'];
+
+if ( ( 5 < $review_number) || ( ! is_numeric($review_number) ) ) {
+  $review_number = 5;
+}
+if (1 == $review_number) {
+  $review_rating = $review_number . ' Star';
+  # code...
+} else {
+  $review_rating = $review_number . ' Stars';
+}
+
+$review_post = array(
+  'post_content'  => $review['text'],
+  'post_title'    => $review['id'],
+  'post_type'     => 'crs_review',
+  'post_status'   => 'publish',
+  'post_date_gmt' => date('Y-m-d H:i:s', strtotime($review['timestamp'])),
+
+  'tax_input'     => array(
+    'rating'        => $review_rating,
+  ),
+  
+  'meta_input'   => $meta_values_array
+);
+
+$post_made = wp_insert_post( $review_post );
+wp_set_object_terms( $post_made, $review_rating, 'rating');
+if( is_wp_error($post_made) ) error_log( $result->get_error_message());
+wp_die();
+
 //DEV NOTES
 //API CALL FORMAT! work on discovering the correct URL format for GMB pings
 //different lookup-by-URL formats; so far none is accepted:
