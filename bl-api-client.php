@@ -289,12 +289,24 @@ wp_set_object_terms( $post_made, $review_rating, 'rating');
 if( is_wp_error($post_made) ) error_log( $result->get_error_message());
 wp_die();
 */
-/*
+
 $activity = get_option('bl_api_client_activity');
-$all_reviews = array_merge($activity['google_reviews'],$activity['facebook_reviews']);
+$google_reviews = [];
+$facebook_reviews = [];
+foreach($activity['google_reviews'] as $review) {
+  $this_review = $review;
+  $this_review['listing_directory'] = 'google';
+  $google_reviews[] = $this_review;
+}
+foreach($activity['facebook_reviews'] as $review) {
+  $this_review = $review;
+  $this_review['listing_directory'] = 'facebook';
+  $facebook_reviews[] = $this_review;
+}
+$all_reviews = array_merge($google_reviews,$facebook_reviews);
 $activity['reviews'] = $all_reviews;
 update_option('bl_api_client_activity',$activity);
-*/
+
 //DEV NOTES
 //API CALL FORMAT! work on discovering the correct URL format for GMB pings
 //different lookup-by-URL formats; so far none is accepted:

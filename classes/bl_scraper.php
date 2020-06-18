@@ -72,7 +72,7 @@ class BL_Scraper {
       $body_params['date-from'] = $ymd;
       error_log('api call start date set for ' . $ymd);
     //}
-    /*
+
     $batchId = $batchApi->create();
 
     if ($batchId) {
@@ -130,7 +130,6 @@ class BL_Scraper {
     } else {
       $err_msg .=  ' invalid batch ID ';
     }
-    */
     // CRITICAL DEV NOTE: everything reviews related and non-aggregate rating related
     // following this comment must be rewritten to update the posts table instead
     // of the options table
@@ -149,9 +148,10 @@ class BL_Scraper {
       $aggregate_rating['locale_id'] = strval($locale_index+1);
     }
     // make record exluding the current locale's previous reviews . . .
-    if (isset($commit[$directory . '_reviews']) && is_array($commit[$directory . '_reviews'])) {
-      foreach ($commit[$directory . '_reviews'] as $current_review) {
-        if ($current_review['locale_id']!=strval($locale_index+1)) {
+    if (isset($commit['reviews']) && is_array($commit['reviews'])) {
+      foreach ($commit['reviews'] as $current_review) {
+        if ( $current_review['listing_directory'] != $directory ||
+             $current_review['locale_id']!=strval($locale_index+1) ) {
           $other_reviews[] = $current_review;
         }
       }
@@ -174,7 +174,7 @@ class BL_Scraper {
     $return_val->aggregate_rating = (count($aggregate_rating)) ? $aggregate_rating : null;
     // . . . but the database commit is everthing, plus what it just got from the API call:
     if ($return_val->reviews && $return_val->aggregate_rating) {
-      $commit[$directory . '_reviews'] = $all_reviews;
+      $commit['reviews'] = $all_reviews;
       $commit[$directory . '_aggregate_rating'] = $all_agg_ratings;
       $msg = 'successful review scrape - '. date('F d Y H:i',time());
       error_log($msg);
