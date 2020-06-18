@@ -12,17 +12,7 @@ class BL_Scraper {
   function __construct() {
 
   }
-  // REAL API CALL - NOTE: needs annotation for verbose debugging :
-  // -- while running on WP Engine with no cache and max PHP execution time,
-  // API calls log sucessful commits but database isn't being updated
-  // - or API calls are failing - trace
-  // 1) somewhere between line 272 and 304, the reviews aren't pushing
-  // to the new object with valid locale ids, or -
-  // 2) somewhere between line 304 and 340, the execution is not completing
-  // sometimes and valid reviews don't get into the database before timeout, because -
-  // 3) During loop execution from lines 94--100, $results is getting data,
-  // the 'while' statement can't fulfull its condition, and needs a set or switch of
-  // alternative conditions to fulfill so we can at least get some data or make it shut up.
+
   public static function call_local_dir($options,$api_endpoint,$directory,$ymd) {
     //$options - request body key=>val pairs
     $return_val = new stdClass();
@@ -36,7 +26,7 @@ class BL_Scraper {
     $log_index = (isset($commit['log'])) ? count($commit['log'])-1 : 0;
     $locale_index = explode(',',$xy_str)[0];
     $db_dir = ($directory==='google') ? 'gmb' : $directory;
-    $msg = '(not set)';
+    $msg = '';
     $err_msg = '';
     // data vars -
     $final_reviews_batch = [];
@@ -79,11 +69,10 @@ class BL_Scraper {
       // add the crucial batch ID to the req body params
       $body_params['batch-id'] = $batchId;
       error_log('Created batch ID ' . $batchId . PHP_EOL);
+
       // THIS IS THE ACTUAL API CALL from the BL API Client Library
       $result = $api->call('/v4/ld/'. $api_endpoint . $append_endpoint, $body_params);
-      // This is how you would make a similar request for your own profile URL . . .
-      //$result = $api->call('/v4/ld/fetch-profile-url', $body_params);
-      // . . . response body handling not included; so far, lookup-by-link returns errors
+
       if ($result['success']) {
         error_log('Added job with ID ' . strval($result['job-id']) . ' ' . strval(PHP_EOL));
       } else {
@@ -94,7 +83,6 @@ class BL_Scraper {
         }
       }
       //
-
       if ($batchApi->commit($batchId)) {
         error_log( 'Committed batch successfully.'. PHP_EOL);
         // poll for results here?
@@ -173,13 +161,18 @@ class BL_Scraper {
     $return_val->reviews = (count($final_reviews_batch)) ? $final_reviews_batch : null;
     $return_val->aggregate_rating = (count($aggregate_rating)) ? $aggregate_rating : null;
     // . . . but the database commit is everthing, plus what it just got from the API call:
-    if ($return_val->reviews && $return_val->aggregate_rating) {
+    if ($return_val->reviews) {
       $commit['reviews'] = $all_reviews;
+      $msg .= ' successful review scrape - '. date('F d Y H:i',time());
+    } else {
+      $msg .= ' no recent reviews found in batch - ' . date('F d Y H:i',time());
+    }
+    if ($return_val->aggregate_rating) {
       $commit[$directory . '_aggregate_rating'] = $all_agg_ratings;
-      $msg = 'successful review scrape - '. date('F d Y H:i',time());
+      $msg .= ' - successful aggregate rating response';
       error_log($msg);
     } else {
-      $err_msg .= ' no data found in final reviews batch ';
+      $err_msg .= ' - no data found in final reviews batch ';
       $msg = 'error: ' . date('F d Y H:i',time());
       $msg .= '' . $err_msg;
       error_log($msg);
@@ -190,7 +183,9 @@ class BL_Scraper {
     //return $return_val;
   }
 
-  // NO API CALL - returns fake data for testing puposes only
+
+
+  // FAKE API CALL - returns fake data for testing puposes only
   // Don't include this in production code
   public static function sim_call_local_dir($options,$api_endpoint,$directory,$ymd) {
     //$options - request body key=>val pairs
