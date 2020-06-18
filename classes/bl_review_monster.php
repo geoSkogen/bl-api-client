@@ -3,7 +3,7 @@
 // -used by review page and review snippet shortcode handlers
 // -used by plugin settings to print data and API activity tables on WP admin page
 class BL_Review_Monster  {
-  public $reviews = array('google'=>array(),'facebook'=>array());
+  public $reviews = [];
   public $ratings = array('google'=>array(),'facebook'=>array());
   public $count = array('google'=>array(),'facebook'=>array());
   public $reviews_all = array();
@@ -11,26 +11,13 @@ class BL_Review_Monster  {
   public $logs = [];
   public static $props = ['log','reviews','aggregate_rating'];
   public static $dirs = ['google','facebook'];
-  public static $review_props = ['author_avatar','author','timestamp','rating','text','id'];
+  public static $review_props = ['author_avatar','author','timestamp','rating','text','listing_directory','locale_id','id'];
   public static $star_img_path = '/wp-content/plugins/bl-api-client/assets/gold-star.png';
 
   function __construct($options_arr) {
-    foreach (self::$dirs as $dir) {
-      foreach (self::$props as $prop) {
-        $key = $dir . '_';
-        $key .= $prop;
-        if (isset($options_arr[$key])) {
-          switch ($prop) {
-            case 'reviews' :
-              $this->reviews[$dir] = $options_arr[$key];
-              break;
-            case 'aggregate_rating' :
-              $this->ratings[$dir] = $options_arr[$key];
-              break;
-          }
-        }
-      }
-    }
+    $this->reviews = $options_arr['reviews'];
+    $this->ratings['google'] = $options_arr['google_aggregate_rating'];
+    $this->ratings['facebook'] = $options_arr['facebook_aggregate_rating'];
     $this->reviews_all = $this->sort_by_date();
     $this->logs = $options_arr['log'];
   }
@@ -80,14 +67,12 @@ class BL_Review_Monster  {
     $new_schema = [];
     $new_obj = array();
     $date_objs = [];
-    foreach(self::$dirs as $dir) {
-      foreach($this->reviews[$dir] as $review_obj) {
+
+      foreach($this->reviews as $review_obj) {
         $new_obj = $review_obj;
         //add a new property to identify the review's home directory
-        $new_obj['dir'] = $dir;
         $new_schema[] = $new_obj;
       }
-    }
     $assoc_index = array();
     $index_val = 0;
     foreach ($new_schema as $elm) {
@@ -133,43 +118,44 @@ class BL_Review_Monster  {
   }
 
   public function do_reviews_table() {
+
     $result = "<table id='bl_api_client_reviews_table'>";
-    foreach(self::$dirs as $dir) {
-      foreach($this->reviews[$dir] as $review_obj) {
-        $result .= "<tr>";
-        foreach(self::$review_props as $review_prop) {
-          $minwidth = '';
-          $this_class = "class='bl_api_client_review_{$review_prop}''";
-          if (isset($review_obj[$review_prop])) {
-            switch($review_prop) {
-              case 'author_avatar' :
-                $inner_html = "<img {$this_class} src={$review_obj[$review_prop]} &nbsp;/>";
-                break;
-              case 'author' :
-              case 'timestamp' :
-                $inner_html = "<span {$this_class}>{$review_obj[$review_prop]}</span>";
-                break;
-              case 'rating' :
-                $coeff = strval(floatval($review_obj[$review_prop]) * 20);
-                $style_rule = "style='height:25px;width: {$coeff}%;background: url( " .
-                  site_url() . self::$star_img_path . " ) repeat-x 0 0;background-position: 0 -25px;'";
-                $inner_html = "<div $style_rule></div>";
-                $minwidth = "style='width:120px;'";
-                break;
-              case 'text' :
-                $inner_html = "<p {$this_class}>{$review_obj[$review_prop]}</p>";
-                break;
-              default:
-                $inner_html = null;
-            }
-          } else {
-            $inner_html = "<span {$this_class}>(not set)</span>";
+
+    foreach($this->reviews as $review_obj) {
+      $result .= "<tr>";
+      foreach(self::$review_props as $review_prop) {
+        $minwidth = '';
+        $this_class = "class='bl_api_client_review_{$review_prop}''";
+        if (isset($review_obj[$review_prop])) {
+          switch($review_prop) {
+            case 'author_avatar' :
+              $inner_html = "<img {$this_class} src={$review_obj[$review_prop]} &nbsp;/>";
+              break;
+            case 'author' :
+            case 'timestamp' :
+              $inner_html = "<span {$this_class}>{$review_obj[$review_prop]}</span>";
+              break;
+            case 'rating' :
+              $coeff = strval(floatval($review_obj[$review_prop]) * 20);
+              $style_rule = "style='height:25px;width: {$coeff}%;background: url( " .
+                site_url() . self::$star_img_path . " ) repeat-x 0 0;background-position: 0 -25px;'";
+              $inner_html = "<div $style_rule></div>";
+              $minwidth = "style='width:120px;'";
+              break;
+            case 'text' :
+              $inner_html = "<p {$this_class}>{$review_obj[$review_prop]}</p>";
+              break;
+            default:
+              $inner_html = null;
           }
-          $result .= "<td {$minwidth} >{$inner_html}</td>";
+        } else {
+          $inner_html = "<span {$this_class}>(not set)</span>";
         }
-        $result .= "</tr>";
+        $result .= "<td {$minwidth} >{$inner_html}</td>";
       }
+      $result .= "</tr>";
     }
+
     $result .= "</table>";
     return $result;
   }
