@@ -72,7 +72,7 @@ class BL_Scraper {
       $body_params['date-from'] = $ymd;
       error_log('api call start date set for ' . $ymd);
     //}
-
+    /*
     $batchId = $batchApi->create();
 
     if ($batchId) {
@@ -130,13 +130,17 @@ class BL_Scraper {
     } else {
       $err_msg .=  ' invalid batch ID ';
     }
-    
+    */
+    // CRITICAL DEV NOTE: everything reviews related and non-aggregate rating related
+    // following this comment must be rewritten to update the posts table instead
+    // of the options table
     // ensure each new item has a locale id
     if ($reviews) {
       error_log('got reviews: ' . strval($reviews));
       foreach($reviews as $review) {
         $this_review = $review;
         $this_review['locale_id'] = strval($locale_index+1);
+        $this_review['listing_directory'] = $directory;
         $final_reviews_batch[] = $this_review;
       }
     }

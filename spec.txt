@@ -12,7 +12,7 @@ Using these terms
        add_action( 'init', array( 'CRSReviewInit', 'crs_review_star_tax' ) );
        add_action( 'init', array( 'CRSReviewInit', 'crs_review_star_numbers' ) );
 
-       need to add meta key values for author avatar, directory, locale id, post date
+       need to add meta key values for author avatar, directory, locale id, post date, id
 
 Server execution timeout problem - summary;
   Default API Call is for the first 100 reviews; can pull up to 500 in one 'page' if
@@ -20,16 +20,23 @@ Server execution timeout problem - summary;
   timeout limit seems to occur quite consistently.
   COMPLETED:
   We can eliminate these occasions by limiting the size of the API call.
-  Since the update tasks are time based, it makes sense to set a small lookback window
-  of time and run the importer that often for that previous period.
-  NOT COMPLETED:
-  That also means we need a way to get the old reviews into the database
+  Since the update tasks are time based, it makes sense to set a small lookback
+  window of time and run the importer that often for that previous period.
+  ALSO COMPLETED:
+  That also means we need a way to get the old reviews into the database -
+  The Serverless CLI tool Baby-Lambda exports JSON & CSV files per API call,
+  runs pagination operations to get all the reviews, and is faster than WordPress.
 
+bl_review_templater.php -
 bl_review_monster.php - line 34
+CRITICAL
+DATA Structure Revisions Needed! Use CRS Reviews Custom Post type
+Reviews need to be stored as posts in the database with custom taxa and metas
+ACTIVE RECORD OF DATA SCHEMA WILL HAVE TO BE REWRITTEN!
                                 - COMPLETED! method for weighted average of all locales & directories
                                 - for weighted average by locale or directory
                                 - for aggregate review shortcode handler (see also bl_review_templater.php, line 35)
-                      - line 39
+                       - line 39
                                 - methods filtering the collection of all reviews:
                                 - by rating!
                                 - by locale?

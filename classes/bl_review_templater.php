@@ -23,7 +23,7 @@ class BL_Review_Templater {
       error_log("got local reviews stylesheet request");
     }
   }
-
+  // NOTE: update this to current CR-snippetX!
   public static function aggregate_rating_shortcode_handler() {
     $result = '(not set)';
     //hit your local options table for recent activity

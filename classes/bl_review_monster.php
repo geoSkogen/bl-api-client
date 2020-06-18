@@ -34,7 +34,7 @@ class BL_Review_Monster  {
     $this->reviews_all = $this->sort_by_date();
     $this->logs = $options_arr['log'];
   }
-  //NOTE:Build out weighted average function - also get agg by locale X biz
+  //NOTE:Build out weighted average function
   public function get_weighted_aggregate() {
     $result = array('rating'=>0,'count'=>0);
     $count = 0;
@@ -54,7 +54,7 @@ class BL_Review_Monster  {
     $result['count'] = $count;
     return $result;
   }
-
+  // . . . also get agg by locale X biz
   public function get_rating_by($filter,$arg) {
     $result = array('rating'=>0,'count'=>0);
     switch($filter) {

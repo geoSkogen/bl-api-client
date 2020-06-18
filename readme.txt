@@ -41,7 +41,7 @@ HOW YOU DO THIS - User Documentation
 
 2) Page 2 : BL Business Info - Crucial Considerations Filling Out The Form
 
-  If you are A City Ranked Suite user, most of your form fields will pull
+  If you are A City Ranked Suite user, most of your form fields will pull info
   automatically from existing local business info already entered in CR Suite.
 
   The following fields will NOT populate automatically:
@@ -54,19 +54,25 @@ HOW YOU DO THIS - User Documentation
   If you're using a tracking line for the primary phone number on your
   GMB listing, enter it in the field provided or the lookup will fail.
 
-3) Page 3 : BL Client Activity - The Call Now Feature
+3) Page 3 : Authorize the Automated Tasks
+
+  Plugin requires the user to manually confirm the Business Name entered in
+  Locale #1 Business Name in order for WordPress to schedule the automated
+  review import tasks. Choose a lookback window; this determines the scope of
+  the API call and how often the review fetch tasks run if they are automated.
+
+4) Page 4 : Deploy single review fetch API Calls in manual mode (optional)
+
+  Please note that manual deployment currently results in a blocking call.
+  This requires the API call execution to complete prior to pageload! It will
+  take a minute.
+
+5) Page 5 : BL Client Activity
 
   The Activity Page displays each status report from the last batch of API Calls.
   The Activity Page also displays a summary of recent reviews BrightLocal looked up.
   This is not what the user sees on the reviews page, i.e., it is not the
   shortcode output.
-(Call Now is under construction - Call Now feature is coming soon - sorry not sorry)
-
-4) Page 4 : Authorize the Automated Tasks
-
-  Plugin requires the user to manually confirm the Business Name entered in
-  Locale #1 Business Name in order for WordPress to schedule the automated
-  review import tasks.
 
 ================================================================================
 

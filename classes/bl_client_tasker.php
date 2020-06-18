@@ -8,7 +8,7 @@ class BL_Client_Tasker {
   function __construct() {
   //
   }
-
+  // Scheduling - api_call_boot(), api_call_traige()
   public static function api_call_boot() {
     $option = get_option('bl_api_client_activity');
     $row = ['-1,-1','call series scheduler activated ' . date('F d Y H:i',time())];
@@ -43,13 +43,6 @@ class BL_Client_Tasker {
       error_log('found valid task index: ' . $new_commit_log[0]);
       $commit['log'][] = $new_commit_log;
       update_option('bl_api_client_activity',$commit);
-      // START the API call validation chain
-      // CALL MANUALLY to make single request after getting biz info from DATABASE
-      // $biz_info = get_option('bl_api_client_settings');
-      // --example for primary locale's GMB:
-      // self::bl_api_get_request_body(0,'google',$biz_info);
-      // --example for secondary locale's facebook:
-      // self::bl_api_get_request_body(1,'facebook',$biz_info);
       self::bl_api_get_request_body($loc_index,$dir,$this_option);
       //
     } else {
@@ -64,13 +57,12 @@ class BL_Client_Tasker {
       if ($new_commit_log[0]!=$xy_str) {
         //determines whether task index just returned null; stops superfluous commits
         error_log('found stop task index: ' . $xy_str);
-        $commit['log'][] = $new_commit_log;
-        update_option('bl_api_client_activity',$commit);
+        self::bl_api_client_flush_activity_log($commit,$new_commit_log);
       }
     }
   }
-
-  public static function get_schedule_interval() {
+  // Utilities - get_days_interval(), get_schedule_interval(), get_interval_start_ymd(), index_task()
+  public static function get_days_interval() {
     if (!self::$interval_days_int) {
       $permissions = get_option('bl_api_client_permissions');
       $interval = isset($permissions['days_interval']) ?
@@ -80,19 +72,16 @@ class BL_Client_Tasker {
       self::$interval_days_int = $interval;
       self::$interval_start_ymd = $start_ymd;
     }
+    return self::$interval_days_int;
+  }
+
+  public static function get_schedule_interval() {
+    self::get_days_interval();
     return self::$interval_days_int * 60 * 60 * 24;
   }
 
   public static function get_interval_start_ymd() {
-    if (!self::$interval_days_int) {
-      $permissions = get_option('bl_api_client_permissions');
-      $interval = isset($permissions['days_interval']) ?
-        intval($permissions['days_interval'] ) : 7;
-      $start_date = mktime(0, 0, 0, date("m"), date("d")-intval($interval),   date("Y"));
-      $start_ymd = date('Y-m-d',$start_date);
-      self::$interval_days_int = $interval;
-      self::$interval_start_ymd = $start_ymd;
-    }
+    self::get_days_interval();
     return self::$interval_start_ymd;
   }
 
@@ -130,6 +119,19 @@ class BL_Client_Tasker {
     return ($stop===count($keys) && $boot!=count($keys)) ? null : $result;
   }
 
+  public static function bl_api_client_flush_activity_log($activity,$new_log) {
+    error_log('activity log was: ' . strval(count($activity['log'])));
+    $locales = BL_API_Client_Settings::get_field_count();
+    $rev_data = array_slice(
+      $activity['log'],
+      count($activity['log'])-((intval($locales)*12)+2)
+    );
+    $activity['log'] = $rev_data;
+    $activity['log'][] = $new_log;
+    error_log('activity log is: ' . strval(count($activity['log'])));
+    update_option('bl_api_client_activity',$activity);
+  }
+  // Services - bl_api_get_request_body(), bl_api_get_reviews()
   public static function bl_api_get_request_body($index,$directory,$this_option) {
     // a conversation with local biz options
     $req_body = null;

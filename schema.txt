@@ -1,9 +1,4 @@
 ==========================================
-Copyright 2020
-City Ranked Media
-All Rights Reserved
-==========================================
-==========================================
 BL API CLIENT WordPress plugin data schema
 ==========================================
 
@@ -55,9 +50,25 @@ using the options table -
           - where num_str1 is the business location row number and
           num_str2 is the listing directory index;
 
-    MOVE Reviews TO POSTS - custom post type: review, with custom    
+    ============================================================================
+    CRITICAL SPEC NOTE:
+    MOVE Reviews TO POSTS - custom post type: review, with custom taxa & metas
+    ============================================================================
 
-    {dir}_reviews - array keys: rating, author, timestamp, text, author_avatar, id, locale_id
+    ================
+    BL Review Schema
+    ================
+    author,
+    author_avatar, //URL
+    timestamp,  // Y-m-d
+    rating, // int
+    text,
+    id, //unique hash
+    listing-directory, //e.g. 'google','facebook'
+    locale-id // unique integer for indexed array
+
+    ============================================================================
+    {dir}_reviews - array keys: rating, author, timestamp, text, author_avatar, id, locale_id, listing directory
 
     {dir}_aggregate_rating - array keys: rating, count, locale_id
 
@@ -75,6 +86,18 @@ using the options table -
     call_now - boolean
 
     call_index - string - 2 comma-separated numeric values
+
+=========================================
+DEV NOTES - HOW TO make a single API call:
+=========================================
+
+    // TO START the API call validation chain
+    // CALL MANUALLY to make single request after getting biz info from DATABASE
+    // $biz_info = get_option('bl_api_client_settings');
+    // --example for primary locale's GMB:
+    // BL_Client_Tasker::bl_api_get_request_body(0,'google',$biz_info);
+    // --example for secondary locale's facebook:
+    // BL_Client_Tasker::bl_api_get_request_body(1,'facebook',$biz_info);
 
 ========================================
 SETTINGS API - CRS HANDSHAKE STACK TRACE

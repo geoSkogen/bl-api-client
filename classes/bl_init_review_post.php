@@ -1,5 +1,5 @@
 <?php
-   class BL_Init_Review_Post {
+  class BL_Init_Review_Post {
 
   // Create the custom post type for Reviews
   public static function review_custom_post_type(){

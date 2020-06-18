@@ -183,7 +183,7 @@ function bl_api_client_schedule_executor() {
       error_log('got cron hook schedule - outer ring: ' . $seconds_key);
       wp_schedule_event( time(), $seconds_key, 'bl_api_client_cron_hook' );
       $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
-      //everything below this is debugging code only; remove in production
+      //everything below this until the outer else satement is debugging code only; remove in production
       error_log('timestamp for outer cron hook is : ' . strval($timestamp));
     } else {
       $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
@@ -193,21 +193,21 @@ function bl_api_client_schedule_executor() {
       error_log('the current time is : ' . strval(time()));
     }
   } else {
-    if (isset($permissions['cron_override']) && $permissions['cron_override']) {
+    if (!$permissions['verified'] && end($activity['log'])[0]!='-3,-3') {
+      error_log('outer cron hook un-scheduled - permissions error');
+      $new_log =  array('-3,-3','tasks unscheduled - settings unverified');
+      BL_CLient_Tasker::bl_api_client_flush_activity_log($activity,$new_log);
+      bl_api_client_deactivate();
+    } else if ( isset($permissions['cron_override']) &&
+        $permissions['cron_override'] &&
+        $permissions['verified'] ) {
       error_log('bl api client running in manual mode');
       if (end($activity['log'])[0]!='-4,-4') {
         error_log('outer cron hook un-scheduled - manual override event');
-        $log =  array('-4,-4','tasks unscheduled - manual override');
-        $activity['log'][] = $log;
-        update_option('bl_api_client_activity',$activity);
+        $new_log =  array('-4,-4','tasks unscheduled - manual override');
+        BL_CLient_Tasker::bl_api_client_flush_activity_log($activity,$new_log);
         bl_api_client_deactivate();
       }
-    } else if (end($activity['log'])[0]!='-3,-3') {
-      error_log('outer cron hook un-scheduled - permissions error');
-      $log =  array('-3,-3','tasks unscheduled - settings unverified');
-      $activity['log'][] = $log;
-      update_option('bl_api_client_activity',$activity);
-      bl_api_client_deactivate();
     }
   }
 }
@@ -215,11 +215,9 @@ function bl_api_client_schedule_executor() {
 bl_api_client_schedule_executor();
 // assign the api call's 'boot' task to the main cron job -
 // it 'seeds' the database and schedules the temporary 'triage' series
-
 add_action( 'bl_api_client_cron_hook',
   array('BL_Client_Tasker','api_call_boot')
 );
-
 // assign the locale-to-directory 'triage' task to the temporary cron job series
 // it unschedules itself when completed
 add_action( 'bl_api_client_call_series',
@@ -232,13 +230,13 @@ add_action( 'bl_api_client_call_series',
 BL Review Schema
 ================
 author,
-author_avatar,
-timestamp,
-rating,
+author_avatar, //URL
+timestamp,  // Y-m-d
+rating, // int
 text,
-id,
-listing-directory,
-locale-id
+id, //unique hash
+listing_directory, //e.g. 'google','facebook'
+locale_id // unique integer for indexed array
 
 */
 
@@ -282,15 +280,15 @@ $review_post = array(
   'tax_input'     => array(
     'rating'        => $review_rating,
   ),
-  
+
   'meta_input'   => $meta_values_array
 );
-
+/*
 $post_made = wp_insert_post( $review_post );
 wp_set_object_terms( $post_made, $review_rating, 'rating');
 if( is_wp_error($post_made) ) error_log( $result->get_error_message());
 wp_die();
-
+*/
 //DEV NOTES
 //API CALL FORMAT! work on discovering the correct URL format for GMB pings
 //different lookup-by-URL formats; so far none is accepted:
