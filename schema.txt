@@ -68,7 +68,8 @@ using the options table -
     locale-id // unique integer for indexed array
 
     ============================================================================
-    {dir}_reviews - array keys: rating, author, timestamp, text, author_avatar, id, locale_id, listing directory
+    
+    reviews - array keys: rating, author, timestamp, text, author_avatar, id, locale_id, listing directory
 
     {dir}_aggregate_rating - array keys: rating, count, locale_id
 

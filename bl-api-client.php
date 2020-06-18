@@ -75,8 +75,9 @@ function bl_api_client_activate() {
   $commit = ($activity) ? $activity : array(
   // comment-out line above and uncomment line below to active w/ blank data table
   // $commit = array(
-    'google_reviews'=>[],'facebook_reviews'=>[],
-    'google_aggregate_rating'=>[],'facebook_aggregate_rating'=>[]
+    'reviews'=[];
+    'facebook_aggregate_rating'=[];
+    'google_aggregate_rating'=[];
   );
   // when api_call_triage() finds -1,-1 in the database, index_task() turns it
   // into 0,0 - the executable arguments for the first request body in the series
