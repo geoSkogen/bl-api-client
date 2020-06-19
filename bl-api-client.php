@@ -290,6 +290,7 @@ wp_set_object_terms( $post_made, $review_rating, 'rating');
 if( is_wp_error($post_made) ) error_log( $result->get_error_message());
 wp_die();
 */
+
 /*
 $activity = get_option('bl_api_client_activity');
 $google_reviews = [];
