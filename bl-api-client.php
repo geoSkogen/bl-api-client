@@ -38,6 +38,10 @@ if ( !class_exists( 'BL_Client_Tasker' ) ) {
   include_once 'classes/bl_client_tasker.php';
 }
 
+if ( !class_exists( 'BL_Init_Review_Post' ) ) {
+  include_once 'classes/bl_init_review_post.php';
+}
+
 //Admin
 if ( !class_exists( 'BL_API_Client_Options' ) ) {
    include_once 'admin/bl_api_client_options.php';
@@ -91,6 +95,7 @@ function bl_api_client_activate() {
     $crs_handshake = BL_Biz_Info_Monster::crs_handshake($body_params,$settings);
     update_option('bl_api_client_settings',$crs_handshake);
   }
+  BL_Init_Review_Post::review_rewrite_flush();
   //instatiate activity table with new log and recycled review data if found;
   update_option('bl_api_client_activity',$commit);
 }
@@ -113,8 +118,8 @@ function bl_api_client_add_cron_intervals( $schedules ) {
     $seconds_int = BL_Client_Tasker::get_schedule_interval();
     $seconds_key = 'bl_api_client_' . strval($seconds_int);
     $seconds_label = 'Every ' . strval($seconds_int) . ' Seconds';
-    error_log('raw secs');
-    error_log(strval($seconds_int));
+    //error_log('raw secs');
+    //error_log(strval($seconds_int));
 
     $schedules[$seconds_key] = array(
       'interval'=> $seconds_int,
@@ -225,6 +230,10 @@ add_action( 'bl_api_client_call_series',
   array('BL_Client_Tasker','api_call_triage')
 );
 
+add_action( 'init', array( 'BL_Init_Review_Post', 'review_custom_post_type' ) );
+add_action( 'init', array( 'BL_Init_Review_Post', 'crs_review_star_tax' ) );
+add_action( 'init', array( 'BL_Init_Review_Post', 'crs_review_star_numbers' ) );
+
 /*
 
 ================
@@ -243,7 +252,7 @@ locale_id // unique integer for indexed array
 
 $review = array(
   'author' => 'spaghetti',
-  'id'=> '125',
+  'id'=> '664',
   'author_avatar'=>'Tim',
   'timestamp'=>'2020-06-08',
   'rating'=>'5',
@@ -271,24 +280,59 @@ if (1 == $review_number) {
   $review_rating = $review_number . ' Stars';
 }
 
+$term_id = 7 - $review_number;
+
 $review_post = array(
   'post_content'  => $review['text'],
   'post_title'    => $review['id'],
   'post_type'     => 'crs_review',
   'post_status'   => 'publish',
   'post_date_gmt' => date('Y-m-d H:i:s', strtotime($review['timestamp'])),
-
+/*
   'tax_input'     => array(
     'rating'        => $review_rating,
   ),
-
-  'meta_input'   => $meta_values_array
+*/
+//  'meta_input'   => $meta_values_array
 );
+$table_name = $wpdb->prefix . "posts";
+$test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) );
+
+ if ( $wpdb->get_var( $test_query ) == $table_name ) {
+  // $wpdb->insert($table_name, $review_post);
+}
+
+$this_page = $parent_page = get_page_by_path( $review['id'], OBJECT ,'crs_review');
+//$this_page_id = ($this_page->ID) ? $this_page->ID : '' ;
+error_log('PAGE ID');
+
+$result = $wpdb->get_row(
+    "SELECT * FROM wp_posts WHERE post_title = " . $review['id'],
+    ARRAY_A
+  );
+$post_id = $result['ID'];
+error_log($post_id);
+$meta_table_name = $wpdb->prefix . "postmeta";
+$meta_test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $meta_table_name ) );
+ if ( $wpdb->get_var( $meta_test_query ) == $meta_table_name ) {
+   foreach($meta_values_array as $key => $value) {
+     $row = array(
+       'post_id'=>$post_id,
+       'meta_key'=>$key,
+       'meta_value'=>$value
+     );
+     //$wpdb->insert($meta_table_name, $row);
+   }
+
+}
+
+
+
 /*
 $post_made = wp_insert_post( $review_post );
 wp_set_object_terms( $post_made, $review_rating, 'rating');
 if( is_wp_error($post_made) ) error_log( $result->get_error_message());
-wp_die();
+//wp_die();
 */
 
 /*

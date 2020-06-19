@@ -90,6 +90,8 @@
   public static function crs_review_star_numbers() {
     $parent_term = term_exists( 'rating', 'crs_review' ); // array is returned if taxonomy is given
     $parent_term_id = $parent_term['term_id']; // get numeric term id
+    error_log('parent term');
+    error_log(strval($parent_term_id));
     wp_insert_term(
       '5 Stars', // the term
       'rating', // the taxonomy
