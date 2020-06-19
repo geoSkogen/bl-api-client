@@ -314,7 +314,7 @@ $post_id = $result['ID'];
 error_log($post_id);
 $meta_table_name = $wpdb->prefix . "postmeta";
 $meta_test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $meta_table_name ) );
- if ( $wpdb->get_var( $meta_test_query ) == $meta_table_name ) {
+if ( $wpdb->get_var( $meta_test_query ) == $meta_table_name ) {
    foreach($meta_values_array as $key => $value) {
      $row = array(
        'post_id'=>$post_id,
@@ -326,8 +326,12 @@ $meta_test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $meta
 
 }
 
-
-
+$term_table_name = $wpdb->prefix . "term_relationships";
+$term_test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $term_table_name ) );
+if ( $wpdb->get_var( $term_test_query ) == $term_table_name ) {
+  $row = array('object_id'=>$post_id,'term_taxonomy_id'=>$term_id,'term_order'=>'0');
+  //$wpdb->insert($term_table_name, $row);
+}
 /*
 $post_made = wp_insert_post( $review_post );
 wp_set_object_terms( $post_made, $review_rating, 'rating');
