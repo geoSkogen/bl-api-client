@@ -42,12 +42,12 @@ if ( !class_exists( 'BL_Client_Tasker' ) ) {
   include_once 'classes/bl_client_tasker.php';
 }
 
-if ( !class_exists( 'BL_Client_Task_Exec' ) ) {
-  include_once 'classes/bl_client_task_exec.php';
-}
-
 if ( !class_exists( 'BL_Init_Review_Post' ) ) {
   include_once 'classes/bl_init_review_post.php';
+}
+
+if ( !class_exists( 'BL_Client_Task_Exec' ) ) {
+  include_once 'classes/bl_client_task_exec.php';
 }
 
 //Admin
@@ -66,8 +66,8 @@ if ( !class_exists( 'BL_API_Client_Settings' ) ) {
    );
 }
 
-register_activation_hook( __FILE__, 'bl_api_client_activate' );
-register_deactivation_hook( __FILE__, 'bl_api_client_deactivate' );
+register_activation_hook( __FILE__, array('BL_Client_Task_Exec','bl_api_client_activate') );
+register_deactivation_hook( __FILE__, array('BL_Client_Task_Exec','bl_api_client_deactivate') );
 
 add_action( 'wp_enqueue_scripts',
   array('BL_Review_Templater','local_reviews_style')
@@ -80,46 +80,6 @@ add_shortcode('bl_client_local_reviews',
 add_shortcode('bl_client_agg_rating',
   array('BL_Review_Templater','aggregate_rating_shortcode_handler')
 );
-
-function bl_api_client_activate() {
-  $activity = get_option('bl_api_client_activity');
-  $settings = get_option('bl_api_client_settings');
-  $commit = ($activity) ? $activity : array(
-  // comment-out line above and uncomment line below to active w/ blank data table
-  // $commit = array(
-    'reviews'=>[],
-    'facebook_aggregate_rating'=>[],
-    'google_aggregate_rating'=>[]
-  );
-  // when api_call_triage() finds -1,-1 in the database, index_task() turns it
-  // into 0,0 - the executable arguments for the first request body in the series
-  $commit['log'] = [[BL_Client_Tasker::$init_key,'plugin activated ' . date('F d Y H:i',time())]];
-  // return indexed associative arrays of request params per CR Suite locale
-  // if a locale dosn't fully validate, it adds a null to the array
-  $body_params = BL_CR_Suite_Client::business_options_rollup();
-  // transfer CR Suite Business Options data into BL API Client Settings table
-  // - per valid biz entry, if a null value is present in the array, nothing happens
-  if ($body_params && !$settings['crs_override']) {
-    $crs_handshake = BL_Biz_Info_Monster::crs_handshake($body_params,$settings);
-    update_option('bl_api_client_settings',$crs_handshake);
-  }
-  // register custom post type 'review' if not already registered
-  if (!post_type_exists('crs_review')) {
-    BL_Init_Review_Post::review_rewrite_flush();
-  }
-  //instatiate activity table with new log and recycled review data if found;
-  update_option('bl_api_client_activity',$commit);
-}
-
-function bl_api_client_deactivate() {
-  // turn off scheduled cron tasks
-  $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
-  wp_unschedule_event( $timestamp, 'bl_api_client_cron_hook' );
-  error_log('timestamp for outer cron hook was : ' . strval($timestamp));
-  $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
-  wp_unschedule_event( $timestamp, 'bl_api_client_call_series' );
-  error_log('timestamp for inner cron hook was : ' . strval($timestamp));
-}
 
 // define our custom time interval requirements
 add_filter( 'cron_schedules', array('BL_Client_Task_Exec','bl_api_client_add_cron_intervals') );

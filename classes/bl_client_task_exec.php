@@ -81,7 +81,7 @@ class BL_Client_Task_Exec {
         error_log('outer cron hook un-scheduled - permissions error');
         $new_log =  array(self::$revoke_key,'tasks unscheduled - settings unverified');
         BL_CLient_Tasker::bl_api_client_flush_activity_log($activity,$new_log);
-        bl_api_client_deactivate();
+        self::bl_api_client_deactivate();
       } else if ( isset($permissions['cron_override']) &&
           $permissions['cron_override'] &&
           $permissions['verified'] ) {
@@ -90,10 +90,51 @@ class BL_Client_Task_Exec {
           error_log('outer cron hook un-scheduled - manual override event');
           $new_log =  array(self::$manual_key,'tasks unscheduled - manual override');
           BL_CLient_Tasker::bl_api_client_flush_activity_log($activity,$new_log);
-          bl_api_client_deactivate();
+          self::bl_api_client_deactivate();
         }
       }
     }
   }
+
+  public static function bl_api_client_activate() {
+    $activity = get_option('bl_api_client_activity');
+    $settings = get_option('bl_api_client_settings');
+    $commit = ($activity) ? $activity : array(
+    // comment-out line above and uncomment line below to active w/ blank data table
+    // $commit = array(
+      'reviews'=>[],
+      'facebook_aggregate_rating'=>[],
+      'google_aggregate_rating'=>[]
+    );
+    // when api_call_triage() finds -1,-1 in the database, index_task() turns it
+    // into 0,0 - the executable arguments for the first request body in the series
+    $commit['log'] = [[BL_Client_Tasker::$init_key,'plugin activated ' . date('F d Y H:i',time())]];
+    // return indexed associative arrays of request params per CR Suite locale
+    // if a locale dosn't fully validate, it adds a null to the array
+    $body_params = BL_CR_Suite_Client::business_options_rollup();
+    // transfer CR Suite Business Options data into BL API Client Settings table
+    // - per valid biz entry, if a null value is present in the array, nothing happens
+    if ($body_params && !$settings['crs_override']) {
+      $crs_handshake = BL_Biz_Info_Monster::crs_handshake($body_params,$settings);
+      update_option('bl_api_client_settings',$crs_handshake);
+    }
+    // register custom post type 'review' if not already registered
+    if (!post_type_exists('crs_review')) {
+      BL_Init_Review_Post::review_rewrite_flush();
+    }
+    //instatiate activity table with new log and recycled review data if found;
+    update_option('bl_api_client_activity',$commit);
+  }
+
+  public static function bl_api_client_deactivate() {
+    // turn off scheduled cron tasks
+    $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
+    wp_unschedule_event( $timestamp, 'bl_api_client_cron_hook' );
+    error_log('timestamp for outer cron hook was : ' . strval($timestamp));
+    $timestamp = wp_next_scheduled( 'bl_api_client_call_series' );
+    wp_unschedule_event( $timestamp, 'bl_api_client_call_series' );
+    error_log('timestamp for inner cron hook was : ' . strval($timestamp));
+  }
+
 
 }
