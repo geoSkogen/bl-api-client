@@ -1,7 +1,8 @@
 ===============================
 Currently Outstanding Dev Specs
 ===============================
-CRITICAL
+
+CRITICAL - COMPLETED!!!
 DATA Structure Revisions Needed! Use CRS Reviews Custom Post type!
 Reviews need to be stored as posts in the database with custom taxa and metas
 Using these terms:
@@ -24,7 +25,7 @@ Using these terms:
       Aggregate reviews arrays should still commit to the options table for easy updates & access
       They are a fixed size and won't take up space
 
-WHY IS wp_insert_post() CRASHING THE SITE?
+WHY IS wp_insert_post() CRASHING THE SITE? - MANAGED!!! 6.19.2020 using $wpdb->insert();
 
 test custom review post bl-api-client.php lines 244-286
 Custom Post Routine in Wordpress is throwing untraceable errors:
@@ -43,101 +44,6 @@ Stack trace:
 #7 /nas/content/live/anderstage/wp-settings.php(371): include_once('/nas/content/li...')
 #8 /nas/content/l in /nas/content/live/anderstage/wp-includes/post.php on line 2591
 
-public static function crsuite_agg_review_shortcode( $atts ) {
-  $a = shortcode_atts( array(
-      'title' => 'Our Reviews'
-    ), $atts );
-  $home = site_url();
-  // Set the Return Variable
-  $crsuite_agg = '';
-  // CR Suite Options
-  $crs_options = get_option('cr_suite_options');
-  // CRS Business Options
-  $biz_options = get_option('crs_business_options');
-  // Geoblock Options
-  $geoblock_options = get_option( 'og_geo_options' );
-  // get_terms - Here we are pulling all the 'rating' post types with the 5, 4 or 3 rating. ( object ) and putting it into the var $terms
-  // $terms = get_transient( 'cr_reviews' );
-
-
-
-  if ('' != $biz_options) {
-    $button_one = isset($geoblock_options['og_geo_button_text_one']) ?  $geoblock_options['og_geo_button_text_one'] : '';
-    $button_one_link = isset($geoblock_options['og_geo_button_link_one']) ?  $geoblock_options['og_geo_button_link_one'] : '';
-    $button_two = isset($geoblock_options['og_geo_button_text_two']) ?  $geoblock_options['og_geo_button_text_two'] : '';
-    $button_two_link = isset($geoblock_options['og_geo_button_link_two']) ?  $geoblock_options['og_geo_button_link_two'] : '';
-
-    $review_override_bool = $crs_options['cr_review_override_bool'] ?? '';
-    $review_override_rating = $crs_options['cr_review_override_rating'] ?? '';
-    $main_service = isset( $biz_options['business_service'] ) ? $biz_options['business_service'] : '';
-    $business_name = isset( $biz_options['business_name']) ? $biz_options['business_name'] : '';
-    $business_service = isset( $biz_options['business_service']) ? $biz_options['business_service'] : '';
-
-    // if ( false === $terms ) {
-      $terms = get_terms( array(
-          'taxonomy' => 'rating',
-          'hide_empty' => false,
-          'name'				=>	[
-            '5 Stars',
-            '4 Stars',
-            '3 Stars'
-            ]
-      ) );
-      // set_transient( 'cr_reviews', $terms, 3600 );
-    // }
-
-    foreach ($terms as $k => $v) {
-       // switch - Load the COUNT of each review category
-
-       switch ($v->name) {
-         case '3 Stars':
-           $three_stars = $v->count;
-           break;
-         case '4 Stars':
-           $four_stars = $v->count;
-           break;
-         case '5 Stars':
-           $five_stars = $v->count;
-           break;
-         default:
-           # code...
-           break;
-       }
-     }
-     // We will total the amount of FOUND REVIEWS and put in the var $total_reviews
-     $total_reviews = $five_stars + $four_stars + $three_stars;
-     // find the aggregate review rating and put in the var $agg_review
-     if (false == $review_override_bool) {
-        $unround_agg = ( 5 * $five_stars + 4 * $four_stars + 3 * $three_stars ) / ( $total_reviews );
-        if ( is_nan($unround_agg)) {
-          $agg_review = 0;
-        } else {
-          $agg_review = round($unround_agg, 1);
-        }
-        $percentRating = $agg_review * 20;
-     }
-     $agg_class = '';
-     $load_scripts_result = CrsUtility::crs_application_permission_settings('crs_geoblock');
-     if( CRSReviewTemplate::isMobileDevice() || CRSReviewTemplate::isBot() ) {
-       $agg_class = 'class="hreview-aggregate"';
-     }
-
-     $crsuite_agg .= '<h3 class="card-title">' . $a['title'] . '</h3>';
-     $crsuite_agg .= '<div id="cr-review-blockx" ' . $agg_class .'>';
-     $crsuite_agg .= '<b class="item"><span class="fn">'. $business_name . '</span></b>';
-     $crsuite_agg .= '<div>';
-     $crsuite_agg .= '<div class="rating-container">';
-     $crsuite_agg .= '<div class="r-stars">';
-     $crsuite_agg .= '<div class="r-stars-inner" style="width: ' . $percentRating . '%; background: transparent url( \'' . $home . '/wp-content/plugins/a-city-ranked-suite/suite/review/assets/gold-star.png\' ) repeat-x 0 0;background-position: 0 -25px;"> ';
-     $crsuite_agg .= '</div><div>';
-     $crsuite_agg .= '<p class="aggRatings">Rated <span class="rating">' . $agg_review . '</span>/<span>5</span> Based on <span class="count">' . $total_reviews . '</span> Verified Ratings</p>';
-     $crsuite_agg .= ( 1 == $load_scripts_result ) ? '<p><a class="aggReview-button" href="' . $button_one_link . '">' . $button_one . '</a><br>' : '';
-     $crsuite_agg .= ( 1 == $load_scripts_result ) ? '<a class="aggReview-button" href="' . $button_two_link . '">' . $button_two . '</a></p>' : '';
-     $crsuite_agg .= '</div></div></div></div></div></div>';
-  }
-
-  echo $crsuite_agg;
-}
 
 MANAGED?
 Server execution timeout problem - summary;
@@ -169,11 +75,106 @@ Server execution timeout problem - summary;
   - point CSV upload routine at baby-lambda's exported CSV files to post the
      review backlogs using raw SQL operations in an expanded activtion hook
 
-HIGH PRIORITY
+     public static function crsuite_agg_review_shortcode( $atts ) {
+       $a = shortcode_atts( array(
+           'title' => 'Our Reviews'
+         ), $atts );
+       $home = site_url();
+       // Set the Return Variable
+       $crsuite_agg = '';
+       // CR Suite Options
+       $crs_options = get_option('cr_suite_options');
+       // CRS Business Options
+       $biz_options = get_option('crs_business_options');
+       // Geoblock Options
+       $geoblock_options = get_option( 'og_geo_options' );
+       // get_terms - Here we are pulling all the 'rating' post types with the 5, 4 or 3 rating. ( object ) and putting it into the var $terms
+       // $terms = get_transient( 'cr_reviews' );
+
+
+
+       if ('' != $biz_options) {
+         $button_one = isset($geoblock_options['og_geo_button_text_one']) ?  $geoblock_options['og_geo_button_text_one'] : '';
+         $button_one_link = isset($geoblock_options['og_geo_button_link_one']) ?  $geoblock_options['og_geo_button_link_one'] : '';
+         $button_two = isset($geoblock_options['og_geo_button_text_two']) ?  $geoblock_options['og_geo_button_text_two'] : '';
+         $button_two_link = isset($geoblock_options['og_geo_button_link_two']) ?  $geoblock_options['og_geo_button_link_two'] : '';
+
+         $review_override_bool = $crs_options['cr_review_override_bool'] ?? '';
+         $review_override_rating = $crs_options['cr_review_override_rating'] ?? '';
+         $main_service = isset( $biz_options['business_service'] ) ? $biz_options['business_service'] : '';
+         $business_name = isset( $biz_options['business_name']) ? $biz_options['business_name'] : '';
+         $business_service = isset( $biz_options['business_service']) ? $biz_options['business_service'] : '';
+
+         // if ( false === $terms ) {
+           $terms = get_terms( array(
+               'taxonomy' => 'rating',
+               'hide_empty' => false,
+               'name'				=>	[
+                 '5 Stars',
+                 '4 Stars',
+                 '3 Stars'
+                 ]
+           ) );
+           // set_transient( 'cr_reviews', $terms, 3600 );
+         // }
+
+         foreach ($terms as $k => $v) {
+            // switch - Load the COUNT of each review category
+
+            switch ($v->name) {
+              case '3 Stars':
+                $three_stars = $v->count;
+                break;
+              case '4 Stars':
+                $four_stars = $v->count;
+                break;
+              case '5 Stars':
+                $five_stars = $v->count;
+                break;
+              default:
+                # code...
+                break;
+            }
+          }
+          // We will total the amount of FOUND REVIEWS and put in the var $total_reviews
+          $total_reviews = $five_stars + $four_stars + $three_stars;
+          // find the aggregate review rating and put in the var $agg_review
+          if (false == $review_override_bool) {
+             $unround_agg = ( 5 * $five_stars + 4 * $four_stars + 3 * $three_stars ) / ( $total_reviews );
+             if ( is_nan($unround_agg)) {
+               $agg_review = 0;
+             } else {
+               $agg_review = round($unround_agg, 1);
+             }
+             $percentRating = $agg_review * 20;
+          }
+          $agg_class = '';
+          $load_scripts_result = CrsUtility::crs_application_permission_settings('crs_geoblock');
+          if( CRSReviewTemplate::isMobileDevice() || CRSReviewTemplate::isBot() ) {
+            $agg_class = 'class="hreview-aggregate"';
+          }
+
+          $crsuite_agg .= '<h3 class="card-title">' . $a['title'] . '</h3>';
+          $crsuite_agg .= '<div id="cr-review-blockx" ' . $agg_class .'>';
+          $crsuite_agg .= '<b class="item"><span class="fn">'. $business_name . '</span></b>';
+          $crsuite_agg .= '<div>';
+          $crsuite_agg .= '<div class="rating-container">';
+          $crsuite_agg .= '<div class="r-stars">';
+          $crsuite_agg .= '<div class="r-stars-inner" style="width: ' . $percentRating . '%; background: transparent url( \'' . $home . '/wp-content/plugins/a-city-ranked-suite/suite/review/assets/gold-star.png\' ) repeat-x 0 0;background-position: 0 -25px;"> ';
+          $crsuite_agg .= '</div><div>';
+          $crsuite_agg .= '<p class="aggRatings">Rated <span class="rating">' . $agg_review . '</span>/<span>5</span> Based on <span class="count">' . $total_reviews . '</span> Verified Ratings</p>';
+          $crsuite_agg .= ( 1 == $load_scripts_result ) ? '<p><a class="aggReview-button" href="' . $button_one_link . '">' . $button_one . '</a><br>' : '';
+          $crsuite_agg .= ( 1 == $load_scripts_result ) ? '<a class="aggReview-button" href="' . $button_two_link . '">' . $button_two . '</a></p>' : '';
+          $crsuite_agg .= '</div></div></div></div></div></div>';
+       }
+
+       echo $crsuite_agg;
+     }
+
 bl_review_templater.php - add aggregate review snippet HTML!!! Math works!
 bl_review_monster.php - line 34
 
-CRITICAL
+CRITICAL - COMPLETED 6.19.2020!!!
 DATA Structure Revisions Needed! Use CRS Reviews Custom Post type
 Reviews need to be stored as posts in the database with custom taxa and metas
 
@@ -199,7 +200,7 @@ bl_client_tasker.php - line 144
                                   TO DO
                                 - add validation for API Keys?
 
-bl_scraper.php - lines 295-325   CRITICAL
+bl_scraper.php - lines 295-325   CRITICAL - COMPLETED 6.19.2020
                                  retool database commit for crs_review post type
                                 - UPDATE - all reviews now commit to a single table with
                                            a 'listing-directory' property of google or
