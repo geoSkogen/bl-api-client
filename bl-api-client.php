@@ -250,7 +250,7 @@ if (1 == $review_number) {
 $term_id = 7 - $review_number;
 
 $review_post = array(
-  'post_title'    => $review['id'],
+  'post_title'    => $review['author'],
   'post_content'  => $review['text'],
   'post_author'   => $review['author'],
   'post_type'     => 'crs_review',
@@ -270,12 +270,12 @@ $test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_nam
    $wpdb->insert($table_name, $review_post);
 }
 
-$this_page = get_page_by_path( $review['id'], OBJECT ,'crs_review');
+$this_page = get_page_by_title( $review['author'], OBJECT ,'crs_review');
 $this_page_id = ($this_page->ID) ? $this_page->ID : '' ;
 error_log('PAGE ID');
-
+error_log($this_page_id);
 $result = $wpdb->get_row(
-    "SELECT * FROM wp_posts WHERE post_title = " . $review['id'],
+    "SELECT * FROM wp_posts WHERE post_title = " . $review['author'],
     ARRAY_A
   );
 $post_id = $result['ID'];

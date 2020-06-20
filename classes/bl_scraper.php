@@ -22,10 +22,8 @@ class BL_Scraper {
     $reviews = [];
     $aggregate_rating = [];
     // task-routing values
-    $commit_log = (isset($commit['log'])) ? end($commit['log']) : [BL_Client_Tasker::$init_key,'(not set)'];
-    $xy_str = (isset($commit_log[0])) ? $commit_log[0] : BL_Client_Tasker::$init_key;
-    $log_index = (isset($commit['log'])) ? count($commit['log'])-1 : 0;
-    $locale_index = explode(',',$xy_str)[0];
+    $commit_log = (isset($commit['log'])) ? end($commit['log']) : ['0,0','(not set)'];
+    $locale_index = $commit_log[0][0];
     $db_dir = ($directory==='google') ? 'gmb' : $directory;
     $msg = '';
     $err_msg = '';
@@ -117,47 +115,33 @@ class BL_Scraper {
     } else {
       $err_msg .=  ' invalid batch ID ';
     }
-    // CRITICAL DEV NOTE: everything reviews related and non-aggregate rating related
-    // following this comment must be rewritten to update the posts table instead
-    // of the options table
-    // ensure each new item has a locale id
-    if ($reviews) {
-      error_log('got reviews: ' . strval(count($reviews)));
-      foreach($reviews as $review) {
-        $this_review = $review;
-        $this_review['locale_id'] = strval($locale_index+1);
-        $this_review['listing_directory'] = $directory;
-        $final_reviews_batch[] = $this_review;
-      }
-    }
-
-    if ($aggregate_rating) {
-      $aggregate_rating['locale_id'] = strval($locale_index+1);
-    }
-
-    if ( isset($commit[$directory . '_aggregate_rating']) &&
-         is_array($commit[$directory . '_aggregate_rating'])) {
-      // make record exluding the current locale's previously stored aggregate . . .
-      foreach ($commit[$directory . '_aggregate_rating'] as $current_rating_obj) {
-        if ($current_rating_obj['locale_id']!=strval($locale_index+1)) {
-          $all_agg_ratings[] = $current_rating_obj;
-        }
-      }
-    }
-    // . . . and push the new reviews for this locale onto it
-    $all_agg_ratings[] = $aggregate_rating;
-    $return_val->reviews = (count($final_reviews_batch)) ? $final_reviews_batch : null;
-    $return_val->aggregate_rating = (count($aggregate_rating)) ? $all_agg_ratings : null;
-
+    // DATA VALIDATION TASK!!!
+    // Build the return values
+    $return_val->reviews = self::valid_batch_array(
+      'reviews',
+      $reviews,
+      $commit,
+      $locale_index,
+      $directory
+    );
+    $return_val->aggregate_rating = self::valid_batch_array(
+      'aggregate_rating',
+      $aggregate_rating,
+      $commit,
+      $locale_index,
+      $directory
+    );
+    // commit the results based on outcome for reviews, agg, and log
     if ($return_val->reviews) {
-      $commit['reviews'] = $final_reviews_batch;
+      $commit['reviews'] = $return_val->reviews;
       $msg .= ' successful review scrape - '. date('F d Y H:i',time());
+      BL_Review_Monster::post_reviews($return_val->reviews);
     } else {
       $msg .= ' no recent reviews found in batch - ' . date('F d Y H:i',time());
     }
 
     if ($return_val->aggregate_rating) {
-      $commit[$directory . '_aggregate_rating'] = $all_agg_ratings;
+      $commit[$directory . '_aggregate_rating'] = $return_val->aggregate_rating;
       $msg .= ' - successful aggregate rating response';
       error_log($msg);
     } else {
@@ -167,7 +151,7 @@ class BL_Scraper {
       error_log($msg);
     }
 
-    $commit['log'][] = [$xy_str,$msg];
+    $commit['log'][] = [$commit_log[0],$msg];
     update_option('bl_api_client_activity',$commit);
     //NOTE: return val needed? - or will this cause blocking effects? Does it matter?
     //return $return_val;
@@ -218,10 +202,8 @@ class BL_Scraper {
     $reviews = [];
     $aggregate_rating = [];
     // task-routing values
-    $commit_log = (isset($commit['log'])) ? end($commit['log']) : [BL_Client_Tasker::$init_key,'(not set)'];
-    $xy_str = (isset($commit_log[0])) ? $commit_log[0] : BL_Client_Tasker::$init_key;
-    $log_index = (isset($commit['log'])) ? count($commit['log'])-1 : 0;
-    $locale_index = explode(',',$xy_str)[0];
+    $commit_log = (isset($commit['log'])) ? end($commit['log']) : ['0,0','(not set)'];
+    $locale_index = $commit_log[0][0];
     $db_dir = ($directory==='google') ? 'gmb' : $directory;
     $msg = '';
     $err_msg = '';
@@ -306,8 +288,8 @@ class BL_Scraper {
     $reviews = array(
       array (
          'rating' => 5,
-         'author' => 'Oil Boil',
-         'timestamp' => '2020-01-28',
+         'author' => 'Tim Trout',
+         'timestamp' => '2020-06-16',
          'text' =>'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
          'positive' => array ( ),
          'critical' => array ( ),
@@ -316,8 +298,8 @@ class BL_Scraper {
      ),
           array (
              'rating' => 5,
-             'author' => 'Kathy Asato',
-             'timestamp' => '2020-04-02',
+             'author' => 'Sam the Sham',
+             'timestamp' => '2020-06-15',
              'text' =>'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
              'positive' => array ( ),
              'critical' => array ( ),
@@ -325,8 +307,8 @@ class BL_Scraper {
              'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
          ), array (
              'rating' => 5,
-             'author' => 'Advanced Plumbing',
-             'timestamp' => '2020-03-02',
+             'author' => 'Jacqui Browne',
+             'timestamp' => '2020-06-14',
              'text' => 'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
              'positive' => array ( ),
              'critical' => array ( ),
@@ -335,8 +317,8 @@ class BL_Scraper {
         ),
         array (
            'rating' => 5,
-           'author' => 'Kay Ao',
-           'timestamp' => '2020-05-02',
+           'author' => 'Marsallace Wallis',
+           'timestamp' => '2020-06-13',
            'text' =>'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
            'positive' => array ( ),
            'critical' => array ( ),
@@ -344,8 +326,8 @@ class BL_Scraper {
            'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
        ), array (
            'rating' => 5,
-           'author' => 'Aed Ping',
-           'timestamp' => '2020-05-02',
+           'author' => 'Victor Borge',
+           'timestamp' => '2020-06-12',
            'text' => 'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
            'positive' => array ( ),
            'critical' => array ( ),
@@ -391,7 +373,7 @@ class BL_Scraper {
       error_log($msg);
     }
 
-    $commit['log'][] = [$xy_str,$msg];
+    $commit['log'][] = [$commit_log[0],$msg];
     update_option('bl_api_client_activity',$commit);
     //NOTE: return val needed? - or will this cause blocking effects? Does it matter?
     //return $return_val;
