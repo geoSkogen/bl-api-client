@@ -24,7 +24,7 @@ class BL_Review_Monster  {
   //NOTE:Build out weighted average function
   public function get_weighted_aggregate() {
     $result = array('rating'=>0,'count'=>0);
-    $count = 0;
+    $count = 1;
     $rating = 0;
     foreach(self::$dirs as $dir) {
       if (  isset($this->ratings[$dir]) && count($this->ratings[$dir]) ) {
@@ -37,8 +37,9 @@ class BL_Review_Monster  {
         error_log($dir);
       }
     }
+    var_dump($this->ratings);
     $result['rating'] = $rating/$count;
-    $result['count'] = $count;
+    $result['count'] = (!$result['rating']) ? 0 : $count;
     return $result;
   }
   // . . . also get agg by locale X biz
@@ -200,6 +201,84 @@ class BL_Review_Monster  {
     }
     $result .= '</table><br/>';
     echo $result;
+  }
+
+  public static function post_reviews($table) {
+    global $wpdb;
+
+    foreach($table as $review) {
+
+      $meta_values_array['review-author'] = $review['author'];
+      $meta_values_array['review-id'] = $review['id'];
+      $meta_values_array['author-email'] = '(not set)';
+      $meta_values_array['author-avatar'] = $review['author_avatar'];
+      $meta_values_array['listing-directory'] = $review['listing_directory'];
+      $meta_values_array['locale-id'] = $review['locale_id'];
+      $meta_values_array['timestamp'] = $review['timestamp'];
+      $meat_values_array['rating'] = $review['rating'];
+
+      $review_number =  $review['rating'];
+
+      if ( ( 5 < $review_number) || ( ! is_numeric($review_number) ) ) {
+        $review_number = 5;
+      }
+      if (1 == $review_number) {
+        $review_rating = $review_number . ' Star';
+        # code...
+      } else {
+        $review_rating = $review_number . ' Stars';
+      }
+
+      $term_id = 7 - $review_number;
+
+      $review_post = array(
+        'post_title'    => $review['author'],
+        'post_content'  => $review['text'],
+        'post_author'   => $review['author'],
+        'post_type'     => 'crs_review',
+        'post_status'   => 'publish',
+        'post_date' => date('Y-m-d', strtotime($review['timestamp'])),
+      );
+      // POST
+      $table_name = $wpdb->prefix . "posts";
+      $test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) );
+
+       if ( $wpdb->get_var( $test_query ) == $table_name ) {
+         $wpdb->insert($table_name, $review_post);
+      }
+      // METAS & TAXA
+      $this_page = get_page_by_path( $review['author'], OBJECT ,'crs_review');
+      $this_page_id = ($this_page->ID) ? $this_page->ID : '' ;
+      error_log('PAGE ID');
+
+      $result = $wpdb->get_row(
+          "SELECT * FROM wp_posts WHERE post_title = " . $review['id'],
+          ARRAY_A
+        );
+      $post_id = $result['ID'];
+      error_log($post_id);
+      // METAS
+      $meta_table_name = $wpdb->prefix . "postmeta";
+      $meta_test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $meta_table_name ) );
+      if ( $wpdb->get_var( $meta_test_query ) == $meta_table_name ) {
+         foreach($meta_values_array as $key => $value) {
+           $row = array(
+             'post_id'=>$post_id,
+             'meta_key'=>$key,
+             'meta_value'=>$value
+           );
+           $wpdb->insert($meta_table_name, $row);
+         }
+
+      }
+      // TAXA
+      $term_table_name = $wpdb->prefix . "term_relationships";
+      $term_test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $term_table_name ) );
+      if ( $wpdb->get_var( $term_test_query ) == $term_table_name ) {
+        $term_row = array('object_id'=>$post_id,'term_taxonomy_id'=>$term_id,'term_order'=>'0');
+        $wpdb->insert($term_table_name, $term_row);
+      }
+    }
   }
 
 }

@@ -76,9 +76,9 @@ add_shortcode('bl_client_agg_rating',
 function bl_api_client_activate() {
   $activity = get_option('bl_api_client_activity');
   $settings = get_option('bl_api_client_settings');
-  $commit = ($activity) ? $activity : array(
+  //$commit = ($activity) ? $activity : array(
   // comment-out line above and uncomment line below to active w/ blank data table
-  // $commit = array(
+   $commit = array(
     'reviews'=>[],
     'facebook_aggregate_rating'=>[],
     'google_aggregate_rating'=>[]
@@ -95,7 +95,10 @@ function bl_api_client_activate() {
     $crs_handshake = BL_Biz_Info_Monster::crs_handshake($body_params,$settings);
     update_option('bl_api_client_settings',$crs_handshake);
   }
-  BL_Init_Review_Post::review_rewrite_flush();
+  // register custom post type 'review' if not already registered
+  if (!post_type_exists('crs_review')) {
+    BL_Init_Review_Post::review_rewrite_flush();
+  }
   //instatiate activity table with new log and recycled review data if found;
   update_option('bl_api_client_activity',$commit);
 }
@@ -125,49 +128,9 @@ function bl_api_client_add_cron_intervals( $schedules ) {
       'interval'=> $seconds_int,
       'display'=> esc_html__( $seconds_label )
     );
-    $schedules['fifteen_seconds'] = array(
-       'interval' => 15,
-       'display'  => esc_html__( 'Every Fifteen Seconds' ),
-    );
-    $schedules['thirty_seconds'] = array(
-       'interval' => 30,
-       'display'  => esc_html__( 'Every Thrity Seconds' ),
-    );
-    $schedules['ninety_seconds'] = array(
-       'interval' => 90,
-       'display'  => esc_html__( 'Every Fifteen Seconds' ),
-    );
-    $schedules['one_minute'] = array(
-        'interval' => 60,
-        'display'  => esc_html__( 'Every Sixty Seconds' ),
-    );
-    $schedules['three_minutes'] = array(
-        'interval' => 180,
-        'display'  => esc_html__( 'Every Three Minutes' ),
-    );
     $schedules['five_minutes'] = array(
         'interval' => 300,
         'display'  => esc_html__( 'Every Five Minutes' ),
-    );
-    $schedules['ten_minutes'] = array(
-        'interval' => 600,
-        'display'  => esc_html__( 'Every Ten Minutes' ),
-    );
-    $schedules['sixteen_minutes'] = array(
-        'interval' => 960,
-        'display'  => esc_html__( 'Every Sixteen Minutes' ),
-    );
-    $schedules['thirty_minutes'] = array(
-        'interval' => 1800,
-        'display'  => esc_html__( 'Every Thirty Minutes' ),
-    );
-    $schedules['forty_minutes'] = array(
-        'interval' => 2400,
-        'display'  => esc_html__( 'Every Thirty Minutes' ),
-    );
-    $schedules['sixty_minutes'] = array(
-        'interval' => 2400,
-        'display'  => esc_html__( 'Every Thirty Minutes' ),
     );
     return $schedules;
 }
@@ -229,10 +192,11 @@ add_action( 'bl_api_client_cron_hook',
 add_action( 'bl_api_client_call_series',
   array('BL_Client_Tasker','api_call_triage')
 );
-
-add_action( 'init', array( 'BL_Init_Review_Post', 'review_custom_post_type' ) );
-add_action( 'init', array( 'BL_Init_Review_Post', 'crs_review_star_tax' ) );
-add_action( 'init', array( 'BL_Init_Review_Post', 'crs_review_star_numbers' ) );
+if (!post_type_exists('crs_review')) {
+  add_action( 'init', array( 'BL_Init_Review_Post', 'review_custom_post_type' ) );
+  add_action( 'init', array( 'BL_Init_Review_Post', 'crs_review_star_tax' ) );
+  add_action( 'init', array( 'BL_Init_Review_Post', 'crs_review_star_numbers' ) );
+}
 
 /*
 
@@ -249,24 +213,27 @@ listing_directory, //e.g. 'google','facebook'
 locale_id // unique integer for indexed array
 
 */
-
+function spaghetti() {
+global $wpdb;
 $review = array(
-  'author' => 'spaghetti',
-  'id'=> '664',
-  'author_avatar'=>'Tim',
-  'timestamp'=>'2020-06-08',
-  'rating'=>'5',
-  'text'=>'this is fun.'
+  'author' => 'Mac the Knife',
+  'id'=> '1212',
+  'author_avatar'=>'Time',
+  'timestamp'=>'2020-06-19',
+  'rating'=>'4',
+  'text'=>'this is fun.',
+  'locale_id'=>'1',
+  'listing_directory'=>'google'
 );
-$locale_index = '1';
-$directory = 'google';
 
 $meta_values_array['review-author'] = $review['author'];
 $meta_values_array['review-id'] = $review['id'];
 $meta_values_array['author-email'] = '(not set)';
 $meta_values_array['author-avatar'] = $review['author_avatar'];
-$meta_values_array['listing-directory'] = $directory;
-$meta_values_array['locale-id'] = $locale_index;
+$meta_values_array['listing-directory'] = $review['listing_directory'];
+$meta_values_array['locale-id'] = $review['locale_id'];
+$meta_values_array['timestamp'] = $review['timestamp'];
+$meat_values_array['rating'] = $review['rating'];
 
 $review_number =  $review['rating'];
 
@@ -283,11 +250,12 @@ if (1 == $review_number) {
 $term_id = 7 - $review_number;
 
 $review_post = array(
-  'post_content'  => $review['text'],
   'post_title'    => $review['id'],
+  'post_content'  => $review['text'],
+  'post_author'   => $review['author'],
   'post_type'     => 'crs_review',
   'post_status'   => 'publish',
-  'post_date_gmt' => date('Y-m-d H:i:s', strtotime($review['timestamp'])),
+  'post_date' => date('Y-m-d', strtotime($review['timestamp'])),
 /*
   'tax_input'     => array(
     'rating'        => $review_rating,
@@ -299,11 +267,11 @@ $table_name = $wpdb->prefix . "posts";
 $test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) );
 
  if ( $wpdb->get_var( $test_query ) == $table_name ) {
-  // $wpdb->insert($table_name, $review_post);
+   $wpdb->insert($table_name, $review_post);
 }
 
-$this_page = $parent_page = get_page_by_path( $review['id'], OBJECT ,'crs_review');
-//$this_page_id = ($this_page->ID) ? $this_page->ID : '' ;
+$this_page = get_page_by_path( $review['id'], OBJECT ,'crs_review');
+$this_page_id = ($this_page->ID) ? $this_page->ID : '' ;
 error_log('PAGE ID');
 
 $result = $wpdb->get_row(
@@ -321,7 +289,7 @@ if ( $wpdb->get_var( $meta_test_query ) == $meta_table_name ) {
        'meta_key'=>$key,
        'meta_value'=>$value
      );
-     //$wpdb->insert($meta_table_name, $row);
+     $wpdb->insert($meta_table_name, $row);
    }
 
 }
@@ -329,9 +297,13 @@ if ( $wpdb->get_var( $meta_test_query ) == $meta_table_name ) {
 $term_table_name = $wpdb->prefix . "term_relationships";
 $term_test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $term_table_name ) );
 if ( $wpdb->get_var( $term_test_query ) == $term_table_name ) {
-  $row = array('object_id'=>$post_id,'term_taxonomy_id'=>$term_id,'term_order'=>'0');
-  //$wpdb->insert($term_table_name, $row);
+  $term_row = array('object_id'=>$post_id,'term_taxonomy_id'=>$term_id,'term_order'=>'0');
+  $wpdb->insert($term_table_name, $term_row);
 }
+wp_die();
+}
+
+//spaghetti();
 /*
 $post_made = wp_insert_post( $review_post );
 wp_set_object_terms( $post_made, $review_rating, 'rating');
