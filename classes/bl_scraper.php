@@ -287,9 +287,9 @@ class BL_Scraper {
     */
     $reviews = array(
       array (
-         'rating' => 5,
-         'author' => 'Tim Trout',
-         'timestamp' => '2020-06-16',
+         'rating' => 2,
+         'author' => 'Kid Rock',
+         'timestamp' => '2020-06-15',
          'text' =>'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
          'positive' => array ( ),
          'critical' => array ( ),
@@ -297,18 +297,18 @@ class BL_Scraper {
          'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
      ),
           array (
-             'rating' => 5,
-             'author' => 'Sam the Sham',
-             'timestamp' => '2020-06-15',
-             'text' =>'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
+             'rating' => 3,
+             'author' => 'Red Fox',
+             'timestamp' => '2020-06-16',
+             'text' =>'',
              'positive' => array ( ),
              'critical' => array ( ),
              'author_avatar' => 'https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg',
              'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
          ), array (
-             'rating' => 5,
-             'author' => 'Jacqui Browne',
-             'timestamp' => '2020-06-14',
+             'rating' => 4,
+             'author' => 'Black Betty',
+             'timestamp' => '2020-06-17',
              'text' => 'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
              'positive' => array ( ),
              'critical' => array ( ),
@@ -316,18 +316,18 @@ class BL_Scraper {
              'id' => '68d81651c71f99b6cb857c2c8c2b31464e23d83a',
         ),
         array (
-           'rating' => 5,
-           'author' => 'Marsallace Wallis',
-           'timestamp' => '2020-06-13',
-           'text' =>'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
+           'rating' => 3,
+           'author' => 'Tom Sawyer',
+           'timestamp' => '2020-06-18',
+           'text' =>'',
            'positive' => array ( ),
            'critical' => array ( ),
            'author_avatar' => 'https://lh4.googleusercontent.com/-QRcjn8rMZx4/AAAAAAAAAAI/AAAAAAAAAAA/c0DpEHMERks/s40-c-rp-mo-br100/photo.jpg',
            'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
        ), array (
            'rating' => 5,
-           'author' => 'Victor Borge',
-           'timestamp' => '2020-06-12',
+           'author' => 'Sam the Sham',
+           'timestamp' => '2020-06-19',
            'text' => 'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
            'positive' => array ( ),
            'critical' => array ( ),

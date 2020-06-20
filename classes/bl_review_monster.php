@@ -251,23 +251,14 @@ class BL_Review_Monster  {
       // METAS & TAXA
       $this_page = get_page_by_title( $review['author'], OBJECT ,'crs_review');
       $this_page_id = ($this_page->ID) ? $this_page->ID : '' ;
-      error_log('PAGE ID');
+      error_log('POSTED REVIEW - PAGE ID:');
       error_log($this_page_id);
-      /*
-      $result = $wpdb->get_row(
-          "SELECT * FROM wp_posts WHERE post_title = " . $review['author'],
-          ARRAY_A
-        );
-      */
-      //$post_id = $result['ID'];
-      //error_log($post_id);
       // METAS
       $meta_table_name = $wpdb->prefix . "postmeta";
       $meta_test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $meta_table_name ) );
       if ( $wpdb->get_var( $meta_test_query ) == $meta_table_name ) {
          foreach($meta_values_array as $key => $value) {
            $row = array(
-            // 'post_id'=>$post_id,
              'post_id'=>$this_page_id,
              'meta_key'=>$key,
              'meta_value'=>$value
@@ -281,7 +272,6 @@ class BL_Review_Monster  {
       $term_test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $term_table_name ) );
       if ( $wpdb->get_var( $term_test_query ) == $term_table_name ) {
         $term_row = array(
-          //'object_id'=>$post_id,
           'object_id'=>$this_page_id,
           'term_taxonomy_id'=>$term_id,
           'term_order'=>'0'

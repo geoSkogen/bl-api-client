@@ -25,7 +25,6 @@ class BL_Biz_Info_Monster {
   //returns indexed array per biz locale - elements are API request body params objects
   //same data structure as BL_CR_Suite_Client::places
   public function get_places($count,$assoc) {
-    //var_dump($assoc);
     $places = [];
     for ($i = 1; $i < $count+1; $i++) {
       $req_body = array();
@@ -60,7 +59,6 @@ class BL_Biz_Info_Monster {
       error_log('crs handshake row ' . strval($i) . ' - number of values imported:');
       error_log(strval($score));
     }
-    //error_log(var_dump($settings_table));
     return $settings_table;
   }
 
@@ -71,21 +69,21 @@ class BL_Biz_Info_Monster {
     $db_dir = ($directory==='google') ? 'gmb' : $directory;
     $tracker = (isset($options[$db_dir . '_line_' . strval($index+1)])) ?
     $options[$db_dir . '_line_' . strval($index+1)] : $tracker;
-    /* triage directory specifics & validate - return error messages to info page */
+    /* triage directory specifics & validate - return error messages to info page !!*/
     error_log('got dir tracker?  ' . $db_dir . '_line_' . strval($index+1) );
     foreach( array_keys(self::$data_keys) as $valid_key) {
       if ($body[$valid_key]) {
         switch($valid_key) {
           case 'postcode'  :
-          //
+          // add regex validation
             $valid_options[$valid_key] = $body[$valid_key];
             break;
           case 'country' :
-          //
+          // add format enforcement
             $valid_options[$valid_key] = $body[$valid_key];
             break;
           case 'telephone' :
-          //
+          // add regex validation
             $valid_options[$valid_key] = ($tracker) ? : $body[$valid_key];
             if ($tracker) {
               error_log('got dir tracker: ' . strval($tracker) );

@@ -180,14 +180,7 @@ class BL_Client_Tasker {
     $valid_req_body = BL_Biz_Info_Monster::valid_api_params($this_option,$index,$req_body,$dir);
     if ($valid_req_body) {
       error_log('bl api client found all required business options keys');
-      // TEST PATTERN ONLY - for valid request body
-      /*
-      foreach($valid_req_body as $key=>$val) {
-        error_log($key);
-        error_log($val);
-      }
-      error_log("\r\n");
-      */
+
       //NOTE: Add data validation for API keys here!!!
       define('BL_API_KEY', $auth['api_key']);
       define('BL_API_SECRET', $auth['api_secret']);
@@ -206,10 +199,7 @@ class BL_Client_Tasker {
 
     //NOTE:DATABASE SUBROUTINE - best design needs programmerly brainstorm:
     // experiment with committing review data to 'activity' table as a callback to the API call;
-    // currently doing database commit within the API call static function scope;
-    // it's a big plate of spaghetti - look at BL_Scraper::call_local_dir()
-    // lines 205 - 214 - and
-    // lines 286 - 324
+
     // The effect is non-blocking and allows the API calls to run in the background,
     // but, suppose the API call returns a result somehow without blocking ?
   }

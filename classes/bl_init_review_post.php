@@ -41,20 +41,12 @@
   }
 
   public static function review_rewrite_flush() {
-       // First, we "add" the custom post type via the above written function.
-      // Note: "add" is written with quotes, as CPTs don't get added to the DB,
-      // They are only referenced in the post_type column with a post entry,
-      // when you add a post of this CPT.
+
       self::review_custom_post_type();
 
-      // ATTENTION: This is *only* done during plugin activation hook in this example!
-      // You should *NEVER EVER* do this on every page load!!
       flush_rewrite_rules();
   }
-  /**
-   * [crs_review_star_tax description]
-   * @return [type] [description]
-   */
+
   public static function crs_review_star_tax() {
     $labels = array(
       'name'              => _x( 'Ratings', 'taxonomy general name', 'cr-suite'),
@@ -90,8 +82,7 @@
   public static function crs_review_star_numbers() {
     $parent_term = term_exists( 'rating', 'crs_review' ); // array is returned if taxonomy is given
     $parent_term_id = $parent_term['term_id']; // get numeric term id
-    error_log('parent term');
-    error_log(strval($parent_term_id));
+    
     wp_insert_term(
       '5 Stars', // the term
       'rating', // the taxonomy

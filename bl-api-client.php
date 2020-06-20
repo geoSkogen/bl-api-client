@@ -2,7 +2,7 @@
 /*
 Plugin Name:  BrightLocal Client Reviews - Alpha Build
 Description:  Live Reviews & Ratings for Your Local Business
-Version:      2020.06.15
+Version:      2020.06.19
 Author:       City Ranked Media
 Author URI:   https://cityranked.com/
 Text Domain:  bl_api_client
@@ -76,9 +76,9 @@ add_shortcode('bl_client_agg_rating',
 function bl_api_client_activate() {
   $activity = get_option('bl_api_client_activity');
   $settings = get_option('bl_api_client_settings');
-  //$commit = ($activity) ? $activity : array(
+  $commit = ($activity) ? $activity : array(
   // comment-out line above and uncomment line below to active w/ blank data table
-   $commit = array(
+  // $commit = array(
     'reviews'=>[],
     'facebook_aggregate_rating'=>[],
     'google_aggregate_rating'=>[]
@@ -121,8 +121,6 @@ function bl_api_client_add_cron_intervals( $schedules ) {
     $seconds_int = BL_Client_Tasker::get_schedule_interval();
     $seconds_key = 'bl_api_client_' . strval($seconds_int);
     $seconds_label = 'Every ' . strval($seconds_int) . ' Seconds';
-    //error_log('raw secs');
-    //error_log(strval($seconds_int));
 
     $schedules[$seconds_key] = array(
       'interval'=> $seconds_int,
@@ -182,16 +180,15 @@ function bl_api_client_schedule_executor() {
 }
 //
 bl_api_client_schedule_executor();
-// assign the api call's 'boot' task to the main cron job -
-// it 'seeds' the database and schedules the temporary 'triage' series
+
 add_action( 'bl_api_client_cron_hook',
   array('BL_Client_Tasker','api_call_boot')
 );
-// assign the locale-to-directory 'triage' task to the temporary cron job series
-// it unschedules itself when completed
+
 add_action( 'bl_api_client_call_series',
   array('BL_Client_Tasker','api_call_triage')
 );
+
 if (!post_type_exists('crs_review')) {
   add_action( 'init', array( 'BL_Init_Review_Post', 'review_custom_post_type' ) );
   add_action( 'init', array( 'BL_Init_Review_Post', 'crs_review_star_tax' ) );
