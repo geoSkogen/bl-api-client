@@ -2,8 +2,7 @@
 class BL_Client_Tasker {
   // Tasker is ALL STATIC - organizes scheduling and validation of API call data
   public static $init_key = '-1,-1';
-  public static $interval_days_int = 0;
-  public static $interval_start_ymd = '';
+  public static $stop_key = '-2,-2';
 
   function __construct() {
   //
@@ -11,7 +10,7 @@ class BL_Client_Tasker {
   // Scheduling - api_call_boot(), api_call_traige()
   public static function api_call_boot() {
     $option = get_option('bl_api_client_activity');
-    $row = ['-1,-1','call series scheduler activated ' . date('F d Y H:i',time())];
+    $row = [self::$init_key,'call series scheduler activated ' . date('F d Y H:i',time())];
     $option['log'][] = $row;
     update_option('bl_api_client_activity',$option);
 
@@ -26,7 +25,6 @@ class BL_Client_Tasker {
 
   public static function api_call_triage() {
     $commit = get_option('bl_api_client_activity');
-    $this_option = get_option('bl_api_client_settings');
     $commit_log = (isset($commit['log'])) ? end($commit['log']) : [[self::$init_key,'(not set)']];
     $xy_str = (isset($commit_log[0])) ? $commit_log[0] : self::$init_key;
     // 'decode' the last activity log
@@ -43,7 +41,7 @@ class BL_Client_Tasker {
       error_log('found valid task index: ' . $new_commit_log[0]);
       $commit['log'][] = $new_commit_log;
       update_option('bl_api_client_activity',$commit);
-      self::bl_api_get_request_body($loc_index,$dir,$this_option);
+      self::bl_api_get_request_body($loc_index,$dir);
       //
     } else {
       // null task-indexing value commits one 'stop-code' to the log
@@ -51,7 +49,7 @@ class BL_Client_Tasker {
       wp_unschedule_event( $timestamp, 'bl_api_client_call_series' );
       error_log('timestamp for next inner cron hook was : ' . strval($timestamp));
       $new_commit_log = [
-        '-2,-2',
+        self::$stop_key,
         'task stop - ' . date('F d Y H:i',time())
       ];
       if ($new_commit_log[0]!=$xy_str) {
@@ -61,36 +59,13 @@ class BL_Client_Tasker {
       }
     }
   }
-  // Utilities - get_days_interval(), get_schedule_interval(), get_interval_start_ymd(), index_task()
-  public static function get_days_interval() {
-    if (!self::$interval_days_int) {
-      $permissions = get_option('bl_api_client_permissions');
-      $interval = isset($permissions['days_interval']) ?
-        intval($permissions['days_interval'] ) : 7;
-      $start_date = mktime(0, 0, 0, date("m"), date("d")-intval($interval),   date("Y"));
-      $start_ymd = date('Y-m-d',$start_date);
-      self::$interval_days_int = $interval;
-      self::$interval_start_ymd = $start_ymd;
-    }
-    return self::$interval_days_int;
-  }
-
-  public static function get_schedule_interval() {
-    self::get_days_interval();
-    return self::$interval_days_int * 60 * 60 * 24;
-  }
-
-  public static function get_interval_start_ymd() {
-    self::get_days_interval();
-    return self::$interval_start_ymd;
-  }
 
   public static function index_task($log) {
     // get index numbers of listing directory and business locale
     // initiate with argument of '-1,-1' in order to return '0,0'
-    if ($log==='-2,-2') { error_log('null call to index task()'); return null; }
+    if ($log===self::$stop_key) { error_log('null call to index task()'); return null; }
     $result = array();
-    error_log("\r\n===================\r\nRe-Indexing Tasks\r\n===================");
+    error_log("\r\nRe-Indexing Tasks\r\n");
     error_log('bl_client field count is ' . strval(BL_API_Client_Settings::get_field_count()) );
     $loc_count = BL_API_Client_Settings::get_field_count();
     $counts = [$loc_count-1,count(BL_Review_Monster::$dirs)-1];
@@ -132,15 +107,15 @@ class BL_Client_Tasker {
     update_option('bl_api_client_activity',$activity);
   }
   // Services - bl_api_get_request_body(), bl_api_get_reviews()
-  public static function bl_api_get_request_body($index,$directory,$this_option) {
+  public static function bl_api_get_request_body($index,$directory) {
     // a conversation with local biz options
     $req_body = null;
-    $biz_info = new BL_Biz_Info_Monster($this_option);
+    $biz_info = new BL_Biz_Info_Monster();
     $dir_slug = ($directory==='google') ? 'gmb' : $directory;
     $link_prop = $dir_slug . '_link_' . strval($index+1);
     // for the first four local listings, if override isn't set,
     // check if CR Suite business options has the required lookup info
-    if (!$this_option['crs_override'] && $index < 4) {
+    if (!$biz_info->crs_override && $index < 4) {
       $biz_key = BL_CR_Suite_Client::$prefixes[$index];
       $req_body = BL_CR_Suite_Client::validate_business_data($biz_key);
       error_log('using cr-suite business options for bl-client');
@@ -152,10 +127,10 @@ class BL_Client_Tasker {
       error_log('cr-suite business options not used; using bl-client lookup');
     }
 
-    if (isset($this_option[$link_prop]) && '' != $this_option[$link_prop]) {
+    if (isset($biz_info->table[$link_prop]) && '' != $biz_info->table[$link_prop]) {
       error_log('found ' . $link_prop . '; starting api call body validation');
       // NEXT step in API validation chain
-      self::bl_api_get_reviews($directory,$index,$req_body,$this_option);
+      self::bl_api_get_reviews($directory,$index,$req_body,$biz_info->table);
     } else {
       error_log($link_prop . ' not found; skipping api call body validation');
     }
@@ -163,33 +138,23 @@ class BL_Client_Tasker {
 
   public static function bl_api_get_reviews($dir,$index,$req_body,$this_option) {
     // data validation follwed by call to scraper
-    $auth = get_option('bl_api_client');
-    /*
-    $permissions = get_option('bl_api_client_permissions');
-    $interval = isset($permissions['days_interval']) ?
-      $permissions['days_interval'] : '7';
-    $start_date = mktime(0, 0, 0, date("m"), date("d")-intval($interval),   date("Y"));
-    $start_ymd = date('Y-m-d',$start_date);
-    */
-    $start_ymd = self::get_interval_start_ymd();
-    error_log('last ymd');
-    error_log(strval($start_ymd));
-
     error_log('cron scheduler is running api call');
     error_log("\r\n\n\nREQUEST BDOY PARAMS VALIDATION TEST\r\n");
     $valid_req_body = BL_Biz_Info_Monster::valid_api_params($this_option,$index,$req_body,$dir);
     if ($valid_req_body) {
       error_log('bl api client found all required business options keys');
+      $start_ymd = BL_Client_Task_Exec::get_interval_start_ymd();
+      error_log('last ymd');
+      error_log(strval($start_ymd));
+      $auth = new BL_API_Client_Auth();
 
-      //NOTE: Add data validation for API keys here!!!
-      define('BL_API_KEY', $auth['api_key']);
-      define('BL_API_SECRET', $auth['api_secret']);
       if (defined('BL_API_KEY') && defined('BL_API_SECRET')) {
         error_log('found api keys');
         //NOTE: THIS IS THE API CALL - UNCOMMENT TO RUN
         // RE: $result -- see comments below;
-        $result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir,$start_ymd);
-        //$result = BL_Scraper::sim_call_local_dir($req_body,'fetch-reviews',$dir,$start_ymd);
+        //$result = BL_Scraper::call_local_dir($req_body,'fetch-reviews',$dir,$start_ymd);
+        $result = BL_Scraper::sim_call_local_dir($req_body,'fetch-reviews',$dir,$start_ymd);
+
       } else {
         error_log('bl api keys not found');
       }
@@ -197,11 +162,6 @@ class BL_Client_Tasker {
       error_log('bl api client required business options keys not found');
     }
 
-    //NOTE:DATABASE SUBROUTINE - best design needs programmerly brainstorm:
-    // experiment with committing review data to 'activity' table as a callback to the API call;
-
-    // The effect is non-blocking and allows the API calls to run in the background,
-    // but, suppose the API call returns a result somehow without blocking ?
   }
 
 }

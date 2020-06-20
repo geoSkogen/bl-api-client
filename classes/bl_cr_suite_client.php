@@ -25,7 +25,7 @@ class BL_CR_Suite_Client {
   public static $places = array();
 
   public static function init_business_options() {
-    $options = get_option('crs_business_options');
+    $options = get_option(self::$db_slug);
     self::$business_options = (isset($options)) ? $options : null;
     return (isset($options)) ? $options : null;
   }

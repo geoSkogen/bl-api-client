@@ -85,20 +85,19 @@ class BL_Scraper {
         // poll for results here?
         do {
           $results = $batchApi->get_results($batchId);
-          //sleep(10); // . . . e.g., to limit how often you poll?
+          // limit how often you poll?
         } while (!in_array($results['status'], array('Stopped', 'Finished')));
         // DATA
         //refer to the /xmpl/data-sample.txt file
-
         //THIS IS THE PATH TO THE REVIEWS ARRAY!
         //error_log(var_dump($results['results']['LdFetchReviews'][0]['results'][0]['reviews']));
 
         //THIS IS THE PATH TO THE REVIEWS Count & Agg Rating!
-        error_log('aggregate count<br/>');
+        error_log('aggregate count');
         error_log($results['results']['LdFetchReviews'][0]['results'][0]['reviews-count']);
-        error_log('aggregate rating<br/>');
+        error_log('aggregate rating');
         error_log($results['results']['LdFetchReviews'][0]['results'][0]['star-rating']);
-
+        // store the API response data if present
         $reviews = (isset($results['results']['LdFetchReviews'][0]['results'][0]['reviews'])) ?
           $results['results']['LdFetchReviews'][0]['results'][0]['reviews'] : null;
         $aggregate_rating = (
@@ -133,9 +132,17 @@ class BL_Scraper {
     );
     // commit the results based on outcome for reviews, agg, and log
     if ($return_val->reviews) {
-      $commit['reviews'] = $return_val->reviews;
-      $msg .= ' successful review scrape - '. date('F d Y H:i',time());
+      // update options table with recent activtiy
+      $commit['reviews'] = self::valid_activity_array(
+        $return_val->reviews,
+        $commit,
+        $locale_index,
+        $directory
+      );
+      // post new reviews crs_review style
       BL_Review_Monster::post_reviews($return_val->reviews);
+      $msg .= ' successful review scrape - '. date('F d Y H:i',time());
+      //
     } else {
       $msg .= ' no recent reviews found in batch - ' . date('F d Y H:i',time());
     }
@@ -190,6 +197,27 @@ class BL_Scraper {
     return $result;
   }
 
+  public static function valid_activity_array($data,$commit,$locale_index,$directory) {
+    // for activity admin panel only - recent activity backlog in options table
+    $result = null;
+    $staging_arr = [];
+    if ($data) {
+      $result = [];
+      if (count($commit['reviews'])) {
+        foreach($commit['reviews'] as $review) {
+          if ( $review['locale_id']!=strval($locale_index+1) ||
+            $directory!=$review['listing_directory']) {
+          // if the locale id or directory listing don't match the current
+          // push the backlogged review onto another separate array
+            $staging_arr[] = $review;
+          }
+        }
+      }
+      // meerge the new reviews with the existing
+      $result = array_merge($data,$staging_arr);
+    }
+    return $result;
+  }
 
   // FAKE API CALL - returns fake data for testing puposes only
   // Don't include this in production code
@@ -288,7 +316,7 @@ class BL_Scraper {
     $reviews = array(
       array (
          'rating' => 2,
-         'author' => 'Kid Rock',
+         'author' => 'sevddKim Kseddsim',
          'timestamp' => '2020-06-15',
          'text' =>'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
          'positive' => array ( ),
@@ -298,7 +326,7 @@ class BL_Scraper {
      ),
           array (
              'rating' => 3,
-             'author' => 'Red Fox',
+             'author' => 'Saddsesd Sseeddckm',
              'timestamp' => '2020-06-16',
              'text' =>'',
              'positive' => array ( ),
@@ -307,7 +335,7 @@ class BL_Scraper {
              'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
          ), array (
              'rating' => 4,
-             'author' => 'Black Betty',
+             'author' => 'Tffeeddim Trdsidddll',
              'timestamp' => '2020-06-17',
              'text' => 'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
              'positive' => array ( ),
@@ -317,7 +345,7 @@ class BL_Scraper {
         ),
         array (
            'rating' => 3,
-           'author' => 'Tom Sawyer',
+           'author' => 'Sadddaffndwich ddEaaerlses',
            'timestamp' => '2020-06-18',
            'text' =>'',
            'positive' => array ( ),
@@ -326,7 +354,7 @@ class BL_Scraper {
            'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
        ), array (
            'rating' => 5,
-           'author' => 'Sam the Sham',
+           'author' => 'Caraaerffely Simafdrtfeon',
            'timestamp' => '2020-06-19',
            'text' => 'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
            'positive' => array ( ),
@@ -355,9 +383,17 @@ class BL_Scraper {
     );
     // commit the results based on outcome for reviews, agg, and log
     if ($return_val->reviews) {
-      $commit['reviews'] = $return_val->reviews;
-      $msg .= ' successful review scrape - '. date('F d Y H:i',time());
+      // update options table with recent activtiy
+      $commit['reviews'] = self::valid_activity_array(
+        $return_val->reviews,
+        $commit,
+        $locale_index,
+        $directory
+      );
+      // post new reviews crs_review style
       BL_Review_Monster::post_reviews($return_val->reviews);
+      $msg .= ' successful review scrape - '. date('F d Y H:i',time());
+      //
     } else {
       $msg .= ' no recent reviews found in batch - ' . date('F d Y H:i',time());
     }
@@ -378,4 +414,5 @@ class BL_Scraper {
     //NOTE: return val needed? - or will this cause blocking effects? Does it matter?
     //return $return_val;
   }
+
 }

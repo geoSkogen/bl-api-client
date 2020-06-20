@@ -34,8 +34,16 @@ if ( !class_exists( 'BL_Review_Templater' ) ) {
   include_once 'classes/bl_review_templater.php';
 }
 
+if ( !class_exists( 'BL_API_Client_Auth' ) ) {
+  include_once 'classes/bl_api_client_auth.php';
+}
+
 if ( !class_exists( 'BL_Client_Tasker' ) ) {
   include_once 'classes/bl_client_tasker.php';
+}
+
+if ( !class_exists( 'BL_Client_Task_Exec' ) ) {
+  include_once 'classes/bl_client_task_exec.php';
 }
 
 if ( !class_exists( 'BL_Init_Review_Post' ) ) {
@@ -85,7 +93,7 @@ function bl_api_client_activate() {
   );
   // when api_call_triage() finds -1,-1 in the database, index_task() turns it
   // into 0,0 - the executable arguments for the first request body in the series
-  $commit['log'] = [['-1,-1','plugin activated ' . date('F d Y H:i',time())]];
+  $commit['log'] = [[BL_Client_Tasker::$init_key,'plugin activated ' . date('F d Y H:i',time())]];
   // return indexed associative arrays of request params per CR Suite locale
   // if a locale dosn't fully validate, it adds a null to the array
   $body_params = BL_CR_Suite_Client::business_options_rollup();
@@ -114,72 +122,9 @@ function bl_api_client_deactivate() {
 }
 
 // define our custom time interval requirements
-add_filter( 'cron_schedules', 'bl_api_client_add_cron_intervals' );
+add_filter( 'cron_schedules', array('BL_Client_Task_Exec','bl_api_client_add_cron_intervals') );
 
-function bl_api_client_add_cron_intervals( $schedules ) {
-
-    $seconds_int = BL_Client_Tasker::get_schedule_interval();
-    $seconds_key = 'bl_api_client_' . strval($seconds_int);
-    $seconds_label = 'Every ' . strval($seconds_int) . ' Seconds';
-
-    $schedules[$seconds_key] = array(
-      'interval'=> $seconds_int,
-      'display'=> esc_html__( $seconds_label )
-    );
-    $schedules['five_minutes'] = array(
-        'interval' => 300,
-        'display'  => esc_html__( 'Every Five Minutes' ),
-    );
-    return $schedules;
-}
-
-function bl_api_client_schedule_executor() {
-  $permissions = get_option('bl_api_client_permissions');
-  $activity = get_option('bl_api_client_activity');
-  if (!isset($activity['log'])) {
-    $activity = array();
-    $activity['log'] = [];
-  }
-  //
-  if ( isset($permissions['verified']) &&
-       $permissions['verified'] &&
-       !$permissions['cron_override']) {
-    if ( !wp_next_scheduled( 'bl_api_client_cron_hook' ) ) {
-      $seconds_int = BL_Client_Tasker::get_schedule_interval();
-      $seconds_key = 'bl_api_client_' . strval($seconds_int);
-      error_log('got cron hook schedule - outer ring: ' . $seconds_key);
-      wp_schedule_event( time(), $seconds_key, 'bl_api_client_cron_hook' );
-      $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
-      //everything below this until the outer else satement is debugging code only; remove in production
-      error_log('timestamp for outer cron hook is : ' . strval($timestamp));
-    } else {
-      $timestamp = wp_next_scheduled( 'bl_api_client_cron_hook' );
-      error_log('timestamp for next outer cron hook is : ' . strval($timestamp));
-      $timestamp1 = wp_next_scheduled( 'bl_api_client_call_series' );
-      error_log('timestamp for next inner cron hook is : ' . strval($timestamp1));
-      error_log('the current time is : ' . strval(time()));
-    }
-  } else {
-    if (!$permissions['verified'] && end($activity['log'])[0]!='-3,-3') {
-      error_log('outer cron hook un-scheduled - permissions error');
-      $new_log =  array('-3,-3','tasks unscheduled - settings unverified');
-      BL_CLient_Tasker::bl_api_client_flush_activity_log($activity,$new_log);
-      bl_api_client_deactivate();
-    } else if ( isset($permissions['cron_override']) &&
-        $permissions['cron_override'] &&
-        $permissions['verified'] ) {
-      error_log('bl api client running in manual mode');
-      if (end($activity['log'])[0]!='-4,-4') {
-        error_log('outer cron hook un-scheduled - manual override event');
-        $new_log =  array('-4,-4','tasks unscheduled - manual override');
-        BL_CLient_Tasker::bl_api_client_flush_activity_log($activity,$new_log);
-        bl_api_client_deactivate();
-      }
-    }
-  }
-}
-//
-bl_api_client_schedule_executor();
+BL_Client_Task_Exec::bl_api_client_schedule_executor();
 
 add_action( 'bl_api_client_cron_hook',
   array('BL_Client_Tasker','api_call_boot')

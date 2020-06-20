@@ -9,13 +9,15 @@ class BL_Review_Monster  {
   public $reviews_all = array();
   public $rating_all = array();
   public $logs = [];
+  public static $options_slug = 'bl_api_client_activity';
   public static $props = ['log','reviews','aggregate_rating'];
   public static $dirs = ['google','facebook'];
   public static $review_props = ['author_avatar','author','timestamp','rating','text','listing_directory','locale_id','id'];
   public static $star_img_path = '/wp-content/plugins/bl-api-client/assets/gold-star.png';
 
-  function __construct($options_arr) {
-    $this->reviews = $options_arr['reviews'];
+  function __construct($table) {
+    $options_arr = get_option(self::$options_slug);
+    $this->reviews = $table;
     $this->ratings['google'] = $options_arr['google_aggregate_rating'];
     $this->ratings['facebook'] = $options_arr['facebook_aggregate_rating'];
     $this->reviews_all = $this->sort_by_date();

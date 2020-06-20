@@ -10,17 +10,23 @@
 class BL_Biz_Info_Monster {
   public $count;
   public $places;
+  public $table;
+  public $crs_override = null;
   public $valid_keys = array(
       'business_name'=>'business-names','city'=>'city','zipcode'=>'postcode',
       'address'=>'street-address','country'=>'country','phone'=>'telephone');
+  public static $options_slug = 'bl_api_client_settings';
   public static $data_keys = array(
       'business-names'=>'business_name','city'=>'city','postcode'=>'zipcode',
       'street-address'=>'address','country'=>'country','telephone'=>'phone');
+
   //returns an empty array if no field count
-  function __construct($table) {
-    $this->count = (isset($table['field_count']) && ''!=$table['field_count']) ?
-      $table['field_count'] : 0;
-    $this->places = $this->get_places($this->count,$table);
+  function __construct() {
+    $this->table = get_option(self::$options_slug);
+    $this->count = (isset($this->table['field_count']) && ''!=$this->table['field_count']) ?
+      $this->table['field_count'] : 0;
+    $this->places = $this->get_places($this->count,$this->table);
+    $this->crs_override = $this->table['crs_override'];
   }
   //returns indexed array per biz locale - elements are API request body params objects
   //same data structure as BL_CR_Suite_Client::places

@@ -412,20 +412,9 @@ class BL_API_Client_Settings {
     $log = (isset($activity['log']) && count($activity['log'])) ?
         array_reverse($activity['log']) : [];
     foreach ($log as $entry) {
-      /*
-      error_log('using default intvals for call now value?');
-      error_log($entry[0]);
-      error_log($entry[1]);
-      */
       $xy = explode(',',$entry[0]);
       $msg = (strpos($entry[1],'review scrape')) ? true : false;
       if ( intval($xy[0]) > -1 && intval($xy[1]) > -1 && $msg ) {
-        /*
-        error_log('VALIDATING INTVALS FOR CALL NOW VALUE:');
-        error_log('last successful scrape:');
-        error_log($xy[0]);
-        error_log($xy[1]);
-        */
         $task_assoc = BL_Client_Tasker::index_task($entry[0]);
         $result = ($task_assoc) ?
           strval($task_assoc['loc']) . ',' . strval($task_assoc['dir']) :
@@ -443,7 +432,7 @@ class BL_API_Client_Settings {
     // all the table names
     $log_slug = 'activity';
     $perm_slug = 'permissions';
-    $info_slug = 'settings';
+  //  $info_slug = 'settings';
     $this_slug = 'call_now';
     //
     $style_rule = 'style="display:none;"';
@@ -453,8 +442,10 @@ class BL_API_Client_Settings {
        get_option("bl_api_client_{$log_slug}") : array();
     $permissions =  ( get_option("bl_api_client_{$perm_slug}") ) ?
        get_option("bl_api_client_{$perm_slug}") : array();
+       /*
     $settings = ( get_option("bl_api_client_{$info_slug}") ) ?
        get_option("bl_api_client_{$info_slug}") : array();
+       */
     $options = ( get_option("bl_api_client_{$this_slug}") ) ?
        get_option("bl_api_client_{$this_slug}") : array();
     // determine pre-set values for the form settings based on last use
@@ -480,7 +471,7 @@ class BL_API_Client_Settings {
       update_option("bl_api_client_{$this_slug}",$options);
       update_option("bl_api_client_{$log_slug}",$activity);
 
-      BL_Client_Tasker::bl_api_get_request_body($index,$directory,$settings);
+      BL_Client_Tasker::bl_api_get_request_body($index,$directory);
     } else {
       /*
       error_log('API call not verified');
@@ -554,7 +545,7 @@ class BL_API_Client_Settings {
 
   public static function bl_api_client_activity_section() {
     $options = get_option('bl_api_client' . '_activity');
-    $review_monster = new BL_Review_Monster($options);
+    $review_monster = new BL_Review_Monster($options['reviews']);
 
     $review_table = "<input name='submit' type='submit' id='call_now_1' class='button-primary' value='&beta;&lambda;' /><br/><br/>";
 
