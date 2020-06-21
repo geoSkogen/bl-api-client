@@ -341,7 +341,7 @@ class BL_Review_Monster  {
         } while ($response);
       } else {
         error_log('post not found');
-        error_log(print_r($post,true));
+        //error_log(print_r($post,true));
       }
       if (count($table)) {
         $result[strval($post['ID'])] = $table;
@@ -353,10 +353,6 @@ class BL_Review_Monster  {
   public static function get_taxa_vals() {
     $result = null;
     return $result;
-  }
-
-  public static function assemble_bl_review($post,$meta) {
-
   }
 
   public static function get_crs_reviews() {
@@ -381,7 +377,7 @@ class BL_Review_Monster  {
             $meta_obj = array();
             $post_obj = array();
             foreach ($arr_val as $index_key=>$postmetas) {
-              error_log($arr_key);
+              //error_log($arr_key);
               //error_log(print_r($postmetas,true));
               if ( is_array($postmetas) ) {
                 $meta_obj[$postmetas['meta_key']]=$postmetas['meta_value'];
@@ -389,8 +385,10 @@ class BL_Review_Monster  {
                 //error_log($postmetas['meta_value']);
               }
             }
+            // NOTE:add subroutine here for the taxa merge - they'll be needed
+            // for legacy reviews
             $post_obj = array_merge($this_post,$meta_obj);
-            error_log(print_r($post_obj,true));
+            //error_log(print_r($post_obj,true));
             $reviews[] = $post_obj;
           }
         }
@@ -401,6 +399,26 @@ class BL_Review_Monster  {
       error_log('crs_review post type not found in wp_posts table');
     }
     return $reviews;
+  }
+
+  public static function get_bl_client_reviews() {
+    $result = [];
+    $crs_reviews = self::get_crs_reviews();
+    foreach ($crs_reviews as $crs_review) {
+      $bl_review = [];
+      foreach (self::$meta_props as $meta_prop) {
+        $slug0 = str_replace('review-','',$meta_prop);
+        $bl_prop = str_replace('-','_',$slug0);
+        $bl_review[$bl_prop] = (isset($crs_review[$meta_prop])) ?
+          $crs_review[$meta_prop] : '(not set)';
+      }
+      $bl_review['text'] = $crs_review['post_content'];
+      $bl_review['timestamp'] = (isset($crs_review['timestamp'])) ?
+       $crs_review['timestamp'] : $crs_review['post_date'];
+      error_log(print_r($bl_review,true));
+      $result[] = $bl_review;
+    }
+    return $result;
   }
 
 }
