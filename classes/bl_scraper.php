@@ -316,8 +316,8 @@ class BL_Scraper {
     $reviews = array(
       array (
          'rating' => 2,
-         'author' => 'sevddKim Kseddsim',
-         'timestamp' => '2020-06-15',
+         'author' => 'serjvvvffrmim Ksejcccigp',
+         'timestamp' => '2020-06-20',
          'text' =>'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
          'positive' => array ( ),
          'critical' => array ( ),
@@ -326,8 +326,8 @@ class BL_Scraper {
      ),
           array (
              'rating' => 3,
-             'author' => 'Saddsesd Sseeddckm',
-             'timestamp' => '2020-06-16',
+             'author' => 'Saglxxxre eglrvvvvffo',
+             'timestamp' => '2020-06-20',
              'text' =>'',
              'positive' => array ( ),
              'critical' => array ( ),
@@ -335,8 +335,8 @@ class BL_Scraper {
              'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
          ), array (
              'rating' => 4,
-             'author' => 'Tffeeddim Trdsidddll',
-             'timestamp' => '2020-06-17',
+             'author' => 'Tfnbvvvjjjffoim Trdseqr',
+             'timestamp' => '2020-06-20',
              'text' => 'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
              'positive' => array ( ),
              'critical' => array ( ),
@@ -345,8 +345,8 @@ class BL_Scraper {
         ),
         array (
            'rating' => 3,
-           'author' => 'Sadddaffndwich ddEaaerlses',
-           'timestamp' => '2020-06-18',
+           'author' => 'Sadttteke eefffecccses',
+           'timestamp' => '2020-06-20',
            'text' =>'',
            'positive' => array ( ),
            'critical' => array ( ),
@@ -354,8 +354,8 @@ class BL_Scraper {
            'id' => '50399aec6a38ab58426ae2e77057a05c36167f52'
        ), array (
            'rating' => 5,
-           'author' => 'Caraaerffely Simafdrtfeon',
-           'timestamp' => '2020-06-19',
+           'author' => 'Caffeferkrk kefennnnon',
+           'timestamp' => '2020-06-120',
            'text' => 'We had a great experience with Earthworks Excavating Services Spaghetti. The communication was wonderful.',
            'positive' => array ( ),
            'critical' => array ( ),

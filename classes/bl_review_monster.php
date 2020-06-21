@@ -12,7 +12,11 @@ class BL_Review_Monster  {
   public static $options_slug = 'bl_api_client_activity';
   public static $props = ['log','reviews','aggregate_rating'];
   public static $dirs = ['google','facebook'];
-  public static $review_props = ['author_avatar','author','timestamp','rating','text','listing_directory','locale_id','id'];
+  public static $review_props = ['author','author_avatar','timestamp','rating','text','listing_directory','locale_id','id'];
+  public static $meta_props = ['review-author','author-email','author-avatar','timestamp','review-rating','listing-directory','locale-id','review-id'];
+  public static $post_props = array('ID'=>'post_id','post_type'=>'crs_review','post_content'=>'text','post_author'=>'author','post_date'=>'timestamp');
+  public static $taxonomy_props = array('table'=>'term_relationships','id'=>'object_id','lookup_key'=>'term_taxonomy_id');
+  public static $taxa_props = array('table'=>'terms','id'=>'term_id','lookup_key'=>'name');
   public static $star_img_path = '/wp-content/plugins/bl-api-client/assets/gold-star.png';
 
   function __construct($table) {
@@ -214,12 +218,11 @@ class BL_Review_Monster  {
 
       $meta_values_array['review-author'] = $review['author'];
       $meta_values_array['review-id'] = $review['id'];
-      $meta_values_array['author-email'] = '(not set)';
       $meta_values_array['author-avatar'] = $review['author_avatar'];
       $meta_values_array['listing-directory'] = $review['listing_directory'];
       $meta_values_array['locale-id'] = $review['locale_id'];
       $meta_values_array['timestamp'] = $review['timestamp'];
-      $meat_values_array['rating'] = $review['rating'];
+      $meta_values_array['review-rating'] = $review['rating'];
 
       $review_number =  $review['rating'];
 
@@ -232,7 +235,7 @@ class BL_Review_Monster  {
       } else {
         $review_rating = $review_number . ' Stars';
       }
-
+      // term ID becomes the value stored in the relationships table
       $term_id = 7 - $review_number;
 
       $review_post = array(
@@ -281,6 +284,123 @@ class BL_Review_Monster  {
         $wpdb->insert($term_table_name, $term_row);
       }
     }
+  }
+
+  public static function get_post_type($str) {
+    global $wpdb;
+    $result = [];
+    $post_row = [];
+    $i = 0;
+    do {
+      $post_row = [];
+      $response = $wpdb->get_row(
+        "SELECT * FROM `wp_posts` WHERE `post_type` = '{$str}'",
+        ARRAY_A,
+        $i
+      );
+      /*
+      error_log('response is');
+      error_log(print_r($response,true));
+      */
+      foreach( self::$post_props as $post_key=>$post_val ) {
+        /*
+        error_log('post key is ');
+        error_log($post_key);
+        error_log('$response[$post_key] is');
+        error_log($response[$post_key]);
+        */
+        if ($response[$post_key]) {
+          $post_row[$post_key] = $response[$post_key];
+        }
+      }
+      $result[$response['ID']] = $post_row;
+      $i++;
+    } while ($response);
+
+    return $result;
+  }
+
+  public static function get_meta_rows($posts) {
+    global $wpdb;
+    $result = [];
+    foreach($posts as $post) {
+      //error_log(print_r($post,true));
+      $table = [];
+      if (!empty($post['ID'])) {
+        $i = 0;
+        do {
+          $response = $wpdb->get_row(
+            "SELECT * FROM `wp_postmeta` WHERE `post_id` = " . strval($post['ID']),
+            ARRAY_A,
+            $i
+          );
+          if (in_array($response['meta_key'],self::$meta_props)) {
+            $table[] = $response;
+          }
+          $i++;
+        } while ($response);
+      } else {
+        error_log('post not found');
+        error_log(print_r($post,true));
+      }
+      if (count($table)) {
+        $result[strval($post['ID'])] = $table;
+      }
+    }
+    return (count(array_keys($result))) ?  $result : '';
+  }
+
+  public static function get_taxa_vals() {
+    $result = null;
+    return $result;
+  }
+
+  public static function assemble_bl_review($post,$meta) {
+
+  }
+
+  public static function get_crs_reviews() {
+    global $wpdb;
+    $reviews = [];
+    $posts = self::get_post_type(self::$post_props['post_type']);
+    if ($posts) {
+      $metas = self::get_meta_rows($posts);
+      //$taxa = self::get_taxa_vals($posts);
+      error_log('posts');
+      error_log(count(array_keys($posts)));
+      if ($metas) {
+        $score = 0;
+        error_log('metas');
+        error_log(count(array_keys($metas)));
+        //error_log('got metas');
+        //error_log(print_r($metas,true));
+        foreach($metas as $arr_key=>$arr_val) {
+
+          if (isset($posts[$arr_key])) {
+            $this_post = $posts[$arr_key];
+            $meta_obj = array();
+            $post_obj = array();
+            foreach ($arr_val as $index_key=>$postmetas) {
+              error_log($arr_key);
+              //error_log(print_r($postmetas,true));
+              if ( is_array($postmetas) ) {
+                $meta_obj[$postmetas['meta_key']]=$postmetas['meta_value'];
+                //error_log(strval($arr_key));
+                //error_log($postmetas['meta_value']);
+              }
+            }
+            $post_obj = array_merge($this_post,$meta_obj);
+            error_log(print_r($post_obj,true));
+            $reviews[] = $post_obj;
+          }
+        }
+      } else {
+        error_log('metadata location error for crs_reviews');
+      }
+    } else {
+      error_log('crs_review post type not found in wp_posts table');
+    }
+    return $reviews;
   }
 
 }
