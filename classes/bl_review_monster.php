@@ -332,7 +332,7 @@ class BL_Review_Monster  {
         } while ($response);
       } else {
         error_log('post not found');
-        //error_log(print_r($post,true));
+        error_log(print_r($post,true));
       }
       if (count($table)) {
         $result[strval($post['ID'])] = $table;
