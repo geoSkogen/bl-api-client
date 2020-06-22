@@ -288,13 +288,14 @@ class BL_Review_Monster  {
 
   public static function get_post_type($str) {
     global $wpdb;
+    $pre = $wpdb->get_blog_prefix();
     $result = [];
     $post_row = [];
     $i = 0;
     do {
       $post_row = [];
       $response = $wpdb->get_row(
-        "SELECT * FROM `wp_posts` WHERE `post_type` = '{$str}'",
+        "SELECT * FROM `{$pre}posts` WHERE `post_type` = '{$str}'",
         ARRAY_A,
         $i
       );
@@ -304,7 +305,7 @@ class BL_Review_Monster  {
         }
       }
       $result[$response['ID']] = $post_row;
-      //error_log(print_r($post_row,true));
+      error_log(print_r($post_row,true));
       $i++;
     } while ($response);
 
@@ -313,6 +314,7 @@ class BL_Review_Monster  {
 
   public static function get_meta_rows($posts) {
     global $wpdb;
+    $pre = $wpdb->get_blog_prefix();
     $result = [];
     foreach($posts as $post) {
       //error_log(print_r($post,true));
@@ -321,7 +323,7 @@ class BL_Review_Monster  {
         $i = 0;
         do {
           $response = $wpdb->get_row(
-            "SELECT * FROM `wp_postmeta` WHERE `post_id` = " . strval($post['ID']),
+            "SELECT * FROM `{$pre}postmeta` WHERE `post_id` = " . strval($post['ID']),
             ARRAY_A,
             $i
           );
@@ -343,11 +345,12 @@ class BL_Review_Monster  {
 
   public static function get_taxon_codes($posts) {
     global $wpdb;
+    $pre = $wpdb->get_blog_prefix();
     $result = [];
     foreach ($posts as $post) {
       if (!empty($post['ID'])) {
         $response = $wpdb->get_row(
-          "SELECT * FROM wp_" . self::$taxon_props['table'] . " WHERE " .
+          "SELECT * FROM ". $pre . self::$taxon_props['table'] . " WHERE " .
           self::$taxon_props['id_key'] . " = " . strval($post['ID']),
           ARRAY_A,
           0
@@ -371,11 +374,12 @@ class BL_Review_Monster  {
 
   public static function get_terms_map($str) {
     global $wpdb;
+    $pre = $wpdb->get_blog_prefix();
     $result = [];
     for ( $i = 0; $i < 5; $i++) {
       $slug = ($i) ? $str . 's' : $str;
       $response = $wpdb->get_row(
-        "SELECT * FROM wp_" . self::$taxa_props['table'] . " WHERE " .
+        "SELECT * FROM ". $pre . self::$taxa_props['table'] . " WHERE " .
         self::$taxa_props['lookup_key'] . " = '" . strval($i+1) . "-" . $slug . "'",
         ARRAY_A,
         0
@@ -388,11 +392,12 @@ class BL_Review_Monster  {
 
   public static function get_taxa_map($arr) {
     global $wpdb;
+    $pre = $wpdb->get_blog_prefix();
     $result = array();
     $i = 0;
     foreach($arr as $taxon_val) {
       $response = $wpdb->get_row(
-        "SELECT * FROM wp_" . self::$taxa_props['table'] . " WHERE " .
+        "SELECT * FROM ". $pre . self::$taxa_props['table'] . " WHERE " .
         self::$taxa_props['id_key'] . " = " . strval($taxon_val),
         ARRAY_A,
         0
