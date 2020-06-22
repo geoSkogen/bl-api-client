@@ -7,7 +7,7 @@ bl_review_templater.php - add aggregate review snippet HTML!!! Math works!
 
 bl_review_monster.php
                                 - COMPLETED! 6.15.2020 - method for weighted average of all locales & directories
-                                - CRITICAL - method for associating metas & taxa with post id for full active record!!!!
+                                - COMPLETED! 6.20.2020 - CRITICAL - method for associating metas & taxa with post id for full active record!!!!
                                   TO DO - eventually . . .
                                 - for weighted average by locale or directory
                                 - for aggregate review shortcode handler (see also bl_review_templater.php, line 35)
