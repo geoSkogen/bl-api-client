@@ -45,7 +45,7 @@ class BL_Review_Monster  {
       }
     }
     var_dump($this->ratings);
-    $result->rating = $rating/$count;
+    $result->rating = number_format($rating/$count,1,'.',',');
     $result->count = (!$result->rating) ? 0 : $count;
     return $result;
   }

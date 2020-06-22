@@ -24,16 +24,40 @@ class BL_Review_Templater {
     }
   }
   // NOTE: update this to current CR-snippetX!
-  public static function aggregate_rating_shortcode_handler() {
+  public static function aggregate_rating_shortcode_handler($atts) {
     $result = '(not set)';
     //hit your local options table for recent activity
     $options_arr = get_option('bl_api_client_activity');
+    $permissions = get_option('bl_api_client_permissions');
+    $geoblock_options = get_option( 'og_geo_options' );
     //instantiate the "review monster" active record
     $monster = new BL_Review_Monster($options_arr['reviews']);
     $avg_obj = $monster->get_weighted_aggregate();
-    $result = "<h2>Rated:{$avg_obj->rating}</h2>";
-    $result .= "<h2>Out of {$avg_obj->count} reviews</h2>";
-    return $result;
+    $agg_class = 'class="hreview-aggregate"';
+    $business_name = ($permissions['verified']) ? $permissions['verify'] : '';
+    $coeff = strval(floatval($avg_obj->rating) * 20);
+    $a = shortcode_atts(
+      array('title' => 'Our Reviews'),
+      $atts
+    );
+    $button_one = isset($geoblock_options['og_geo_button_text_one']) ?  $geoblock_options['og_geo_button_text_one'] : '';
+    $button_one_link = isset($geoblock_options['og_geo_button_link_one']) ?  $geoblock_options['og_geo_button_link_one'] : '';
+    $button_two = isset($geoblock_options['og_geo_button_text_two']) ?  $geoblock_options['og_geo_button_text_two'] : '';
+    $button_two_link = isset($geoblock_options['og_geo_button_link_two']) ?  $geoblock_options['og_geo_button_link_two'] : '';
+
+    $snippet_html = '<h3 class="card-title">' . $a['title'] . '</h3>';
+    $snippet_html .= '<div id="cr-review-blockx" ' . $agg_class .'>';
+    $snippet_html .= '<b class="item"><span class="fn">'. $business_name . '</span></b>';
+    $snippet_html .= '<div>';
+    $snippet_html .= '<div class="rating-container">';
+    $snippet_html .= '<div class="r-stars">';
+    $snippet_html .= '<div class="r-stars-inner" style="width: ' . $coeff . '%; background: transparent url(' . site_url() . self::$star_img_path . ' ) repeat-x 0 0;background-position: 0 -25px;"> ';
+    $snippet_html .= '</div><div>';
+    $snippet_html .= '<p class="aggRatings">Rated <span class="rating">' . strval($avg_obj->rating) . '</span>/<span>5</span> Based on <span class="count">' . strval($avg_obj->count) . '</span> Verified Ratings</p>';
+    $snippet_html .= '<p><a class="aggReview-button" href="' . $button_one_link . '">' . $button_one . '</a><br>';
+    $snippet_html .= '<a class="aggReview-button" href="' . $button_two_link . '">' . $button_two . '</a></p>';
+    $snippet_html .= '</div></div></div></div></div></div>';
+    return $snippet_html;
   }
 
   public static function local_reviews_shortcode_handler() {
