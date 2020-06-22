@@ -100,8 +100,6 @@ if (!post_type_exists('crs_review')) {
   add_action( 'init', array( 'BL_Init_Review_Post', 'crs_review_star_numbers' ) );
 }
 
-//BL_Review_Monster::get_crs_reviews();
-BL_Review_Monster::get_bl_client_reviews();
 //DEV NOTES
 //API CALL FORMAT! work on discovering the correct URL format for GMB pings
 //different lookup-by-URL formats; so far none is accepted:
