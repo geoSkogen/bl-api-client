@@ -305,7 +305,7 @@ class BL_Review_Monster  {
         }
       }
       $result[$response['ID']] = $post_row;
-      error_log(print_r($post_row,true));
+      //error_log(print_r($post_row,true));
       $i++;
     } while ($response);
 
