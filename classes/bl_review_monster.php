@@ -28,7 +28,7 @@ class BL_Review_Monster  {
     $this->reviews_all = $this->sort_by_date();
     $this->logs = $options_arr['log'];
   }
-  //NOTE:Build out weighted average function
+
   public function get_weighted_aggregate() {
     $result = new stdClass();
     $count = 1;
@@ -238,23 +238,29 @@ class BL_Review_Monster  {
 
       $term_id = $dictionary[$review_number];
 
+      $post_title = 'A ' . strval($review_number) . ' Star ' .
+        ucwords($review['listing_directory']) . ' Review from ' .
+        ucwords($review['author']);
+
       $review_post = array(
-        'post_title'    => $review['author'],
+        'post_title'    => $post_title,
         'post_content'  => $review['text'],
-        'post_author'   => $review['author'],
+        //'post_author'   => $review['author'],
         'post_type'     => 'crs_review',
         'post_status'   => 'publish',
-        'post_date' => date('Y-m-d', strtotime($review['timestamp'])),
+        'post_date_gmt' => date('Y-m-d', strtotime($review['timestamp']))
       );
+
       // POST
       $table_name = $wpdb->prefix . "posts";
       $test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) );
 
        if ( $wpdb->get_var( $test_query ) == $table_name ) {
-         $wpdb->insert($table_name, $review_post);
-      }
+         //$wpdb->insert($table_name, $review_post);
+         wp_insert_post($review_post);
+       }
       // METAS & TAXA
-      $this_page = get_page_by_title( $review['author'], OBJECT ,'crs_review');
+      $this_page = get_page_by_title( $post_title, OBJECT ,'crs_review');
       $this_page_id = ($this_page->ID) ? $this_page->ID : '' ;
       error_log('POSTED REVIEW - PAGE ID:');
       error_log($this_page_id);
@@ -334,7 +340,7 @@ class BL_Review_Monster  {
         } while ($response);
       } else {
         error_log('post not found');
-        error_log(print_r($post,true));
+        //error_log(print_r($post,true));
       }
       if (count($table)) {
         $result[strval($post['ID'])] = $table;

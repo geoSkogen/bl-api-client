@@ -131,6 +131,13 @@ class BL_API_Client_Settings {
     );
 
     add_settings_section(
+      'bl_api_client_history',                             //uniqueID
+      'Upload BrightLocal Reviews History',                //Title
+      array('BL_API_Client_Settings','bl_api_client_history_section'),//CallBack Function
+      'bl_api_client_history'                               //page-slug
+    );
+
+    add_settings_section(
       'bl_api_client_activity',                               //uniqueID
       'BrightLocal API Activity',                             //Title
       array('BL_API_Client_Settings','bl_api_client_activity_section'),//CallBack Function
@@ -200,6 +207,14 @@ class BL_API_Client_Settings {
       'bl_api_client_call_now',
       'bl_api_client_call_now'
     );
+
+    add_settings_field(
+      'csv_upload',
+      'Upload CSV File',
+      array('BL_API_Client_Settings','bl_api_client_csv_upload'),
+      'bl_api_client_history',
+      'bl_api_client_history'
+    );
     //dynamic grouped settings fields - reiterates all items on the list: $bl_api_client_label_toggle
     for ($i = 1; $i < self::get_field_count() + 1; $i++) {
       self::$current_field_index = $i;
@@ -233,7 +248,8 @@ class BL_API_Client_Settings {
     register_setting( 'bl_api_client_settings', 'bl_api_client_settings' );
     register_setting( 'bl_api_client_activity', 'bl_api_client_activity' );
     register_setting( 'bl_api_client_permissions', 'bl_api_client_permissions' );
-    register_setting( 'bl_api_client_call_now', 'bl_api_client_call_now' );
+    //register_setting( 'bl_api_client_call_now', 'bl_api_client_call_now' );
+    register_setting( 'bl_api_client_history', 'bl_api_client_history' );
   }
   //Templates
   ////template 3 - settings section field - dynamically rendered <input/>
@@ -399,7 +415,7 @@ class BL_API_Client_Settings {
     error_log('field query crs override');
     error_log(strval(self::$cron_override));
     */
-    $result .= "<input type='number' class='zeroText' style='width:4em;' min='1' max='31'
+    $result .= "<input type='number' class='zeroText' style='width:4em;' min='1' max='730'
       name='bl_api_client_permissions[days_interval]' value='{$days_interval}' ";
     $result .= "<label for='days_interval' class='call_now_label'>&nbsp;&nbsp;Days</label>";
 
@@ -500,6 +516,32 @@ class BL_API_Client_Settings {
     echo $result;
 
   }
+
+  public static function bl_api_client_csv_upload() {
+    // options table controller
+    $client = BL_Reviews_Importer::csv_upload_client();
+    // form values
+    $value_tag = (!$client->file_path || !$client->valid_file_name) ?
+      'placeholder' : 'value';
+    $placeholder = (!$client->file_path || !$client->valid_file_name) ?
+      '(not set)' : $client->file_path;
+    $upload_text = ($client->valid_file_name) ? : '(upload a file)';
+    //uploader inputs
+    $str = "";
+    $str .= "<div class='flexOuterStart'>";
+    $str .= "<input type='text' class='bl_api_client_admin' id='upload_path'
+      name='bl_api_client_history[upload_path]' {$value_tag}='{$client->file_path}'/>";
+    $str .= "<div class='bl_api_client_file' id='upload_button'><b>{$upload_text}</b>";
+    $str .= "<input id='upload_file' type='file' class='bl_api_client_admin'
+      name='bl_api_client_history[upload_file]'/>";
+    $str .= "</div></div>";
+    /*
+    $str .= "<input type='text' style='display:none' id='former_structure_path'
+      name='cr_sagt[former_structure_path]' value='{$client->former_path}'/>";
+    $str .= '';
+    */
+    echo $str;
+  }
   // currently not in use
   public static function sticky_field($dir,$prop,$db_slug,$json_str) {
     $style_rule = 'style="display:none;"';
@@ -558,6 +600,18 @@ class BL_API_Client_Settings {
   public static function bl_api_client_permissions_section() {
     // . . . while the whole moves
     // and every part stands still.
+
+  }
+
+  public static function bl_api_client_history_section() {
+      wp_enqueue_media();
+      wp_register_script(
+        'bl_api_client_media_uploader_csv',
+        plugins_url('../lib/bl_api_client_media_uploader_csv.js', __FILE__),
+        array('jquery')
+      );
+      wp_enqueue_script('bl_api_client_media_uploader_csv');
+      wp_enqueue_script('bl_api_client_upload_helper',plugin_dir_url(__FILE__).'../lib/bl_api_client_upload_helper.js');
   }
 
   public static function bl_api_client_call_now_section() {

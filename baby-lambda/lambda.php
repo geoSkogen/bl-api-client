@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '../vendor/autoload.php');
+require_once(__DIR__ . '../../vendor/autoload.php');
 require_once(__DIR__ . '/records/auth.php');
 require_once(__DIR__ . '/records/places.php');
 require_once(__DIR__ . '/classes/body_params.php');

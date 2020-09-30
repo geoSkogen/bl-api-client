@@ -15,6 +15,7 @@ class BL_Scraper {
 
   public static function call_local_dir($options,$api_endpoint,$directory,$ymd) {
     //in this case the arg $options are request body key=>val pairs
+    ini_set('max_execution_time', 300);
     global $wpdb;
     $return_val = new stdClass();
     $commit = get_option('bl_api_client_activity');

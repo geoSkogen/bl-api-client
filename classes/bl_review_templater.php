@@ -74,7 +74,7 @@ class BL_Review_Templater {
     // NOTE: add filtration - BL_Review_Monster should have filtration
     // -by rating, -by locale, -by date
     foreach ($monster->reviews_all as $review_obj) {
-      $result .= "<div class='bl_client_review {$review_obj['listing_directory']}'>";
+      $result .= "<div class='bl_client_review {$review_obj['listing_directory']}' itemprop='review' itemscope='' itemtype='http://schema.org/Review'>";
       //iterate each review object property
       foreach (self::$review_props as $review_prop) {
         //inject its keyname into the classname
@@ -87,7 +87,8 @@ class BL_Review_Templater {
               break;
             case 'author' :
             case 'timestamp' :
-              $inner_html = "<p {$this_class}>{$review_obj[$review_prop]}</p>";
+              $meta_prop = ($review_prop==='author') ? "itemprop='$review_prop'" : '';
+              $inner_html = "<p $meta_prop {$this_class}>{$review_obj[$review_prop]}</p>";
               break;
             case 'rating' :
               //determine the width coefficient from the aggregate rating
@@ -100,15 +101,20 @@ class BL_Review_Templater {
               //nest the elements; inject their inline styles
               $inner_inner_html = "<div class='bl_client gold_stars' $style_rule></div>";
               $inner_html = "<div class='bl_client gold_stars_wrapper' {$minwidth}>{$inner_inner_html}</div>";
+              $inner_html .= '<div class="cr-hidden"  itemprop="reviewRating" itemscope="" itemtype="http://schema.org/Rating">';
+              $inner_html .= '<meta itemprop="bestRating" content="5">';
+              $inner_html .= '<meta itemprop="worstRating" content="1">';
+              $inner_html .= '<meta itemprop="ratingValue" content="' . strval(floatval($review_obj[$review_prop])) . '">';
+              $inner_html .= '</div>';
               break;
             case 'text' :
-              $inner_html = "<p {$this_class}>{$review_obj[$review_prop]}</p>";
+              $inner_html = "<p itemprop='reviewBody' {$this_class}>{$review_obj[$review_prop]}</p>";
               break;
             default:
               $inner_html = '';
           }
         } else {
-          $inner_html = "<span {$this_class}>(not set)</span>";
+          $inner_html = "<span itemprop='reviewBody' {$this_class}>(not set)</span>";
         }
         //append the current review attribute
         $result .= $inner_html;
