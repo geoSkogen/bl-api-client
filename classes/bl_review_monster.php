@@ -44,7 +44,7 @@ class BL_Review_Monster  {
         error_log($dir);
       }
     }
-    var_dump($this->ratings);
+    //var_dump($this->ratings);
     $result->rating = number_format($rating/$count,1,'.',',');
     $result->count = (!$result->rating) ? 0 : $count;
     return $result;
