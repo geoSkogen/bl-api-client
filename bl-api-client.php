@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name:  BrightLocal Client Reviews - Alpha Build
+Plugin Name:  BrightLocal Client Reviews 
 Description:  Live Reviews & Ratings for Your Local Business
-Version:      2020.06.19
+Version:      2020.10.1
 Author:       City Ranked Media
 Author URI:   https://cityranked.com/
 Text Domain:  bl_api_client
