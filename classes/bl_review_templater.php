@@ -83,7 +83,7 @@ class BL_Review_Templater {
     $star_url = plugins_url( 'assets/gold-star.png', __DIR__ );
     $percentRating = $avg_obj->rating * 20;
 
-    $result .= "<div id='my_review_shrine' class='bl_client_reviews_widget' itemscope='' itemtype='http://schema.org/LocalBusiness'>";
+    $result = "<div id='my_review_shrine' class='bl_client_reviews_widget' itemscope='' itemtype='http://schema.org/LocalBusiness'>";
     $result .= '<h2>Our Review Rating</h2>';
     $result .= '<div> <p class="crs-business-name">' . $biz_schema['business-names'] . ' </div>';
     $result .= '<meta itemprop="name" content="' . $biz_schema['business-names'] . '">';

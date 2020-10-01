@@ -1,4 +1,6 @@
-.bl_client_review.google {
+.bl_client_review.google,
+.bl_client_review.facebook,
+.bl_client_review.website {
     background: #f7f7f7;
     padding: 20px;
     margin: 10px;
@@ -35,11 +37,14 @@ p.bl_client_review_prop.timestamp {
 }
 
 @media screen and (max-width: 767px) {
-	.bl_client_review.google {
+  .bl_client_review.google,
+  .bl_client_review.facebook,
+  .bl_client_review.website {
 		width: 100% !important;
 		margin: 0;
 		margin-bottom: 15px;
 	}
+  
   img.bl_client_review_prop.author_avatar {
     width: 10% !important;
   }
