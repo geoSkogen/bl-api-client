@@ -11,7 +11,7 @@ This WordPress Plugin is built on the following OPEN SOURCE packages:
   https://github.com/BrightLocal/BrightLocal-API-Helper
 
 2) Guzzle PHP, which the BrightLocal Helper library Includes
-  https://github.com/BrightLocal/BrightLocal-API-Helper
+  https://github.com/guzzle/guzzle
 
 By installing this plugin, you are including these software packages in your
 WordPress installation, on your website property.  City Ranked Media assumes
@@ -92,8 +92,6 @@ SHORTCODES
 2) Aggregate Rating
 
   [bl_client_agg_rating]
-
-  (this feature is coming soon)
 
 ================================================================================
 ================================================================================
