@@ -18,8 +18,22 @@ class BL_Reviews_Importer {
     if ($test_file_name) {
       $result->valid_file_name = $test_file_name;
       $result->file_path = $result->raw_path;
-      $valid_file = self::valid_upload_structure($result->raw_path);
+      $meta_props = self::get_directory_listing($result->valid_file_name);
+      $result->structure = self::valid_upload_structure($result->file_path,$meta_props);
+      $result->publish = $options['publish'];
+      if ($result->publish) {
+        $options['publish'] = false;
+        update_option('bl_api_client_history',$options);
+      }
     }
+    return $result;
+  }
+
+  public static function get_directory_listing($filename) {
+    $data_arr = explode('_',str_replace('.csv','',$filename));
+    $result = array();
+    $result['locale_id'] = $data_arr[1];
+    $result['listing_directory'] = $data_arr[2];
     return $result;
   }
 
@@ -43,14 +57,31 @@ class BL_Reviews_Importer {
     return $result;
   }
 
-  public static function valid_upload_structure($path) {
+  public static function valid_upload_structure($path,$meta_props) {
     $new_rows = [];
     $err = [];
     $msgs = [];
     $schema = new Schema($path);
     $table = $schema->data_index;
     $index = 0;
-    foreach ($table as $row) {}
+    $new_rows = [];
+    if (count($table[0]) && count($table[1])) {
+      foreach ($table as $row) {
+        $new_row = array();
+        $this_row = array();
+        if ($index) {
+          for ($i = 0; $i < count($table[0]); $i++) {
+            $new_row[$table[0][$i]] = $row[$i];
+          }
+          $this_row = array_merge($new_row,$meta_props);
+        }
+        $new_rows[] = $this_row;
+        $index++;
+      }
+    } else {
+
+    }
+    return $new_rows;
   }
 
 

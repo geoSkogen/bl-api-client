@@ -520,6 +520,13 @@ class BL_API_Client_Settings {
   public static function bl_api_client_csv_upload() {
     // options table controller
     $client = BL_Reviews_Importer::csv_upload_client();
+
+    if ($client->publish && count($client->structure)) {
+      //BL_Review_Monster::post_reviews($client->structure);
+      echo "PUBLISH!";
+    } else {
+      echo "NO PUBLISH!";
+    }
     // form values
     $value_tag = (!$client->file_path || !$client->valid_file_name) ?
       'placeholder' : 'value';
@@ -535,12 +542,33 @@ class BL_API_Client_Settings {
     $str .= "<input id='upload_file' type='file' class='bl_api_client_admin'
       name='bl_api_client_history[upload_file]'/>";
     $str .= "</div></div>";
+    $str .= "<label for'publish'>";
+    $str .= "<input id='publish_now' type='checkbox' name='bl_api_client_history[publish]' value=false />";
+    $str .= "</label>";
     /*
     $str .= "<input type='text' style='display:none' id='former_structure_path'
       name='cr_sagt[former_structure_path]' value='{$client->former_path}'/>";
     $str .= '';
     */
     echo $str;
+
+    $table = "<table>";
+    $table .= '<tr>';
+    foreach($client->structure[0] as $key=>$prop) {
+      $table .= "<td>$key</td>";
+    }
+    $table .= '</tr>';
+    for($i = 0; $i < count($client->structure); $i++) {
+      $table .= '<tr>';
+      foreach($client->structure[$i] as $val) {
+        $table .= "<td>$val</td>";
+      }
+      $table .= '</tr>';
+    }
+    $table .= "</table>";
+    //var_dump($client->structure);
+    echo $table;
+
   }
   // currently not in use
   public static function sticky_field($dir,$prop,$db_slug,$json_str) {
@@ -612,6 +640,7 @@ class BL_API_Client_Settings {
       );
       wp_enqueue_script('bl_api_client_media_uploader_csv');
       wp_enqueue_script('bl_api_client_upload_helper',plugin_dir_url(__FILE__).'../lib/bl_api_client_upload_helper.js');
+      wp_enqueue_script('bl_api_client_publish_toggle',plugin_dir_url(__FILE__).'../lib/bl_api_client_publish_toggle.js');
   }
 
   public static function bl_api_client_call_now_section() {
