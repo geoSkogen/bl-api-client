@@ -74,9 +74,10 @@ class BL_Review_Templater {
     $avg_obj = $monster->get_weighted_aggregate();
 
     $biz_schema = BL_CR_Suite_Client::validate_business_data('business');
-    var_dump($biz_schema);
+    //var_dump($biz_schema);
     $crs_opts = get_option('crs_business_options');
     $biz_schema['region'] = $crs_opts['business_state'];
+    $biz_schema['logo'] = $crs_opts['business_logo'];
     //$monster = new BL_Review_Monster($options_arr['reviews']);
     //isntantiate the review shrine return string value
     $star_url = plugins_url( 'assets/gold-star.png', __DIR__ );
@@ -88,6 +89,7 @@ class BL_Review_Templater {
     $result .= '<meta itemprop="name" content="' . $biz_schema['business-names'] . '">';
     $result .= '<meta itemprop="url" content="' . site_url() . '">';
     $result .= '<meta itemprop="telephone" content="' . $biz_schema['telephone'] . '">';
+    $result .= '<meta itemprop="image" content="' . $biz_schema['logo'] . '">';
     $result .= '<div class="wpcr3_hide" itemprop="address" itemscope="" itemtype="http://schema.org/PostalAddress">';
     $result .= '<meta itemprop="streetAddress" content="' . $biz_schema['street-address'] . '">';
     $result .= '<meta itemprop="addressLocality" content="' . $biz_schema['city'] . '">';
@@ -150,7 +152,10 @@ class BL_Review_Templater {
               $inner_html .= '</div>';
               break;
             case 'text' :
-              $inner_html = "<p itemprop='reviewBody' {$this_class}>{$review_obj[$review_prop]}</p>";
+              $text = ($review_obj[$review_prop]==='(not set)') ?
+                "<i class='no-review-text'>The user didn't write a review, and has left just a rating.</i>" :
+                $review_obj[$review_prop];
+              $inner_html = "<p itemprop='reviewBody' {$this_class}>{$text}</p>";
               break;
             default:
               $inner_html = '';

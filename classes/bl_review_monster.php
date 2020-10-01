@@ -505,7 +505,7 @@ class BL_Review_Monster  {
       'listing_directory'=>'website',
       'author_avatar'=> site_url(). '/wp-content/plugins/bl-api-client/assets/author-avatar.png',
       'locale_id'=>'1',
-      'text'=>'(no comments)'
+      'text'=>'(not set)'
     );
     $crs_reviews = self::get_crs_reviews();
     // translates the object property keynames
