@@ -50,13 +50,8 @@ using the options table -
           - where num_str1 is the business location row number and
           num_str2 is the listing directory index;
 
-    ============================================================================
-    CRITICAL SPEC NOTE:
-    MOVE Reviews TO POSTS - custom post type: review, with custom taxa & metas
-    ============================================================================
-
     ================
-    BL Review Schema
+    BL Review Schema - Reviews are custom post types crs_review
     ================
     author,
     author_avatar, //URL
@@ -66,10 +61,6 @@ using the options table -
     id, //unique hash
     listing-directory, //e.g. 'google','facebook'
     locale-id // unique integer for indexed array
-
-    ============================================================================
-    
-    reviews - array keys: rating, author, timestamp, text, author_avatar, id, locale_id, listing directory
 
     {dir}_aggregate_rating - array keys: rating, count, locale_id
 

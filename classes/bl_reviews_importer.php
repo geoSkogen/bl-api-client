@@ -63,6 +63,7 @@ class BL_Reviews_Importer {
     $msgs = [];
     $schema = new Schema($path);
     $table = $schema->data_index;
+    error_log(print_r($table,true));
     $index = 0;
     $new_rows = [];
     if (count($table[0]) && count($table[1])) {
@@ -74,8 +75,8 @@ class BL_Reviews_Importer {
             $new_row[$table[0][$i]] = $row[$i];
           }
           $this_row = array_merge($new_row,$meta_props);
+          $new_rows[] = $this_row;
         }
-        $new_rows[] = $this_row;
         $index++;
       }
     } else {

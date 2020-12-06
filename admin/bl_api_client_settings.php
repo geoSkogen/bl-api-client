@@ -41,7 +41,7 @@ class BL_API_Client_Settings {
     } else {
       //error_log('found cr client passive record w/ options intact');
     }
-    if (!count(array_keys(self::$options))||!isset(self::$crs_override)) {
+    if (is_array(self::$options)||!isset(self::$crs_override)) {
       self::$options = get_option('bl_api_client_settings');
       self::$crs_override = ( isset(self::$options['crs_override']) )  ?
         intval(self::$options['crs_override']) : 0;
@@ -521,7 +521,7 @@ class BL_API_Client_Settings {
     // options table controller
     $client = BL_Reviews_Importer::csv_upload_client();
 
-    if ($client->publish && count($client->structure)) {
+    if (isset($client->publish) && $client->publish && count($client->structure)) {
       //BL_Review_Monster::post_reviews($client->structure);
       echo "PUBLISH!";
     } else {
@@ -550,23 +550,24 @@ class BL_API_Client_Settings {
       name='cr_sagt[former_structure_path]' value='{$client->former_path}'/>";
     $str .= '';
     */
-    echo $str;
-
     $table = "<table>";
-    $table .= '<tr>';
-    foreach($client->structure[0] as $key=>$prop) {
-      $table .= "<td>$key</td>";
-    }
-    $table .= '</tr>';
-    for($i = 0; $i < count($client->structure); $i++) {
+    if (!empty($client->structure[0])) {
       $table .= '<tr>';
-      foreach($client->structure[$i] as $val) {
-        $table .= "<td>$val</td>";
+      foreach($client->structure[0] as $key=>$prop) {
+        $table .= "<td>$key</td>";
       }
       $table .= '</tr>';
+      for($i = 0; $i < count($client->structure); $i++) {
+        $table .= '<tr>';
+        foreach($client->structure[$i] as $val) {
+          $table .= "<td>$val</td>";
+        }
+        $table .= '</tr>';
+      }
     }
     $table .= "</table>";
     //var_dump($client->structure);
+    echo $str;
     echo $table;
 
   }
@@ -615,12 +616,14 @@ class BL_API_Client_Settings {
 
   public static function bl_api_client_activity_section() {
     $options = get_option('bl_api_client' . '_activity');
-    $review_monster = new BL_Review_Monster($options['reviews']);
+    $review_monster = (!empty($options['reviews'])) ? new BL_Review_Monster($options['reviews']) : null;
 
     $review_table = "<input name='submit' type='submit' id='call_now_1' class='button-primary' value='&beta;&lambda;' /><br/><br/>";
 
-    $review_table .= $review_monster->do_activity_log_table();
-    $review_table .= $review_monster->do_reviews_table();
+    if ($review_monster) {
+      $review_table .= $review_monster->do_activity_log_table();
+      $review_table .= $review_monster->do_reviews_table();
+    }
 
     echo $review_table;
   }
