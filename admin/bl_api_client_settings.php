@@ -522,7 +522,7 @@ class BL_API_Client_Settings {
     $client = BL_Reviews_Importer::csv_upload_client();
 
     if (isset($client->publish) && $client->publish && count($client->structure)) {
-      //BL_Review_Monster::post_reviews($client->structure);
+      BL_Review_Monster::post_reviews($client->structure);
       echo "PUBLISH!";
     } else {
       echo "NO PUBLISH!";
