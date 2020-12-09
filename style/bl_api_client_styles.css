@@ -116,6 +116,7 @@ a:link, a:active, a:hover, a:visited {
   text-decoration: none;
 }
 
+.bl_api_client_file,
 .bl_admin,
 input[type="submit"] {
   color: white;
@@ -126,6 +127,15 @@ input[type="submit"] {
   border: none;
   cursor: pointer;
   font-weight: 800;
+}
+
+input[type="file"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  padding: 0 0 !important;
+  margin: 0 0 !important;
+  cursor: pointer;
 }
 
 input[type="number"] {

@@ -523,9 +523,9 @@ class BL_API_Client_Settings {
 
     if (isset($client->publish) && $client->publish && count($client->structure)) {
       BL_Review_Monster::post_reviews($client->structure);
-      echo "PUBLISH!";
+      //echo "PUBLISH!";
     } else {
-      echo "NO PUBLISH!";
+      //echo "NO PUBLISH!";
     }
     // form values
     $value_tag = (!$client->file_path || !$client->valid_file_name) ?
@@ -534,23 +534,21 @@ class BL_API_Client_Settings {
       '(not set)' : $client->file_path;
     $upload_text = ($client->valid_file_name) ? : '(upload a file)';
     //uploader inputs
-    $str = "";
+    $str = "<h4>Submit CSV File for Preview | Check Publish Box & Submit to Post Reviews</h4>";
     $str .= "<div class='flexOuterStart'>";
-    $str .= "<input type='text' class='bl_api_client_admin' id='upload_path'
+    $str .= "<input type='text' class='zeroText bl_api_client_admin' id='upload_path'
       name='bl_api_client_history[upload_path]' {$value_tag}='{$client->file_path}'/>";
     $str .= "<div class='bl_api_client_file' id='upload_button'><b>{$upload_text}</b>";
     $str .= "<input id='upload_file' type='file' class='bl_api_client_admin'
       name='bl_api_client_history[upload_file]'/>";
     $str .= "</div></div>";
-    $str .= "<label for'publish'>";
+    $str .= "<label for'publish'><b>Publish Reviews?</b>";
     $str .= "<input id='publish_now' type='checkbox' name='bl_api_client_history[publish]' value=false />";
     $str .= "</label>";
-    /*
-    $str .= "<input type='text' style='display:none' id='former_structure_path'
-      name='cr_sagt[former_structure_path]' value='{$client->former_path}'/>";
-    $str .= '';
-    */
-    $table = "<table>";
+    $str .= "<div class='bl_admin' id='bl-reviews-table-toggle' style='width:10em;'>
+      <span id='data-text'>hide</span> reviews table</div>";
+
+    $table = "<table id='bl-reviews-upload-preview' data-disp='none,block'>";
     if (!empty($client->structure[0])) {
       $table .= '<tr>';
       foreach($client->structure[0] as $key=>$prop) {
@@ -644,6 +642,7 @@ class BL_API_Client_Settings {
       wp_enqueue_script('bl_api_client_media_uploader_csv');
       wp_enqueue_script('bl_api_client_upload_helper',plugin_dir_url(__FILE__).'../lib/bl_api_client_upload_helper.js');
       wp_enqueue_script('bl_api_client_publish_toggle',plugin_dir_url(__FILE__).'../lib/bl_api_client_publish_toggle.js');
+      wp_enqueue_script('bl_api_client_table_toggle',plugin_dir_url(__FILE__).'../lib/bl_api_client_table_toggle.js');
   }
 
   public static function bl_api_client_call_now_section() {

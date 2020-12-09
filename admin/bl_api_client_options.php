@@ -31,7 +31,7 @@ class BL_API_Client_Options {
           'bl_api_client_permissions',             // menu Slug(page)
           array('BL_API_Client_Options','bl_api_client_permissions_page')// CB Function plugin_options_page()
       );
-      /*
+
       add_submenu_page(
           'bl_api_client',                         //parent menu
           'BrightLocal Client API Calls',                // Page Title
@@ -40,7 +40,6 @@ class BL_API_Client_Options {
           'bl_api_client_call_now',             // menu Slug(page)
           array('BL_API_Client_Options','bl_api_client_call_now_page')// CB Function plugin_options_page()
       );
-      */
 
       add_submenu_page(
           'bl_api_client',                         //parent menu
@@ -77,11 +76,11 @@ class BL_API_Client_Options {
   public static function bl_api_client_history_page() {
     self::bl_api_client_options_page('_history');
   }
-  /*
+
   public static function bl_api_client_call_now_page() {
     self::bl_api_client_options_page('_call_now');
   }
-  */
+  
   public static function bl_api_client_options_page($db_slug) {
     wp_register_style('bl_api_client_styles', plugin_dir_url(__FILE__) . '../style/' . 'bl_api_client_styles' . '.css');
     wp_enqueue_style('bl_api_client_styles');
