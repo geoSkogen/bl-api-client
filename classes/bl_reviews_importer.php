@@ -20,7 +20,7 @@ class BL_Reviews_Importer {
       $result->file_path = $result->raw_path;
       $meta_props = self::get_directory_listing($result->valid_file_name);
       $result->structure = self::valid_upload_structure($result->file_path,$meta_props);
-      $result->publish = $options['publish'];
+      $result->publish = (!empty($options['publish'])) ?  $options['publish'] : false ;
       if ($result->publish) {
         $options['publish'] = false;
         update_option('bl_api_client_history',$options);
@@ -63,19 +63,40 @@ class BL_Reviews_Importer {
     $msgs = [];
     $schema = new Schema($path);
     $table = $schema->data_index;
+    $sanitize_titles = ['positive','critical'];
+    $sanitize_cols = [];
     error_log(print_r($table,true));
-    $index = 0;
     $new_rows = [];
     if (count($table[0]) && count($table[1])) {
+      $table_cols = [];
+      $index = 0;
       foreach ($table as $row) {
-        $new_row = array();
+        $new_row = [];
+        $new_props = array();
         $this_row = array();
         if ($index) {
-          for ($i = 0; $i < count($table[0]); $i++) {
-            $new_row[$table[0][$i]] = $row[$i];
+          //later data iterations - index > 0 - strip out unwanted values
+          foreach($row as $val) {
+            if ($val!='Array') {
+              $new_row[] = $val;
+            }
           }
-          $this_row = array_merge($new_row,$meta_props);
+          // index the sanitized keys against the sanitized values
+          for ($i = 0; $i < count($table_cols); $i++) {
+            $new_props[$table_cols[$i]] = $new_row[$i];
+          }
+          // attach the meta-values - data source
+          $this_row = array_merge($new_props,$meta_props);
           $new_rows[] = $this_row;
+
+        } else {
+          //first iteration : index === 0 | !index - strip out unwanted keys
+          foreach($row as $prop) {
+            if (!in_array($prop,$sanitize_titles)) {
+              $table_cols[] = $prop;
+            }
+          }
+
         }
         $index++;
       }

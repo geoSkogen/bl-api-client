@@ -220,19 +220,12 @@ class BL_Review_Monster  {
       $meta_values_array['review-rating'] = $review['rating'];
 
       $review_number =  $review['rating'];
-      $review_taxon = 'Star';
+      $review_taxon = 'Stars';
       $review_number = ((5 < $review_number) || (!is_numeric($review_number))) ?
         5 : $review_number;
-      $review_rating = $review_number . $review_taxon;
-      $review_rating .= ($review_number > 1) ? 's' : '';
-      /*
-      if (1 == $review_number) {
-        $review_rating = $review_number . ' Star';
-        # code...
-      } else {
-        $review_rating = $review_number . ' Stars';
-      }
-      */
+      $review_rating = $review_number . ' ' . $review_taxon;
+      //$review_rating .= ($review_number > 1) ? 's' : '';
+
       // term ID becomes the value stored in the relationships table
       $dictionary = self::get_terms_map($review_taxon);
 
@@ -245,10 +238,20 @@ class BL_Review_Monster  {
       $review_post = array(
         'post_title'    => $post_title,
         'post_content'  => $review['text'],
-        //'post_author'   => $review['author'],
+        'tax_input'     => array( 'rating' => $review_rating ),
         'post_type'     => 'crs_review',
         'post_status'   => 'publish',
-        'post_date_gmt' => date('Y-m-d', strtotime($review['timestamp']))
+        'post_date_gmt' => date('Y-m-d', strtotime($review['timestamp'])),
+        'meta_input'    => array(
+          'review-author' => $meta_values_array['review-author'],
+          'author-email'  => '(not set)',
+          'review-id'  => $meta_values_array['review-id'],
+          'author-avatar' =>  $meta_values_array['author-avatar'],
+          'listing-directory' =>  $meta_values_array['listing-directory'],
+          'locale-id' =>  $meta_values_array['locale-id'],
+          'timestamp'=>  $meta_values_array['timestamp'],
+          'review-rating'=>  $meta_values_array['review-rating'],
+          )
       );
 
       // POST
@@ -257,9 +260,11 @@ class BL_Review_Monster  {
 
        if ( $wpdb->get_var( $test_query ) == $table_name ) {
          //$wpdb->insert($table_name, $review_post);
-         wp_insert_post($review_post);
+         $post_id = wp_insert_post($review_post);
        }
+      wp_set_object_terms( $post_id, $review_rating, 'rating' );
       // METAS & TAXA
+      /*
       $this_page = get_page_by_title( $post_title, OBJECT ,'crs_review');
       $this_page_id = ($this_page->ID) ? $this_page->ID : '' ;
       error_log('POSTED REVIEW - PAGE ID:');
@@ -289,6 +294,7 @@ class BL_Review_Monster  {
         );
         $wpdb->insert($term_table_name, $term_row);
       }
+      */
     }
   }
 
