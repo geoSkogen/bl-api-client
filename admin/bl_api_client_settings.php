@@ -248,7 +248,7 @@ class BL_API_Client_Settings {
     register_setting( 'bl_api_client_settings', 'bl_api_client_settings' );
     register_setting( 'bl_api_client_activity', 'bl_api_client_activity' );
     register_setting( 'bl_api_client_permissions', 'bl_api_client_permissions' );
-    //register_setting( 'bl_api_client_call_now', 'bl_api_client_call_now' );
+    register_setting( 'bl_api_client_call_now', 'bl_api_client_call_now' );
     register_setting( 'bl_api_client_history', 'bl_api_client_history' );
   }
   //Templates
