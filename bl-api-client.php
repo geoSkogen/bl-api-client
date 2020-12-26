@@ -107,35 +107,3 @@ if (!post_type_exists('crs_review')) {
   add_action( 'init', array( 'BL_Init_Review_Post', 'crs_review_star_tax' ) );
   add_action( 'init', array( 'BL_Init_Review_Post', 'crs_review_star_numbers' ) );
 }
-
-//DEV NOTES
-//API CALL FORMAT! work on discovering the correct URL format for GMB pings
-//different lookup-by-URL formats; so far none is accepted:
-//https://search.google.com/local/reviews?placeid=ChIJsc2v07GxlVQRRK-jGkZfiw0
-//https://local.google.com/place?id=975978498955128644&use=srp&hl=en
-//Keys are stashed here:
-//ChIJsc2v07GxlVQRRK-jGkZfiw0
-//975978498955128644
-/*
-$table_name = $wpdb->prefix . "posts";
-$test_query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) );
-$one_rows = [];
- if ( $wpdb->get_var( $test_query ) == $table_name ) {
-   //$wpdb->insert($table_name, $review_post);
-   $zero_rows = $wpdb->get_results(
-     "SELECT * FROM $table_name WHERE post_author = 0",
-     ARRAY_A
-   );
-   foreach($zero_rows as $zero_row) {
-     $one_row = $zero_row;
-     $one_row['post_author'] = 1;
-     $wpdb->update(
-       $table_name,
-       array( 'post_author' => $one_row['post_author']),
-       array( 'ID' => $one_row['ID']),
-       array( '%s' )
-     );
-   }
-   error_log(print_r($zero_rows,true));
- }
-*/

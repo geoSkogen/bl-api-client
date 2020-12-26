@@ -227,7 +227,7 @@ class BL_API_Client_Settings {
           strval(self::$current_field_index) . "</span>";
 
         if ($field_name === 'gmb_line') {
-          $tracker_status = (!self::$options[$this_field]) ?
+          $tracker_status = (empty(self::$options[$this_field])) ?
             "<span class='alert_me'>&nbsp;» " . self::$caveat_text . " </span>" :
             '';
           $this_label .= $tracker_status;
